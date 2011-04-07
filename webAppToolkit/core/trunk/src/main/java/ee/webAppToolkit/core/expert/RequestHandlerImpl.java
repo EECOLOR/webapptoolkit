@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
 
 import com.google.inject.Injector;
 
 import ee.webAppToolkit.core.Result;
+import ee.webAppToolkit.core.SiteMap;
 import ee.webAppToolkit.core.WrappingController;
 import ee.webAppToolkit.core.annotations.SubController;
 import ee.webAppToolkit.core.exceptions.ConfigurationException;
@@ -19,143 +21,201 @@ import ee.webAppToolkit.core.exceptions.HttpException;
 public class RequestHandlerImpl implements RequestHandler {
 
 	// store all handlers without trailing /
-
 	private Map<String, Handler> _handlers;
 
 	@Inject
 	public RequestHandlerImpl(Injector injector, ControllerDescriptionFactory descriptionFactory,
-			@WebAppToolkit Map<String, Class<?>> bindings) throws ConfigurationException {
+			@WebAppToolkit Map<String, Class<?>> bindings,
+			SiteMap siteMap) throws ConfigurationException {
 
-		_handlers = new HashMap<String, Handler>();
+		/*
+		 * Handlers are created using an instance in order to keep their methods simple
+		 * and have members like injector, descriptionFactory and bindings released for 
+		 * garbage collection. 
+		 */
+		BindingProcessor bindingProcessor = new BindingProcessor(injector, descriptionFactory, bindings, siteMap);
+		_handlers = bindingProcessor.getHandlers();
 		
-		List<String> keys = new ArrayList<String>(bindings.keySet());
-		// sort the keys so we only need to loop once
-		Collections.sort(keys);
-
-		// to prevent excessive use of processing power we cache the controller
-		// descriptions
-		Map<Class<?>, ControllerDescription> descriptionCache = new HashMap<Class<?>, ControllerDescription>();
-
-		// loop through all keys so they can be processed
-		for (String key : keys) {
-			Class<?> controllerType = bindings.get(key);
-
-			if (key.endsWith("/")) {
-				throw new ConfigurationException("Keys should not end with a /, found '" + key + "'");
-			}
-
-			System.out.println("_processController: " + key + " : " + controllerType);
-			_processController(injector, descriptionFactory, bindings, descriptionCache, key, controllerType);
-		}
-		
-		//TODO remove
-		ArrayList<String> test = new ArrayList<String>(_handlers.keySet());
-		Collections.sort(test);
-		for (String s : test)
-		{
-			int r = 4 - (s.length() / 8);
-			StringBuffer buf = new StringBuffer (r);
-			for (int i = 0; i < r; i++) {
-				buf.append("\t");
-			}
-			
-			System.out.println("'" + s + "' " + buf.toString() + _handlers.get(s));
-		}
-	}
-
-	private void _processController(Injector injector, ControllerDescriptionFactory descriptionFactory,
-			Map<String, Class<?>> bindings, Map<Class<?>, ControllerDescription> descriptionCache, String key,
-			Class<?> controllerType) throws ConfigurationException {
-
-		ControllerDescription description;
-
-		// get the controller description and put it in the cache
-		if (descriptionCache.containsKey(controllerType)) {
-			description = descriptionCache.get(controllerType);
-		} else {
-			description = descriptionFactory.create(controllerType);
-			descriptionCache.put(controllerType, description);
-		}
-
-		// determine the chain of controllers
-		List<ParentController> parents = new ArrayList<ParentController>();
-
-		String chain = key;
-		
-		if (WrappingController.class.isAssignableFrom(controllerType)) {
-			
-			if (chain.length() > 0)
-			{
-				chain = chain.substring(0, chain.lastIndexOf('/'));
-			}
-			_addParent(controllerType, parents, chain);
-		}
-		
-		System.out.println(chain);
-		while (chain.length() > 0) {
-			chain = chain.substring(0, chain.lastIndexOf('/'));
-
-			if (bindings.containsKey(chain)) {
-				Class<?> parentControllerType = bindings.get(chain);
-				if (WrappingController.class.isAssignableFrom(parentControllerType)) {
-					System.out.println("_addParent :: " + chain + " :: " + parentControllerType);
-					_addParent(parentControllerType, parents, chain);
-				}
-			}
-		}
-
-		// get all actions
-		List<Action> actions = description.getActions();
-
-		boolean hasParents = parents.size() > 0;
-
-		// create the handler chains
-		for (Action action : actions) {
-			// only provide a controller provider if the handler has no parents
-			Handler handler = new ActionHandler(action, hasParents ? null : injector.getProvider(controllerType));
-
-			for (ParentController parentController : parents) {
-				handler = new ControllerHandler(injector.getProvider(parentController.controllerType), handler,
-						parentController.name);
-			}
-
-			String actionName = action.getName();
-			_handlers.put(key + "/" + actionName, handler);
-
-			// also add it at the current key if the name is 'index'
-			if (actionName.equals(ControllerDescription.INDEX)) {
-				_handlers.put(key, handler);
-			}
-		}
-
-		// create controller chains
-		List<SubController> subControllers = description.getSubControllers();
-
-		for (SubController subController : subControllers) {
-			_processController(injector, descriptionFactory, bindings, descriptionCache,
-					key + "/" + subController.name(), subController.type());
-		}
-	}
-
-	private void _addParent(Class<?> controllerType, List<ParentController> parents, String chain) {
-		String name = chain.length() > 0 ? chain.substring(chain.lastIndexOf('/') + 1) : null;
-		parents.add(new ParentController(name, controllerType));
-	}
-
-	class ParentController {
-		protected Class<?> controllerType;
-		protected String name;
-
-		ParentController(String name, Class<?> controllerType) {
-			this.name = name;
-			this.controllerType = controllerType;
-		}
+		System.out.println(siteMap);
 	}
 
 	@Override
 	public Result handleRequest(String path) throws HttpException {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO Implement caching
+		
+		String testPath = path;
+		Handler handler = _handlers.get(testPath);
+		
+		while (handler == null && testPath.length() > 0)
+		{
+			testPath = testPath.substring(0, testPath.lastIndexOf('/'));
+			handler = _handlers.get(testPath);
+		}
+		
+		try {
+			return handler.handle(testPath).result;
+		} catch (Throwable e) {
+			throw new HttpException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e);
+		}
 	}
 
+	public class BindingProcessor {
+
+		private Map<Class<?>, ControllerDescription> _descriptionCache;
+		private Injector _injector;
+		private ControllerDescriptionFactory _descriptionFactory;
+		private Map<String, Class<?>> _bindings;
+		private SiteMap _siteMap;
+
+		public BindingProcessor(Injector injector, ControllerDescriptionFactory descriptionFactory,
+				Map<String, Class<?>> bindings, SiteMap siteMap) throws ConfigurationException {
+
+			_injector = injector;
+			_descriptionFactory = descriptionFactory;
+			_bindings = bindings;
+			_siteMap = siteMap;
+
+			// to prevent excessive use of processing power we cache the controller descriptions
+			_descriptionCache = new HashMap<Class<?>, ControllerDescription>();
+
+			_gatherHandlers();
+		}
+
+		private void _gatherHandlers() throws ConfigurationException {
+			_handlers = new HashMap<String, Handler>();
+			
+			/* 
+			 * We need to sort the keys in order to make sure deep mapped controllers
+			 * have the correct parents
+			 */
+			List<String> keys = new ArrayList<String>(_bindings.keySet());
+			Collections.sort(keys);
+			
+			// loop through all keys so they can be processed
+			for (String key : keys) {
+				Class<?> controllerType = _bindings.get(key);
+
+				if (key.endsWith("/")) {
+					throw new ConfigurationException("Keys should not end with a /, found '" + key + "'");
+				}
+
+				_processController(key, controllerType);
+			}
+		}
+
+		public Map<String, Handler> getHandlers() throws ConfigurationException {
+			return _handlers;
+		}
+
+		private ControllerDescription _getDescription(Class<?> controllerType) throws ConfigurationException {
+			ControllerDescription description;
+
+			// get the controller description and put it in the cache
+			if (_descriptionCache.containsKey(controllerType)) {
+				description = _descriptionCache.get(controllerType);
+			} else {
+				description = _descriptionFactory.create(controllerType);
+				_descriptionCache.put(controllerType, description);
+			}
+
+			return description;
+		}
+
+		private void _processController(String path, Class<?> controllerType) throws ConfigurationException {
+
+			ControllerDescription description = _getDescription(controllerType);
+
+			// build a chain of controllers
+			List<ParentController> controllerChain = new ArrayList<ParentController>();
+
+			// add the current controller to the chain
+			boolean controllerIsParent = _addToChain(controllerType, controllerChain, path);
+
+			String parentPath = path;
+
+			while (parentPath.length() > 0) {
+				// remove the last segment
+				parentPath = parentPath.substring(0, parentPath.lastIndexOf('/'));
+
+				// check if we have a controller mapped at the given path
+				if (_bindings.containsKey(parentPath)) {
+					Class<?> parentControllerType = _bindings.get(parentPath);
+					_addToChain(parentControllerType, controllerChain, parentPath);
+				}
+			}
+
+			// get all actions
+			List<Action> actions = description.getActions();
+
+			// create the handler chains for each action
+			for (Action action : actions) {
+				// only provide a controller provider if the handler has no direct parent
+				Handler handler;
+				if (controllerIsParent) {
+					handler = new ActionHandler(action);
+				} else {
+					handler = new ActionHandler(action, _injector.getProvider(controllerType));
+				}
+
+				for (ParentController parentController : controllerChain) {
+					handler = new ControllerHandler(_injector.getProvider(parentController.controllerType), handler,
+							parentController.name);
+				}
+
+				String actionName = action.getName();
+
+				// add it at the current key if the name is 'index'
+				if (actionName.equals(ControllerDescription.INDEX)) {
+					_addHandler(path, handler);
+				}
+				
+				_addHandler(path + "/" + actionName, handler);
+			}
+
+			// create controller chains
+			List<SubController> subControllers = description.getSubControllers();
+
+			for (SubController subController : subControllers) {
+				String newPath = path + "/" + subController.name();
+				Class<?> subControllerType = subController.type();
+				//add the path to the binding in order for other controllers to be able to find it
+				_bindings.put(newPath, subControllerType);
+				_processController(newPath, subControllerType);
+			}
+		}
+
+		private Handler _addHandler(String path, Handler handler) throws ConfigurationException {
+			
+			if (_siteMap.containsPath(path))
+			{
+				throw new ConfigurationException("The path '" + path + "' is registered more then once.");
+			}
+			
+			if (path.length() > 0)
+			{
+				_siteMap.addPagesForPath(path);
+			}
+			
+			return _handlers.put(path, handler);
+		}
+
+		private boolean _addToChain(Class<?> controllerType, List<ParentController> controllerChain, String chain) {
+			boolean added = WrappingController.class.isAssignableFrom(controllerType);
+			if (added) {
+				String name = chain.length() > 0 ? chain.substring(chain.lastIndexOf('/') + 1) : null;
+				controllerChain.add(new ParentController(name, controllerType));
+			}
+			return added;
+		}
+
+		class ParentController {
+			protected Class<?> controllerType;
+			protected String name;
+
+			ParentController(String name, Class<?> controllerType) {
+				this.name = name;
+				this.controllerType = controllerType;
+			}
+		}
+	}
 }

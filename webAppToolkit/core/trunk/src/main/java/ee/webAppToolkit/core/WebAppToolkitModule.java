@@ -3,21 +3,15 @@ package ee.webAppToolkit.core;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.inject.AbstractModule;
+import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
-import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.google.inject.servlet.ServletModule;
 
-import ee.webAppToolkit.core.expert.Action;
-import ee.webAppToolkit.core.expert.ActionFactory;
-import ee.webAppToolkit.core.expert.ActionImpl;
-import ee.webAppToolkit.core.expert.ControllerDescription;
-import ee.webAppToolkit.core.expert.ControllerDescriptionFactory;
-import ee.webAppToolkit.core.expert.ControllerDescriptionImpl;
-import ee.webAppToolkit.core.expert.RequestHandler;
-import ee.webAppToolkit.core.expert.RequestHandlerImpl;
+import ee.webAppToolkit.core.expert.DefaultBindingsModule;
 import ee.webAppToolkit.core.expert.WebAppToolkit;
+import ee.webAppToolkit.core.expert.WebAppToolkitServlet;
 
-public abstract class WebAppToolkitModule extends AbstractModule {
+public abstract class WebAppToolkitModule extends ServletModule {
 	
 	protected Binder handle(String path)
 	{
@@ -27,20 +21,18 @@ public abstract class WebAppToolkitModule extends AbstractModule {
 	private Map<String, Class<?>> _bindings = new HashMap<String, Class<?>>();
 	
 	@Override
-	final protected void configure() {
+	protected void configureServlets() {
 		bind(new TypeLiteral<Map<String, Class<?>>>(){}).annotatedWith(WebAppToolkit.class).toInstance(_bindings);
 		
-		install(new FactoryModuleBuilder()
-			.implement(ControllerDescription.class, ControllerDescriptionImpl.class)
-			.build(ControllerDescriptionFactory.class));
-		install(new FactoryModuleBuilder()
-			.implement(Action.class, ActionImpl.class)
-			.build(ActionFactory.class));
+		install(getDefaultBindingsModule());
 		
-		//TODO remove
-		bind(RequestHandler.class).to(RequestHandlerImpl.class).asEagerSingleton();
+		serve("/*").with(WebAppToolkitServlet.class);
 		
 		configureControllers();
+	}
+
+	protected Module getDefaultBindingsModule() {
+		return new DefaultBindingsModule();
 	}
 
 	abstract protected void configureControllers();
