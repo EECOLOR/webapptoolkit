@@ -2,6 +2,8 @@ package ee.webAppToolkit.core.expert;
 
 import javax.inject.Provider;
 
+import ee.webAppToolkit.core.Result;
+
 public class ActionHandler extends Handler {
 
 	private Action _action;
@@ -9,28 +11,28 @@ public class ActionHandler extends Handler {
 
 	public ActionHandler(Action action)
 	{
-		this(action, null);
+		this(null, action);
 	}
 	
-	public ActionHandler(Action action, Provider<?> controllerProvider)
+	public ActionHandler(Provider<?> controllerProvider, Action action)
 	{
-		super(action.getName());
+		super(controllerProvider, action.getName());
 		
 		_action = action;
 		_controllerProvider = controllerProvider;
 	}
 	
 	@Override
-	public HandlerResult handle(String path) throws Throwable
+	public Result handle(String path) throws Throwable
 	{
 		Object controller = _controllerProvider.get();
 		return handle(path, controller);
 	}
 	
 	@Override
-	public HandlerResult handle(String path, Object controller) throws Throwable
+	public Result handle(String path, Object controller) throws Throwable
 	{
-		return new HandlerResult(_action.invoke(controller), controller);
+		return _action.invoke(controller);
 	}
 	
 	@Override

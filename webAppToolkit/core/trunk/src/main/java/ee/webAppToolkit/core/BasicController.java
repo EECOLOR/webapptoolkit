@@ -9,7 +9,7 @@ import ee.webAppToolkit.core.annotations.SubControllers;
 public class BasicController implements WrappingController{
 
 	@Override
-	public void beforeHandling(String memberName) {
+	public void beforeHandling(String memberName, Object controller) {
 		
 	}
 

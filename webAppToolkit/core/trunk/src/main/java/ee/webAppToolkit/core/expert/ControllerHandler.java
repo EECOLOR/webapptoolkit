@@ -7,40 +7,49 @@ import ee.webAppToolkit.core.WrappingController;
 
 public class ControllerHandler extends Handler {
 
-	private Provider<?> _controllerProvider;
 	private Handler _childHandler;
 
 	public ControllerHandler(Provider<?> controllerProvider, Handler childHandler)
 	{
-		_controllerProvider = controllerProvider;
+		super(controllerProvider);
+		
 		_childHandler = childHandler;
 	}
 	
 	public ControllerHandler(Provider<?> controllerProvider, Handler childHandler, String name)
 	{
-		super(name);
+		super(controllerProvider, name);
 		
-		_controllerProvider = controllerProvider;
 		_childHandler = childHandler;
 	}
 	
 	@Override
-	public HandlerResult handle(String path) throws Throwable {
-		WrappingController actualController = (WrappingController) _controllerProvider.get();
+	public Result handle(String path) throws Throwable {
+		WrappingController actualController = (WrappingController) getControllerProvider().get();
 		
 		String memberName = _childHandler.getName();
 		
-		actualController.beforeHandling(memberName);
+		Object controller;
 		
-		HandlerResult handlerResult = _childHandler.handle(path, actualController);
+		if (_childHandler instanceof ControllerHandler)
+		{
+			controller = _childHandler.getControllerProvider().get();
+		} else
+		{
+			controller = actualController;
+		}
 		
-		Result result = actualController.wrapResult(handlerResult.result, memberName, handlerResult.controller);
+		actualController.beforeHandling(memberName, controller);
 		
-		return new HandlerResult(result, actualController);
+		Result result = _childHandler.handle(path, controller);
+		
+		result = actualController.wrapResult(result, memberName, controller);
+		
+		return result;
 	}
 
 	@Override
-	public HandlerResult handle(String path, Object controller) throws Throwable
+	public Result handle(String path, Object controller) throws Throwable
 	{
 		return handle(path);
 	}
@@ -48,6 +57,6 @@ public class ControllerHandler extends Handler {
 	@Override
 	public String toString()
 	{
-		return _controllerProvider.get().getClass().getSimpleName() + " > " + _childHandler;
+		return getControllerProvider().get().getClass().getSimpleName() + " > " + _childHandler;
 	}
 }

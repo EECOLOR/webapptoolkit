@@ -53,7 +53,7 @@ public class RequestHandlerImpl implements RequestHandler {
 		}
 		
 		try {
-			return handler.handle(testPath).result;
+			return handler.handle(testPath);
 		} catch (Throwable e) {
 			throw new HttpException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e);
 		}
@@ -154,7 +154,7 @@ public class RequestHandlerImpl implements RequestHandler {
 				if (controllerIsParent) {
 					handler = new ActionHandler(action);
 				} else {
-					handler = new ActionHandler(action, _injector.getProvider(controllerType));
+					handler = new ActionHandler(_injector.getProvider(controllerType), action);
 				}
 
 				for (ParentController parentController : controllerChain) {

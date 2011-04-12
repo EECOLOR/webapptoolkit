@@ -1,35 +1,33 @@
 package ee.webAppToolkit.core.expert;
 
+import javax.inject.Provider;
+
 import ee.webAppToolkit.core.Result;
 
 abstract public class Handler {
 	private String _name;
+	private Provider<?> _controllerProvider;
 
-	public Handler()
+	public Handler(Provider<?> controllerProvider)
 	{
+		this(controllerProvider, null);
 	}
 	
-	public Handler(String name)
+	public Handler(Provider<?> controllerProvider, String name)
 	{
+		_controllerProvider = controllerProvider;
 		_name = name;
 	}
 	
-	abstract public HandlerResult handle(String path) throws Throwable;
-	abstract public HandlerResult handle(String path, Object controller)throws Throwable;
+	public Provider<?> getControllerProvider()
+	{
+		return _controllerProvider;
+	}
+	
+	abstract public Result handle(String path) throws Throwable;
+	abstract public Result handle(String path, Object controller)throws Throwable;
 
 	public String getName() {
 		return _name;
 	}
-	
-	class HandlerResult
-	{
-		Result result;
-		Object controller;
-		
-		public HandlerResult(Result result, Object controller) {
-			this.result = result;
-			this.controller = controller;
-		}
-	}
-
 }
