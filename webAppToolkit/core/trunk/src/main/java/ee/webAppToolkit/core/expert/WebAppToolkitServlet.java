@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import ee.webAppToolkit.core.RequestMethod;
 import ee.webAppToolkit.core.Result;
 import ee.webAppToolkit.core.exceptions.HttpException;
 import ee.webAppToolkit.core.exceptions.RedirectException;
@@ -39,22 +38,10 @@ public class WebAppToolkitServlet extends HttpServlet {
 	@Override
 	public void service(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
 			throws ServletException, IOException {
-		// we don't need to take into account the servlet context since we are mapped to /*
-		String contextPath = httpServletRequest.getContextPath();
-		String pathInfo = httpServletRequest.getPathInfo();
 
-		_logger.info("Attempt to service for contextPath '" + contextPath + "' and pathInfo '" + pathInfo + "'");
-
-		// create the path
-		String path = contextPath + pathInfo;
-
-		// Grab the request method
-		RequestMethod requestMethod = RequestMethod.valueOf(httpServletRequest.getMethod());
-
-		
 		try {
 			// Handle the request
-			Result result = _requestHandler.handleRequest(path);
+			Result result = _requestHandler.handleRequest();
 
 			if (result != null) {
 				String characterEncoding = result.getCharacterEncoding();
@@ -73,7 +60,6 @@ public class WebAppToolkitServlet extends HttpServlet {
 		} catch (RedirectException e) {
 			// handle redirects
 			LocationBuilder locationBuilder = e.getLocationBuilder();
-			locationBuilder.in(contextPath);
 
 			String location = locationBuilder.getLocation();
 			_logger.info("Redirecting to location '" + location + "'");

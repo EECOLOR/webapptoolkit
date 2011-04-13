@@ -8,5 +8,5 @@ import ee.webAppToolkit.core.exceptions.HttpException;
 
 @ImplementedBy(RequestHandlerImpl.class)
 public interface RequestHandler {
-	public Result handleRequest(String path) throws HttpException;
+	public Result handleRequest() throws HttpException;
 }

@@ -1,5 +1,7 @@
 package ee.webAppToolkit.core.expert;
 
+import java.util.Set;
+
 import com.google.inject.ImplementedBy;
 
 import ee.webAppToolkit.core.RequestMethod;
@@ -9,7 +11,7 @@ import ee.webAppToolkit.core.Result;
 public interface Action
 {
 	public String getName();
-	public boolean allows(RequestMethod requestMethod);
+	public Set<RequestMethod> getRequestMethods();
 	public Class<?> getReturnType();
 	public Result invoke(Object instance) throws Throwable;
 }

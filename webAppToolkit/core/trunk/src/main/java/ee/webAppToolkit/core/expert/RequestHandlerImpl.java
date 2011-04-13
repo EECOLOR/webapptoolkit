@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.inject.Injector;
@@ -14,6 +15,7 @@ import com.google.inject.Injector;
 import ee.webAppToolkit.core.Result;
 import ee.webAppToolkit.core.SiteMap;
 import ee.webAppToolkit.core.WrappingController;
+import ee.webAppToolkit.core.annotations.Path;
 import ee.webAppToolkit.core.annotations.SubController;
 import ee.webAppToolkit.core.exceptions.ConfigurationException;
 import ee.webAppToolkit.core.exceptions.HttpException;
@@ -22,12 +24,15 @@ public class RequestHandlerImpl implements RequestHandler {
 
 	// store all handlers without trailing /
 	private Map<String, Handler> _handlers;
+	private Provider<String> _pathProvider;
 
 	@Inject
 	public RequestHandlerImpl(Injector injector, ControllerDescriptionFactory descriptionFactory,
 			@WebAppToolkit Map<String, Class<?>> bindings,
-			SiteMap siteMap) throws ConfigurationException {
+			SiteMap siteMap, @Path Provider<String> pathProvider) throws ConfigurationException {
 
+		_pathProvider = pathProvider;
+		
 		/*
 		 * Handlers are created using an instance in order to keep their methods simple
 		 * and have members like injector, descriptionFactory and bindings released for 
@@ -40,10 +45,10 @@ public class RequestHandlerImpl implements RequestHandler {
 	}
 
 	@Override
-	public Result handleRequest(String path) throws HttpException {
+	public Result handleRequest() throws HttpException {
 		// TODO Implement caching
 		
-		String testPath = path;
+		String testPath = _pathProvider.get();
 		Handler handler = _handlers.get(testPath);
 		
 		while (handler == null && testPath.length() > 0)
@@ -53,7 +58,7 @@ public class RequestHandlerImpl implements RequestHandler {
 		}
 		
 		try {
-			return handler.handle(testPath);
+			return handler.handle();
 		} catch (Throwable e) {
 			throw new HttpException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e);
 		}
@@ -128,9 +133,11 @@ public class RequestHandlerImpl implements RequestHandler {
 			// build a chain of controllers
 			List<ParentController> controllerChain = new ArrayList<ParentController>();
 
+			
 			// add the current controller to the chain
-			boolean controllerIsParent = _addToChain(controllerType, controllerChain, path);
+			boolean parentIsWrapping = _addToChain(controllerType, controllerChain, path, true);
 
+			boolean directChild = parentIsWrapping;
 			String parentPath = path;
 
 			while (parentPath.length() > 0) {
@@ -138,9 +145,10 @@ public class RequestHandlerImpl implements RequestHandler {
 				parentPath = parentPath.substring(0, parentPath.lastIndexOf('/'));
 
 				// check if we have a controller mapped at the given path
-				if (_bindings.containsKey(parentPath)) {
+				directChild = _bindings.containsKey(parentPath);
+				if (directChild) {
 					Class<?> parentControllerType = _bindings.get(parentPath);
-					_addToChain(parentControllerType, controllerChain, parentPath);
+					directChild = _addToChain(parentControllerType, controllerChain, parentPath, directChild);
 				}
 			}
 
@@ -149,17 +157,22 @@ public class RequestHandlerImpl implements RequestHandler {
 
 			// create the handler chains for each action
 			for (Action action : actions) {
-				// only provide a controller provider if the handler has no direct parent
+				
+				
+				String memberName = action.getName();
 				Handler handler;
-				if (controllerIsParent) {
-					handler = new ActionHandler(action);
+				if (parentIsWrapping) {
+					handler = new ActionHandlerImpl(action);
 				} else {
-					handler = new ActionHandler(_injector.getProvider(controllerType), action);
+					// only provide a controller provider if the direct parent is not wrapping
+					handler = new ActionHandlerImpl(action, _injector.getProvider(controllerType));
 				}
 
+				Provider<? extends WrappingController> controllerProvider;
 				for (ParentController parentController : controllerChain) {
-					handler = new ControllerHandler(_injector.getProvider(parentController.controllerType), handler,
-							parentController.name);
+					controllerProvider = _injector.getProvider(parentController.controllerType);
+					handler = new ControllerHandlerImpl(controllerProvider, handler, memberName, parentController.previousIsMember);
+					memberName = parentController.name;
 				}
 
 				String actionName = action.getName();
@@ -199,22 +212,25 @@ public class RequestHandlerImpl implements RequestHandler {
 			return _handlers.put(path, handler);
 		}
 
-		private boolean _addToChain(Class<?> controllerType, List<ParentController> controllerChain, String chain) {
+		private boolean _addToChain(Class<?> controllerType, List<ParentController> controllerChain, String chain, boolean previousIsMember) {
 			boolean added = WrappingController.class.isAssignableFrom(controllerType);
 			if (added) {
 				String name = chain.length() > 0 ? chain.substring(chain.lastIndexOf('/') + 1) : null;
-				controllerChain.add(new ParentController(name, controllerType));
+				controllerChain.add(new ParentController(name, controllerType.asSubclass(WrappingController.class), previousIsMember));
 			}
 			return added;
+
 		}
 
 		class ParentController {
-			protected Class<?> controllerType;
+			protected Class<? extends WrappingController> controllerType;
 			protected String name;
+			protected boolean previousIsMember;
 
-			ParentController(String name, Class<?> controllerType) {
+			ParentController(String name, Class<? extends WrappingController> controllerType, boolean previousIsMember) {
 				this.name = name;
 				this.controllerType = controllerType;
+				this.previousIsMember = previousIsMember;
 			}
 		}
 	}

@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +32,7 @@ public class ActionImpl implements Action
 	private Method _method;
 	private String _name;
 	
-	private Set<RequestMethod> _access;
+	private Set<RequestMethod> _requestMethods;
 	private List<ArgumentInformation> _argumentInformation;
 	
 	@Inject
@@ -46,10 +48,14 @@ public class ActionImpl implements Action
 
 	private void _determineAccess()
 	{
-		if (_method.isAnnotationPresent(Get.class)) _access.add(RequestMethod.GET);
-		if (_method.isAnnotationPresent(Post.class)) _access.add(RequestMethod.POST);
-		if (_method.isAnnotationPresent(Put.class)) _access.add(RequestMethod.PUT);
-		if (_method.isAnnotationPresent(Delete.class)) _access.add(RequestMethod.DELETE);
+		Set<RequestMethod> requestMethods = new HashSet<RequestMethod>();
+		if (_method.isAnnotationPresent(Get.class)) requestMethods.add(RequestMethod.GET);
+		if (_method.isAnnotationPresent(Post.class)) requestMethods.add(RequestMethod.POST);
+		if (_method.isAnnotationPresent(Put.class)) requestMethods.add(RequestMethod.PUT);
+		if (_method.isAnnotationPresent(Delete.class)) requestMethods.add(RequestMethod.DELETE);
+		
+		//make it unmodifiable
+		_requestMethods = Collections.unmodifiableSet(requestMethods);
 	}
 	
 	private void _getParameterKeys() throws ConfigurationException
@@ -105,15 +111,11 @@ public class ActionImpl implements Action
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see ee.webAppToolkit.Action#allows(ee.webAppToolkit.RequestMethod)
-	 */
 	@Override
-	public boolean allows(RequestMethod requestMethod)
-	{
-		return _access.size() == 0 || _access.contains(requestMethod);
-	}	
-	
+	public Set<RequestMethod> getRequestMethods() {
+		return _requestMethods;
+	}
+
 	/* (non-Javadoc)
 	 * @see ee.webAppToolkit.Action#invoke(java.lang.Object)
 	 */

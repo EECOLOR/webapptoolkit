@@ -2,17 +2,19 @@ package ee.webAppToolkit.core.expert;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.google.inject.servlet.ServletScopes;
 
 import ee.webAppToolkit.core.annotations.DefaultCharacterEncoding;
+import ee.webAppToolkit.core.annotations.Path;
 
 public class DefaultBindingsModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
 		bindDefaultCharacterEncoding();
+		bindPath();
 		bindControllerDescriptionFactory();
 		bindActionFactory();
-
 	}
 
 	protected void bindDefaultCharacterEncoding() {
@@ -20,13 +22,16 @@ public class DefaultBindingsModule extends AbstractModule {
 		requestStaticInjection(DefaultResult.class);
 	}
 
-	protected void bindActionFactory() {
-		install(new FactoryModuleBuilder().implement(Action.class, ActionImpl.class).build(ActionFactory.class));
+	protected void bindPath() {
+		bind(String.class).annotatedWith(Path.class).toProvider(PathProvider.class).in(ServletScopes.REQUEST);
 	}
-
+	
 	protected void bindControllerDescriptionFactory() {
 		install(new FactoryModuleBuilder().implement(ControllerDescription.class, ControllerDescriptionImpl.class)
 				.build(ControllerDescriptionFactory.class));
 	}
 
+	protected void bindActionFactory() {
+		install(new FactoryModuleBuilder().implement(Action.class, ActionImpl.class).build(ActionFactory.class));
+	}
 }
