@@ -25,9 +25,10 @@ public class RequestHandlerImpl implements RequestHandler {
 	// store all handlers without trailing /
 	private Map<String, Handler> _handlers;
 	private Provider<String> _pathProvider;
-
+	
 	@Inject
 	public RequestHandlerImpl(Injector injector, ControllerDescriptionFactory descriptionFactory,
+			ActionHandlerFactory actionHandlerFactory, ControllerHandlerFactory controllerHandlerFactory,
 			@WebAppToolkit Map<String, Class<?>> bindings,
 			SiteMap siteMap, @Path Provider<String> pathProvider) throws ConfigurationException {
 
@@ -38,7 +39,7 @@ public class RequestHandlerImpl implements RequestHandler {
 		 * and have members like injector, descriptionFactory and bindings released for 
 		 * garbage collection. 
 		 */
-		BindingProcessor bindingProcessor = new BindingProcessor(injector, descriptionFactory, bindings, siteMap);
+		BindingProcessor bindingProcessor = new BindingProcessor(injector, descriptionFactory, actionHandlerFactory, controllerHandlerFactory, bindings, siteMap);
 		_handlers = bindingProcessor.getHandlers();
 		
 		System.out.println(siteMap);
@@ -59,6 +60,9 @@ public class RequestHandlerImpl implements RequestHandler {
 		
 		try {
 			return handler.handle();
+		} catch (HttpException e)
+		{
+			throw e;
 		} catch (Throwable e) {
 			throw new HttpException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e);
 		}
@@ -69,21 +73,31 @@ public class RequestHandlerImpl implements RequestHandler {
 		private Map<Class<?>, ControllerDescription> _descriptionCache;
 		private Injector _injector;
 		private ControllerDescriptionFactory _descriptionFactory;
+		private ActionHandlerFactory _actionHandlerFactory;
+		private ControllerHandlerFactory _controllerHandlerFactory;
 		private Map<String, Class<?>> _bindings;
 		private SiteMap _siteMap;
 
 		public BindingProcessor(Injector injector, ControllerDescriptionFactory descriptionFactory,
-				Map<String, Class<?>> bindings, SiteMap siteMap) throws ConfigurationException {
+				ActionHandlerFactory actionHandlerFactory, ControllerHandlerFactory controllerHandlerFactory, Map<String, Class<?>> bindings, SiteMap siteMap) throws ConfigurationException {
 
 			_injector = injector;
 			_descriptionFactory = descriptionFactory;
+			_actionHandlerFactory = actionHandlerFactory;
+			_controllerHandlerFactory = controllerHandlerFactory;
 			_bindings = bindings;
 			_siteMap = siteMap;
 
 			// to prevent excessive use of processing power we cache the controller descriptions
 			_descriptionCache = new HashMap<Class<?>, ControllerDescription>();
 
+			try
+			{
 			_gatherHandlers();
+			} catch (Throwable e)
+			{
+				e.printStackTrace();
+			}
 		}
 
 		private void _gatherHandlers() throws ConfigurationException {
@@ -162,16 +176,16 @@ public class RequestHandlerImpl implements RequestHandler {
 				String memberName = action.getName();
 				Handler handler;
 				if (parentIsWrapping) {
-					handler = new ActionHandlerImpl(action);
+					handler = _actionHandlerFactory.create(action);
 				} else {
 					// only provide a controller provider if the direct parent is not wrapping
-					handler = new ActionHandlerImpl(action, _injector.getProvider(controllerType));
+					handler = _actionHandlerFactory.create(action, _injector.getProvider(controllerType));
 				}
 
 				Provider<? extends WrappingController> controllerProvider;
 				for (ParentController parentController : controllerChain) {
 					controllerProvider = _injector.getProvider(parentController.controllerType);
-					handler = new ControllerHandlerImpl(controllerProvider, handler, memberName, parentController.previousIsMember);
+					handler = _controllerHandlerFactory.create(controllerProvider, handler, memberName, parentController.previousIsMember);
 					memberName = parentController.name;
 				}
 

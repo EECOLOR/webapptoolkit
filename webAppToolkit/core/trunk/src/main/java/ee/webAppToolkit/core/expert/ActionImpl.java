@@ -28,6 +28,19 @@ import ee.webAppToolkit.core.exceptions.EmptyValueException;
 
 public class ActionImpl implements Action
 {
+	static private Set<RequestMethod> ALL_REQUEST_METHODS = _getAllRequestMethods();
+	
+	static private Set<RequestMethod> _getAllRequestMethods()
+	{
+		HashSet<RequestMethod> requestMethods = new HashSet<RequestMethod>();
+		requestMethods.add(RequestMethod.GET);
+		requestMethods.add(RequestMethod.POST);
+		requestMethods.add(RequestMethod.PUT);
+		requestMethods.add(RequestMethod.DELETE);
+		
+		return Collections.unmodifiableSet(requestMethods);
+	}
+	
 	private ActionArgumentResolver _actionArgumentResolver;
 	private Method _method;
 	private String _name;
@@ -42,11 +55,11 @@ public class ActionImpl implements Action
 		_method = method;
 		_name = method.getName();
 
-		_determineAccess();
+		_determineRequestMethods();
 		_getParameterKeys();
 	}
 
-	private void _determineAccess()
+	private void _determineRequestMethods()
 	{
 		Set<RequestMethod> requestMethods = new HashSet<RequestMethod>();
 		if (_method.isAnnotationPresent(Get.class)) requestMethods.add(RequestMethod.GET);
@@ -54,8 +67,14 @@ public class ActionImpl implements Action
 		if (_method.isAnnotationPresent(Put.class)) requestMethods.add(RequestMethod.PUT);
 		if (_method.isAnnotationPresent(Delete.class)) requestMethods.add(RequestMethod.DELETE);
 		
-		//make it unmodifiable
-		_requestMethods = Collections.unmodifiableSet(requestMethods);
+		if (requestMethods.size() > 0)
+		{
+			//make it unmodifiable
+			_requestMethods = Collections.unmodifiableSet(requestMethods);
+		} else
+		{
+			_requestMethods = ALL_REQUEST_METHODS;
+		}
 	}
 	
 	private void _getParameterKeys() throws ConfigurationException
