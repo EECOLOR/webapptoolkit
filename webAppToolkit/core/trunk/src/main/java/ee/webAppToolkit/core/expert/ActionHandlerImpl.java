@@ -13,20 +13,25 @@ import ee.webAppToolkit.core.Result;
 import ee.webAppToolkit.core.exceptions.ConfigurationException;
 import ee.webAppToolkit.core.exceptions.HttpException;
 
+//TODO refactor parts of this with the controller handler
 public class ActionHandlerImpl implements ActionHandler {
 
 	private Map<RequestMethod, Action> _actions;
+	private ContextProvider _contextProvider;
+	private String _context;
 	private Provider<?> _controllerProvider;
 	private Provider<RequestMethod> _requestMethodProvider;
 	
 	public ActionHandlerImpl(Provider<RequestMethod> requestMethodProvider, Action action) throws ConfigurationException
 	{
-		this(requestMethodProvider, action, null);
+		this(requestMethodProvider, action, null, null, null);
 	}
 	
-	public ActionHandlerImpl(Provider<RequestMethod> requestMethodProvider, Action action, Provider<?> controllerProvider) throws ConfigurationException
+	public ActionHandlerImpl(Provider<RequestMethod> requestMethodProvider, Action action, Provider<?> controllerProvider, ContextProvider contextProvider, String context) throws ConfigurationException
 	{
 		_requestMethodProvider = requestMethodProvider;
+		_contextProvider = contextProvider;
+		_context = context;
 		_controllerProvider = controllerProvider;
 		
 		_actions = new HashMap<RequestMethod, Action>();
@@ -36,6 +41,9 @@ public class ActionHandlerImpl implements ActionHandler {
 	@Override
 	public Result handle() throws Throwable
 	{
+		//because we create the controller we need to set the context
+		_contextProvider.setContext(_context);
+		
 		Object controller = _controllerProvider.get();
 		return handle(controller);
 	}

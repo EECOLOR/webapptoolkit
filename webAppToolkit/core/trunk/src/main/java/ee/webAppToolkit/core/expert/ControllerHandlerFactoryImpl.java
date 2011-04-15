@@ -1,5 +1,6 @@
 package ee.webAppToolkit.core.expert;
 
+import javax.inject.Inject;
 import javax.inject.Provider;
 
 import ee.webAppToolkit.core.WrappingController;
@@ -10,10 +11,18 @@ import ee.webAppToolkit.core.WrappingController;
  */
 public class ControllerHandlerFactoryImpl implements ControllerHandlerFactory {
 
+	private ContextProvider _contextProvider;
+
+	@Inject
+	public ControllerHandlerFactoryImpl(ContextProvider contextProvider) {
+		_contextProvider = contextProvider;
+	}
+
 	@Override
-	public ControllerHandlerImpl create(Provider<? extends WrappingController> controllerProvider,
+	public ControllerHandlerImpl create(Provider<? extends WrappingController> controllerProvider, String context,
 			Handler childHandler, String memberName, boolean childIsMember) {
-		return new ControllerHandlerImpl(controllerProvider, childHandler, memberName, childIsMember);
+		return new ControllerHandlerImpl(controllerProvider, _contextProvider, context, childHandler, memberName,
+				childIsMember);
 	}
 
 }

@@ -5,6 +5,7 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.servlet.ServletScopes;
 
 import ee.webAppToolkit.core.RequestMethod;
+import ee.webAppToolkit.core.annotations.Context;
 import ee.webAppToolkit.core.annotations.DefaultCharacterEncoding;
 import ee.webAppToolkit.core.annotations.Path;
 
@@ -17,6 +18,11 @@ public class DefaultBindingsModule extends AbstractModule {
 		bindControllerDescriptionFactory();
 		bindActionFactory();
 		bindRequestMethod();
+		bindContext();
+	}
+
+	private void bindContext() {
+		bind(String.class).annotatedWith(Context.class).toProvider(ContextProvider.class);
 	}
 
 	private void bindRequestMethod() {

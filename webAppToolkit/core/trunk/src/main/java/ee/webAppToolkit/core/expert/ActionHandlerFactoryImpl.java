@@ -13,11 +13,13 @@ import ee.webAppToolkit.core.exceptions.ConfigurationException;
 public class ActionHandlerFactoryImpl implements ActionHandlerFactory {
 
 	private Provider<RequestMethod> _requestMethodProvider;
+	private ContextProvider _contextProvider;
 
 	@Inject
-	public ActionHandlerFactoryImpl(Provider<RequestMethod> requestMethodProvider)
+	public ActionHandlerFactoryImpl(Provider<RequestMethod> requestMethodProvider, ContextProvider contextProvider)
 	{
 		_requestMethodProvider = requestMethodProvider;
+		_contextProvider = contextProvider;
 	}
 	
 	@Override
@@ -26,8 +28,8 @@ public class ActionHandlerFactoryImpl implements ActionHandlerFactory {
 	}
 
 	@Override
-	public ActionHandler create(Action action, Provider<?> controllerProvider) throws ConfigurationException {
-		return new ActionHandlerImpl(_requestMethodProvider, action, controllerProvider);
+	public ActionHandler create(Action action, Provider<?> controllerProvider, String context) throws ConfigurationException {
+		return new ActionHandlerImpl(_requestMethodProvider, action, controllerProvider, _contextProvider, context);
 	}
 
 }

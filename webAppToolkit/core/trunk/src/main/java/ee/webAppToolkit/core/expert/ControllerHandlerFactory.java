@@ -8,5 +8,5 @@ import ee.webAppToolkit.core.WrappingController;
 
 @ImplementedBy(ControllerHandlerFactoryImpl.class)
 public interface ControllerHandlerFactory {
-	public ControllerHandlerImpl create(Provider<? extends WrappingController> controllerProvider, Handler childHandler, String memberName, boolean childIsMember);
+	public ControllerHandlerImpl create(Provider<? extends WrappingController> controllerProvider, String context, Handler childHandler, String memberName, boolean childIsMember);
 }

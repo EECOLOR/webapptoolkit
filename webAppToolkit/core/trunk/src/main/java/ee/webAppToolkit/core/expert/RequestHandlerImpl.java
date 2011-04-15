@@ -179,13 +179,13 @@ public class RequestHandlerImpl implements RequestHandler {
 					handler = _actionHandlerFactory.create(action);
 				} else {
 					// only provide a controller provider if the direct parent is not wrapping
-					handler = _actionHandlerFactory.create(action, _injector.getProvider(controllerType));
+					handler = _actionHandlerFactory.create(action, _injector.getProvider(controllerType), path);
 				}
 
 				Provider<? extends WrappingController> controllerProvider;
 				for (ParentController parentController : controllerChain) {
 					controllerProvider = _injector.getProvider(parentController.controllerType);
-					handler = _controllerHandlerFactory.create(controllerProvider, handler, memberName, parentController.previousIsMember);
+					handler = _controllerHandlerFactory.create(controllerProvider, parentController.path, handler, memberName, parentController.previousIsMember);
 					memberName = parentController.name;
 				}
 
@@ -226,11 +226,11 @@ public class RequestHandlerImpl implements RequestHandler {
 			return _handlers.put(path, handler);
 		}
 
-		private boolean _addToChain(Class<?> controllerType, List<ParentController> controllerChain, String chain, boolean previousIsMember) {
+		private boolean _addToChain(Class<?> controllerType, List<ParentController> controllerChain, String path, boolean previousIsMember) {
 			boolean added = WrappingController.class.isAssignableFrom(controllerType);
 			if (added) {
-				String name = chain.length() > 0 ? chain.substring(chain.lastIndexOf('/') + 1) : null;
-				controllerChain.add(new ParentController(name, controllerType.asSubclass(WrappingController.class), previousIsMember));
+				String name = path.length() > 0 ? path.substring(path.lastIndexOf('/') + 1) : null;
+				controllerChain.add(new ParentController(name, controllerType.asSubclass(WrappingController.class), previousIsMember, path));
 			}
 			return added;
 
@@ -240,11 +240,13 @@ public class RequestHandlerImpl implements RequestHandler {
 			protected Class<? extends WrappingController> controllerType;
 			protected String name;
 			protected boolean previousIsMember;
+			protected String path;
 
-			ParentController(String name, Class<? extends WrappingController> controllerType, boolean previousIsMember) {
+			ParentController(String name, Class<? extends WrappingController> controllerType, boolean previousIsMember, String path) {
 				this.name = name;
 				this.controllerType = controllerType;
 				this.previousIsMember = previousIsMember;
+				this.path = path;
 			}
 		}
 	}

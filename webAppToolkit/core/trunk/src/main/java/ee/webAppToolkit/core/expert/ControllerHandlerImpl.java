@@ -8,13 +8,17 @@ import ee.webAppToolkit.core.WrappingController;
 public class ControllerHandlerImpl implements ControllerHandler {
 
 	private Provider<? extends WrappingController> _controllerProvider;
+	private String _context;
+	private ContextProvider _contextProvider;
 	private Handler _childHandler;
 	private boolean _childIsMember;
 	private String _memberName;
 	
-	public ControllerHandlerImpl(Provider<? extends WrappingController> controllerProvider, Handler childHandler, String memberName, boolean childIsMember)
+	public ControllerHandlerImpl(Provider<? extends WrappingController> controllerProvider, ContextProvider contextProvider, String context, Handler childHandler, String memberName, boolean childIsMember)
 	{
 		_controllerProvider = controllerProvider;
+		_context = context;
+		_contextProvider = contextProvider;
 		_childHandler = childHandler;
 		_memberName = memberName;
 		_childIsMember = childIsMember;
@@ -29,6 +33,9 @@ public class ControllerHandlerImpl implements ControllerHandler {
 	public Result handle(WrappingController controller) throws Throwable
 	{
 		WrappingController subController = null;
+		
+		// set the current context
+		_contextProvider.setContext(_context);
 		
 		if (_childIsMember)
 		{
@@ -52,6 +59,9 @@ public class ControllerHandlerImpl implements ControllerHandler {
 		{
 			result = _childHandler.handle();
 		}
+		
+		// the context might have been changed in the child handler, we need to set it again
+		_contextProvider.setContext(_context);
 		
 		if (result != null && !result.preventWrapping())
 		{
