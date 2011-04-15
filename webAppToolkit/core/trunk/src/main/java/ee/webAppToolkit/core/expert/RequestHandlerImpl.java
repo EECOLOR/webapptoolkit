@@ -91,9 +91,10 @@ public class RequestHandlerImpl implements RequestHandler {
 			// to prevent excessive use of processing power we cache the controller descriptions
 			_descriptionCache = new HashMap<Class<?>, ControllerDescription>();
 
+			//TODO remove try catch
 			try
 			{
-			_gatherHandlers();
+				_gatherHandlers();
 			} catch (Throwable e)
 			{
 				e.printStackTrace();
