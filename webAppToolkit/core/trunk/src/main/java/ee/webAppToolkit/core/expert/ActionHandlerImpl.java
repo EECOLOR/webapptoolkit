@@ -17,7 +17,7 @@ import ee.webAppToolkit.core.exceptions.HttpException;
 public class ActionHandlerImpl implements ActionHandler {
 
 	private Map<RequestMethod, Action> _actions;
-	private ContextProvider _contextProvider;
+	private ThreadLocalProvider<String> _contextProvider;
 	private String _context;
 	private Provider<?> _controllerProvider;
 	private Provider<RequestMethod> _requestMethodProvider;
@@ -27,7 +27,7 @@ public class ActionHandlerImpl implements ActionHandler {
 		this(requestMethodProvider, action, null, null, null);
 	}
 	
-	public ActionHandlerImpl(Provider<RequestMethod> requestMethodProvider, Action action, Provider<?> controllerProvider, ContextProvider contextProvider, String context) throws ConfigurationException
+	public ActionHandlerImpl(Provider<RequestMethod> requestMethodProvider, Action action, Provider<?> controllerProvider, ThreadLocalProvider<String> contextProvider, String context) throws ConfigurationException
 	{
 		_requestMethodProvider = requestMethodProvider;
 		_contextProvider = contextProvider;
@@ -42,7 +42,7 @@ public class ActionHandlerImpl implements ActionHandler {
 	public Result handle() throws Throwable
 	{
 		//because we create the controller we need to set the context
-		_contextProvider.setContext(_context);
+		_contextProvider.set(_context);
 		
 		Object controller = _controllerProvider.get();
 		return handle(controller);

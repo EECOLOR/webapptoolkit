@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import ee.webAppToolkit.core.WrappingController;
+import ee.webAppToolkit.core.annotations.Context;
 
 /*
  * Had to implement it manually because of the limitation of the FactoryModuleBuilder that does not
@@ -11,10 +12,10 @@ import ee.webAppToolkit.core.WrappingController;
  */
 public class ControllerHandlerFactoryImpl implements ControllerHandlerFactory {
 
-	private ContextProvider _contextProvider;
+	private ThreadLocalProvider<String> _contextProvider;
 
 	@Inject
-	public ControllerHandlerFactoryImpl(ContextProvider contextProvider) {
+	public ControllerHandlerFactoryImpl(@Context ThreadLocalProvider<String> contextProvider) {
 		_contextProvider = contextProvider;
 	}
 

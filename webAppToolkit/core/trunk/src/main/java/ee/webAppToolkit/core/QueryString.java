@@ -1,4 +1,4 @@
-package ee.webAppToolkit.core.expert;
+package ee.webAppToolkit.core;
 
 import java.util.HashMap;
 import java.util.Map;

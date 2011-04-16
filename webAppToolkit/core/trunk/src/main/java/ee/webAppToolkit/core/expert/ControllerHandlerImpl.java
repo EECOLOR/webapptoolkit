@@ -9,12 +9,12 @@ public class ControllerHandlerImpl implements ControllerHandler {
 
 	private Provider<? extends WrappingController> _controllerProvider;
 	private String _context;
-	private ContextProvider _contextProvider;
+	private ThreadLocalProvider<String> _contextProvider;
 	private Handler _childHandler;
 	private boolean _childIsMember;
 	private String _memberName;
 	
-	public ControllerHandlerImpl(Provider<? extends WrappingController> controllerProvider, ContextProvider contextProvider, String context, Handler childHandler, String memberName, boolean childIsMember)
+	public ControllerHandlerImpl(Provider<? extends WrappingController> controllerProvider, ThreadLocalProvider<String> contextProvider, String context, Handler childHandler, String memberName, boolean childIsMember)
 	{
 		_controllerProvider = controllerProvider;
 		_context = context;
@@ -35,7 +35,7 @@ public class ControllerHandlerImpl implements ControllerHandler {
 		WrappingController subController = null;
 		
 		// set the current context
-		_contextProvider.setContext(_context);
+		_contextProvider.set(_context);
 		
 		if (_childIsMember)
 		{
@@ -61,7 +61,7 @@ public class ControllerHandlerImpl implements ControllerHandler {
 		}
 		
 		// the context might have been changed in the child handler, we need to set it again
-		_contextProvider.setContext(_context);
+		_contextProvider.set(_context);
 		
 		if (result != null && !result.preventWrapping())
 		{

@@ -2,8 +2,11 @@ package ee.webAppToolkit.core.expert;
 
 import java.util.HashMap;
 
+import javax.inject.Singleton;
+
 import ee.webAppToolkit.core.SiteMap;
 
+@Singleton
 public class SiteMapImpl extends HashMap<String, SiteMap> implements SiteMap {
 	private static final long serialVersionUID = 1L;
 

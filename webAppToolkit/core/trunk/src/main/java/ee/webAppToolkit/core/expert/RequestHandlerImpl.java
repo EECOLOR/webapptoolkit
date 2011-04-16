@@ -25,6 +25,7 @@ public class RequestHandlerImpl implements RequestHandler {
 	// store all handlers without trailing /
 	private Map<String, Handler> _handlers;
 	private Provider<String> _pathProvider;
+	private BindingProcessor _bindingProcessor;
 	
 	@Inject
 	public RequestHandlerImpl(Injector injector, ControllerDescriptionFactory descriptionFactory,
@@ -39,10 +40,15 @@ public class RequestHandlerImpl implements RequestHandler {
 		 * and have members like injector, descriptionFactory and bindings released for 
 		 * garbage collection. 
 		 */
-		BindingProcessor bindingProcessor = new BindingProcessor(injector, descriptionFactory, actionHandlerFactory, controllerHandlerFactory, bindings, siteMap);
-		_handlers = bindingProcessor.getHandlers();
+		_bindingProcessor = new BindingProcessor(injector, descriptionFactory, actionHandlerFactory, controllerHandlerFactory, bindings, siteMap);
 		
-		System.out.println(siteMap);
+	}
+
+	@Override
+	public void init(String context) throws ConfigurationException {
+		_handlers = _bindingProcessor.getHandlers(context);
+		// mark binding processor for garbage collection
+		_bindingProcessor = null;
 	}
 
 	@Override
@@ -77,7 +83,8 @@ public class RequestHandlerImpl implements RequestHandler {
 		private ControllerHandlerFactory _controllerHandlerFactory;
 		private Map<String, Class<?>> _bindings;
 		private SiteMap _siteMap;
-
+		private String _context;
+		
 		public BindingProcessor(Injector injector, ControllerDescriptionFactory descriptionFactory,
 				ActionHandlerFactory actionHandlerFactory, ControllerHandlerFactory controllerHandlerFactory, Map<String, Class<?>> bindings, SiteMap siteMap) throws ConfigurationException {
 
@@ -90,15 +97,6 @@ public class RequestHandlerImpl implements RequestHandler {
 
 			// to prevent excessive use of processing power we cache the controller descriptions
 			_descriptionCache = new HashMap<Class<?>, ControllerDescription>();
-
-			//TODO remove try catch
-			try
-			{
-				_gatherHandlers();
-			} catch (Throwable e)
-			{
-				e.printStackTrace();
-			}
 		}
 
 		private void _gatherHandlers() throws ConfigurationException {
@@ -123,7 +121,11 @@ public class RequestHandlerImpl implements RequestHandler {
 			}
 		}
 
-		public Map<String, Handler> getHandlers() throws ConfigurationException {
+		public Map<String, Handler> getHandlers(String context) throws ConfigurationException {
+			_context = context;
+			_gatherHandlers();
+			
+			System.out.println(_siteMap);
 			return _handlers;
 		}
 
@@ -150,7 +152,8 @@ public class RequestHandlerImpl implements RequestHandler {
 
 			
 			// add the current controller to the chain
-			boolean parentIsWrapping = _addToChain(controllerType, controllerChain, path, true);
+			_addToChain(controllerType, controllerChain, path, true);
+			boolean parentIsWrapping = WrappingController.class.isAssignableFrom(controllerType); 
 
 			boolean directChild = parentIsWrapping;
 			String parentPath = path;
@@ -160,10 +163,10 @@ public class RequestHandlerImpl implements RequestHandler {
 				parentPath = parentPath.substring(0, parentPath.lastIndexOf('/'));
 
 				// check if we have a controller mapped at the given path
-				directChild = _bindings.containsKey(parentPath);
-				if (directChild) {
+				if (_bindings.containsKey(parentPath)) {
 					Class<?> parentControllerType = _bindings.get(parentPath);
-					directChild = _addToChain(parentControllerType, controllerChain, parentPath, directChild);
+					_addToChain(parentControllerType, controllerChain, parentPath, directChild);
+					directChild = WrappingController.class.isAssignableFrom(controllerType);
 				}
 			}
 
@@ -180,13 +183,17 @@ public class RequestHandlerImpl implements RequestHandler {
 					handler = _actionHandlerFactory.create(action);
 				} else {
 					// only provide a controller provider if the direct parent is not wrapping
-					handler = _actionHandlerFactory.create(action, _injector.getProvider(controllerType), path);
+					handler = _actionHandlerFactory.create(action, _injector.getProvider(controllerType), _context + path);
 				}
 
 				Provider<? extends WrappingController> controllerProvider;
 				for (ParentController parentController : controllerChain) {
-					controllerProvider = _injector.getProvider(parentController.controllerType);
-					handler = _controllerHandlerFactory.create(controllerProvider, parentController.path, handler, memberName, parentController.previousIsMember);
+					controllerType = parentController.controllerType;
+					if (WrappingController.class.isAssignableFrom(controllerType))
+					{
+						controllerProvider = _injector.getProvider(controllerType.asSubclass(WrappingController.class));
+						handler = _controllerHandlerFactory.create(controllerProvider, _context + parentController.path, handler, memberName, parentController.previousIsMember);
+					}
 					memberName = parentController.name;
 				}
 
@@ -214,6 +221,8 @@ public class RequestHandlerImpl implements RequestHandler {
 
 		private Handler _addHandler(String path, Handler handler) throws ConfigurationException {
 			
+			path = _context + path;
+			
 			if (_siteMap.containsPath(path))
 			{
 				throw new ConfigurationException("The path '" + path + "' is registered more then once.");
@@ -227,23 +236,18 @@ public class RequestHandlerImpl implements RequestHandler {
 			return _handlers.put(path, handler);
 		}
 
-		private boolean _addToChain(Class<?> controllerType, List<ParentController> controllerChain, String path, boolean previousIsMember) {
-			boolean added = WrappingController.class.isAssignableFrom(controllerType);
-			if (added) {
-				String name = path.length() > 0 ? path.substring(path.lastIndexOf('/') + 1) : null;
-				controllerChain.add(new ParentController(name, controllerType.asSubclass(WrappingController.class), previousIsMember, path));
-			}
-			return added;
-
+		private void _addToChain(Class<?> controllerType, List<ParentController> controllerChain, String path, boolean previousIsMember) {
+			String name = path.length() > 0 ? path.substring(path.lastIndexOf('/') + 1) : null;
+			controllerChain.add(new ParentController(name, controllerType, previousIsMember, path));
 		}
 
 		class ParentController {
-			protected Class<? extends WrappingController> controllerType;
+			protected Class<?> controllerType;
 			protected String name;
 			protected boolean previousIsMember;
 			protected String path;
 
-			ParentController(String name, Class<? extends WrappingController> controllerType, boolean previousIsMember, String path) {
+			ParentController(String name, Class<?> controllerType, boolean previousIsMember, String path) {
 				this.name = name;
 				this.controllerType = controllerType;
 				this.previousIsMember = previousIsMember;

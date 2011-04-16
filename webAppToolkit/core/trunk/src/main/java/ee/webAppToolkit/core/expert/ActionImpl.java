@@ -178,7 +178,7 @@ public class ActionImpl implements Action
 			throw e.getCause();
 		} catch (IllegalArgumentException e)
 		{
-			throw new ConfigurationException("Problem invoking method: '" + getName() + "'. Illigal argument, probably a type mismatch. \nTypes:\n" + Arrays.toString(_method.getParameterTypes()) + "\nValues\n" + Arrays.toString(args));
+			throw new ConfigurationException("Problem invoking method: '" + getName() + "'. Illigal argument, probably a type mismatch. \nTypes:\n" + Arrays.toString(_method.getParameterTypes()) + "\nValues\n" + Arrays.toString(args), e);
 		}
 		
 		if (result != null)

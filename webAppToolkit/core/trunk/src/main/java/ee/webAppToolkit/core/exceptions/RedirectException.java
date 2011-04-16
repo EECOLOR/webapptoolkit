@@ -1,22 +1,18 @@
 package ee.webAppToolkit.core.exceptions;
 
-import ee.webAppToolkit.core.expert.LocationBuilder;
-
-
 //Runtime exception to keep the API simple
 public class RedirectException extends RuntimeException
 {
 	private static final long serialVersionUID = 1L;
+	private String _location;
 	
-	private LocationBuilder _locationBuilder;
-	
-	public RedirectException(LocationBuilder locationBuilder)
+	public RedirectException(String location)
 	{
-		_locationBuilder = locationBuilder;
+		_location = location;
 	}
 	
-	public LocationBuilder getLocationBuilder()
+	public String getLocation()
 	{
-		return _locationBuilder;
+		return _location;
 	}
 }

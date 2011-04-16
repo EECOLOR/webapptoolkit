@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import ee.webAppToolkit.core.RequestMethod;
+import ee.webAppToolkit.core.annotations.Context;
 import ee.webAppToolkit.core.exceptions.ConfigurationException;
 
 /*
@@ -13,10 +14,10 @@ import ee.webAppToolkit.core.exceptions.ConfigurationException;
 public class ActionHandlerFactoryImpl implements ActionHandlerFactory {
 
 	private Provider<RequestMethod> _requestMethodProvider;
-	private ContextProvider _contextProvider;
+	private ThreadLocalProvider<String> _contextProvider;
 
 	@Inject
-	public ActionHandlerFactoryImpl(Provider<RequestMethod> requestMethodProvider, ContextProvider contextProvider)
+	public ActionHandlerFactoryImpl(Provider<RequestMethod> requestMethodProvider, @Context ThreadLocalProvider<String> contextProvider)
 	{
 		_requestMethodProvider = requestMethodProvider;
 		_contextProvider = contextProvider;

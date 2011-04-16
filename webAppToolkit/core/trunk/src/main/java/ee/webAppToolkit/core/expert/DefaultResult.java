@@ -29,7 +29,7 @@ public class DefaultResult implements Result
 	 */
 	public DefaultResult(String content)
 	{
-		this("text/plain", content);
+		this("text/html", content);
 	}
 	
 	/**
@@ -40,7 +40,7 @@ public class DefaultResult implements Result
 	 */
 	public DefaultResult(String content, boolean preventWrapping)
 	{
-		this("text/plain", content, preventWrapping);
+		this("text/html", content, preventWrapping);
 	}
 	
 	/**
