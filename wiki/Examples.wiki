@@ -1,0 +1,5 @@
+#summary Examples
+
+= Examples =
+
+This section contains examples
