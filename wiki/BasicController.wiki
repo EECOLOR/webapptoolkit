@@ -1,0 +1,15 @@
+#summary BasicController information
+
+= BasicController =
+
+The {{{BasicController}}} class was created to provide some common methods with an easy to use syntax. Most controllers will extend this class in order for their code to be more concise. Note that {{{BasicController}}} just provides a cleaner API to features of the !WebAppToolkit, nothing more.
+
+Methods and properties available in the {{{BasicController}}}:
+
+ * render - Creates a {{{Result}}} using a {{{Renderer}}} implementation
+ * output - Creates a {{{Result}}} from a {{{String}}}
+ * redirect - Allows you to redirect the client to another url
+ * flash - Access to the flash memory
+ * internals - Access to injected objects used by {{{BasicController}}}
+
+Check the Javadocs for more detailed information of these methods and the source to see how they are implemented.
