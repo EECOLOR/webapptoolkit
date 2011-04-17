@@ -43,13 +43,13 @@ If no value could be resolved an exception is thrown. This can be prevented by a
 
 The following arguments types are available by default (note that these are only the most commonly used):
 
-- @Path String
-- @Context String
-- SiteMap
-- RequestMethod
-- 
+ * @Path String
+ * @Context String
+ * SiteMap
+ * RequestMethod
+ * 
 
 Action argument resolvers are available by default for the following annotations:
 
-- @Flash
-- @Parameter
+ * @Flash
+ * @Parameter
