@@ -1,0 +1,28 @@
+#summary Information about actions
+
+Actions are public methods of [Controllers].
+
+= Annotations =
+
+To prevent a public method from becoming an action you need to annotate it with the {{{@Forbidden}}} annotation.
+
+The http specification provides different request methods, !WebAppToolkit allows you to distinguish between 4 of them:
+
+ * Get
+ * Post
+ * Put
+ * Delete
+
+If you want an action to available only with the {{{Get}}} request method you can annotate it with {{{@Get}}}. By default an action is available for all request methods.
+
+= Return types =
+
+An action can have two different return types: {{{void}}} and {{{Result}}}. If the action has {{{Result}}} as a return type and returns {{{null}}} it has the same effect as return type {{{void}}}: no result.
+
+{{{Result}}} allows you to specify:
+
+- character encoding (default is UTF-8)
+- content type (default is text/html)
+- content
+- headers
+- if this result may be wrapped
