@@ -21,8 +21,8 @@ An action can have two different return types: {{{void}}} and {{{Result}}}. If t
 
 {{{Result}}} allows you to specify:
 
-- character encoding (default is UTF-8)
-- content type (default is text/html)
-- content
-- headers
-- if this result may be wrapped
+ * character encoding (default is UTF-8)
+ * content type (default is text/html)
+ * content
+ * headers
+ * if this result may be wrapped
