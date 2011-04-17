@@ -3,3 +3,4 @@
   * [Getting_started Getting started]
   * [Core]
    * [Controllers]
+   * [Actions]
