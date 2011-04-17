@@ -1,9 +1,12 @@
-package ee.webAppToolkit.core.expert;
+package ee.webAppToolkit.core.expert.impl;
 
 import javax.inject.Provider;
 
 import ee.webAppToolkit.core.Result;
 import ee.webAppToolkit.core.WrappingController;
+import ee.webAppToolkit.core.expert.ControllerHandler;
+import ee.webAppToolkit.core.expert.Handler;
+import ee.webAppToolkit.core.expert.ThreadLocalProvider;
 
 public class ControllerHandlerImpl implements ControllerHandler {
 

@@ -5,19 +5,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.inject.Key;
-import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
+import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.servlet.ServletModule;
+import com.google.inject.servlet.ServletScopes;
 import com.google.inject.util.Types;
 
 import ee.webAppToolkit.core.annotations.Context;
 import ee.webAppToolkit.core.annotations.Path;
-import ee.webAppToolkit.core.expert.DefaultBindingsModule;
+import ee.webAppToolkit.core.expert.Action;
+import ee.webAppToolkit.core.expert.ActionFactory;
+import ee.webAppToolkit.core.expert.ControllerDescription;
+import ee.webAppToolkit.core.expert.ControllerDescriptionFactory;
+import ee.webAppToolkit.core.expert.DefaultCharacterEncoding;
+import ee.webAppToolkit.core.expert.DefaultContentType;
+import ee.webAppToolkit.core.expert.RequestMethodProvider;
 import ee.webAppToolkit.core.expert.StaticServlet;
 import ee.webAppToolkit.core.expert.ThreadLocalProvider;
-import ee.webAppToolkit.core.expert.ThreadLocalProviderImpl;
 import ee.webAppToolkit.core.expert.WebAppToolkit;
 import ee.webAppToolkit.core.expert.WebAppToolkitServlet;
+import ee.webAppToolkit.core.expert.impl.ActionImpl;
+import ee.webAppToolkit.core.expert.impl.ControllerDescriptionImpl;
+import ee.webAppToolkit.core.expert.impl.DefaultResult;
+import ee.webAppToolkit.core.expert.impl.ThreadLocalProviderImpl;
 
 public abstract class WebAppToolkitModule extends ServletModule {
 
@@ -74,7 +84,17 @@ public abstract class WebAppToolkitModule extends ServletModule {
 		bindThreadLocalProvider(String.class, Path.class);
 		bindThreadLocalProvider(String.class, Context.class);
 		
-		install(getDefaultBindingsModule());
+		bind(RequestMethod.class).toProvider(RequestMethodProvider.class).in(ServletScopes.REQUEST);
+
+		bind(String.class).annotatedWith(DefaultCharacterEncoding.class).toInstance("UTF-8");
+		bind(String.class).annotatedWith(DefaultContentType.class).toInstance("text/html");
+		requestStaticInjection(DefaultResult.class);
+
+		install(new FactoryModuleBuilder().implement(ControllerDescription.class,
+				ControllerDescriptionImpl.class).build(ControllerDescriptionFactory.class));
+
+		install(new FactoryModuleBuilder().implement(Action.class, ActionImpl.class).build(
+				ActionFactory.class));
 
 		bindStaticServlet();
 		
@@ -89,10 +109,6 @@ public abstract class WebAppToolkitModule extends ServletModule {
 		serve("/static/*").with(StaticServlet.class);
 	}
 	
-	protected Module getDefaultBindingsModule() {
-		return new DefaultBindingsModule();
-	}
-
 	abstract protected void configureControllers();
 
 	protected class Binder {

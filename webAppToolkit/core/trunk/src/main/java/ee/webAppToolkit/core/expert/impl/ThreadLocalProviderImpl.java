@@ -1,4 +1,6 @@
-package ee.webAppToolkit.core.expert;
+package ee.webAppToolkit.core.expert.impl;
+
+import ee.webAppToolkit.core.expert.ThreadLocalProvider;
 
 
 public class ThreadLocalProviderImpl <T> implements ThreadLocalProvider<T> {

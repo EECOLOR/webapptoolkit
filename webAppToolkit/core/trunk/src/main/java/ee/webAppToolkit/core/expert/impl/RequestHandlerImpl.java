@@ -1,4 +1,4 @@
-package ee.webAppToolkit.core.expert;
+package ee.webAppToolkit.core.expert.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +19,14 @@ import ee.webAppToolkit.core.annotations.Path;
 import ee.webAppToolkit.core.annotations.SubController;
 import ee.webAppToolkit.core.exceptions.ConfigurationException;
 import ee.webAppToolkit.core.exceptions.HttpException;
+import ee.webAppToolkit.core.expert.Action;
+import ee.webAppToolkit.core.expert.ActionHandlerFactory;
+import ee.webAppToolkit.core.expert.ControllerDescription;
+import ee.webAppToolkit.core.expert.ControllerDescriptionFactory;
+import ee.webAppToolkit.core.expert.ControllerHandlerFactory;
+import ee.webAppToolkit.core.expert.Handler;
+import ee.webAppToolkit.core.expert.RequestHandler;
+import ee.webAppToolkit.core.expert.WebAppToolkit;
 
 public class RequestHandlerImpl implements RequestHandler {
 

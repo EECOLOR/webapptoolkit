@@ -5,6 +5,7 @@ import com.google.inject.Key;
 
 import ee.webAppToolkit.core.exceptions.ConfigurationException;
 import ee.webAppToolkit.core.exceptions.EmptyValueException;
+import ee.webAppToolkit.core.expert.impl.ActionArgumentResolverImpl;
 
 @ImplementedBy(ActionArgumentResolverImpl.class)
 public interface ActionArgumentResolver

@@ -5,6 +5,7 @@ import com.google.inject.ImplementedBy;
 import ee.webAppToolkit.core.Result;
 import ee.webAppToolkit.core.exceptions.ConfigurationException;
 import ee.webAppToolkit.core.exceptions.HttpException;
+import ee.webAppToolkit.core.expert.impl.RequestHandlerImpl;
 
 
 @ImplementedBy(RequestHandlerImpl.class)

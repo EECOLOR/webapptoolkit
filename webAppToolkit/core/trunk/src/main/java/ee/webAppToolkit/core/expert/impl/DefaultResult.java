@@ -1,4 +1,4 @@
-package ee.webAppToolkit.core.expert;
+package ee.webAppToolkit.core.expert.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -7,13 +7,18 @@ import java.util.Map;
 import com.google.inject.Inject;
 
 import ee.webAppToolkit.core.Result;
-import ee.webAppToolkit.core.annotations.DefaultCharacterEncoding;
+import ee.webAppToolkit.core.expert.DefaultCharacterEncoding;
+import ee.webAppToolkit.core.expert.DefaultContentType;
 
 public class DefaultResult implements Result 
 {
 	@Inject
 	@DefaultCharacterEncoding
 	public static String DEFAULT_CHARACTER_ENCODING;
+	
+	@Inject
+	@DefaultContentType
+	public static String DEFAULT_CONTENT_TYPE;
 	
 	private String _characterEncoding;
 	private String _contentType;
@@ -29,7 +34,7 @@ public class DefaultResult implements Result
 	 */
 	public DefaultResult(String content)
 	{
-		this("text/html", content);
+		this(DEFAULT_CONTENT_TYPE, content);
 	}
 	
 	/**
@@ -40,7 +45,7 @@ public class DefaultResult implements Result
 	 */
 	public DefaultResult(String content, boolean preventWrapping)
 	{
-		this("text/html", content, preventWrapping);
+		this(DEFAULT_CONTENT_TYPE, content, preventWrapping);
 	}
 	
 	/**

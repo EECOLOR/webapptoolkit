@@ -1,4 +1,4 @@
-package ee.webAppToolkit.core.expert;
+package ee.webAppToolkit.core.expert.impl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -25,6 +25,8 @@ import ee.webAppToolkit.core.annotations.Post;
 import ee.webAppToolkit.core.annotations.Put;
 import ee.webAppToolkit.core.exceptions.ConfigurationException;
 import ee.webAppToolkit.core.exceptions.EmptyValueException;
+import ee.webAppToolkit.core.expert.Action;
+import ee.webAppToolkit.core.expert.ActionArgumentResolver;
 
 public class ActionImpl implements Action
 {

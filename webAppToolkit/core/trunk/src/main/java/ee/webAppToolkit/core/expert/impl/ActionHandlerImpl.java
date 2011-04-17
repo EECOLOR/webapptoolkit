@@ -1,4 +1,4 @@
-package ee.webAppToolkit.core.expert;
+package ee.webAppToolkit.core.expert.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +12,9 @@ import ee.webAppToolkit.core.RequestMethod;
 import ee.webAppToolkit.core.Result;
 import ee.webAppToolkit.core.exceptions.ConfigurationException;
 import ee.webAppToolkit.core.exceptions.HttpException;
+import ee.webAppToolkit.core.expert.Action;
+import ee.webAppToolkit.core.expert.ActionHandler;
+import ee.webAppToolkit.core.expert.ThreadLocalProvider;
 
 //TODO refactor parts of this with the controller handler
 public class ActionHandlerImpl implements ActionHandler {

@@ -1,4 +1,4 @@
-package ee.webAppToolkit.core.expert;
+package ee.webAppToolkit.core.expert.impl;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -15,6 +15,9 @@ import ee.webAppToolkit.core.annotations.Forbidden;
 import ee.webAppToolkit.core.annotations.SubController;
 import ee.webAppToolkit.core.annotations.SubControllers;
 import ee.webAppToolkit.core.exceptions.ConfigurationException;
+import ee.webAppToolkit.core.expert.Action;
+import ee.webAppToolkit.core.expert.ActionFactory;
+import ee.webAppToolkit.core.expert.ControllerDescription;
 
 public class ControllerDescriptionImpl implements ControllerDescription
 {

@@ -1,10 +1,11 @@
-package ee.webAppToolkit.core.expert;
+package ee.webAppToolkit.core.expert.impl;
 
 import java.util.HashMap;
 
 import javax.inject.Singleton;
 
 import ee.webAppToolkit.core.SiteMap;
+import ee.webAppToolkit.core.expert.ControllerDescription;
 
 @Singleton
 public class SiteMapImpl extends HashMap<String, SiteMap> implements SiteMap {

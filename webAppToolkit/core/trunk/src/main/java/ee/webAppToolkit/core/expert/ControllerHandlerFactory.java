@@ -5,6 +5,8 @@ import javax.inject.Provider;
 import com.google.inject.ImplementedBy;
 
 import ee.webAppToolkit.core.WrappingController;
+import ee.webAppToolkit.core.expert.impl.ControllerHandlerFactoryImpl;
+import ee.webAppToolkit.core.expert.impl.ControllerHandlerImpl;
 
 @ImplementedBy(ControllerHandlerFactoryImpl.class)
 public interface ControllerHandlerFactory {

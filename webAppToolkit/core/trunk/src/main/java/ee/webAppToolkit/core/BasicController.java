@@ -5,7 +5,7 @@ import javax.inject.Provider;
 
 import ee.webAppToolkit.core.annotations.Context;
 import ee.webAppToolkit.core.exceptions.RedirectException;
-import ee.webAppToolkit.core.expert.DefaultResult;
+import ee.webAppToolkit.core.expert.impl.DefaultResult;
 
 public class BasicController {
 	

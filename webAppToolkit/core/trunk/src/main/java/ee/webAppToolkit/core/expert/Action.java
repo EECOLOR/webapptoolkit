@@ -6,6 +6,7 @@ import com.google.inject.ImplementedBy;
 
 import ee.webAppToolkit.core.RequestMethod;
 import ee.webAppToolkit.core.Result;
+import ee.webAppToolkit.core.expert.impl.ActionImpl;
 
 @ImplementedBy(ActionImpl.class)
 public interface Action

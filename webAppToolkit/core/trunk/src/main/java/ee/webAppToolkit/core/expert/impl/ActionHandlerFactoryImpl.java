@@ -1,4 +1,4 @@
-package ee.webAppToolkit.core.expert;
+package ee.webAppToolkit.core.expert.impl;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -6,6 +6,10 @@ import javax.inject.Provider;
 import ee.webAppToolkit.core.RequestMethod;
 import ee.webAppToolkit.core.annotations.Context;
 import ee.webAppToolkit.core.exceptions.ConfigurationException;
+import ee.webAppToolkit.core.expert.Action;
+import ee.webAppToolkit.core.expert.ActionHandler;
+import ee.webAppToolkit.core.expert.ActionHandlerFactory;
+import ee.webAppToolkit.core.expert.ThreadLocalProvider;
 
 /*
  * Had to implement it manually because of the limitation of the FactoryModuleBuilder that does not
