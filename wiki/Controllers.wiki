@@ -65,6 +65,12 @@ This makes {{{SubController}}} a sub controller of {{{MainController}}}. This al
 
 Controllers can have control over the actions or sub controllers that are being executed and their result. This control is gained by implementing {{{WrappingController}}} which provides two methods.
 
+Note that the controller and result arguments may be {{{null}}}. If the controller argument is {{{null}}} a sub controller is called that is not a {{{WrappingController}}} itself. This means it's not part of the handling chain and creating an instance might be overhead.
+
+Consider the following request: {{{/wrappingController1/controller/wrappingController2/action}}}
+
+{{{wrappingController1}}} will not get an instance of controller since there is no need to create an instance of {{{controller}}}.
+
 == beforeHandling ==
 
 {{{
