@@ -4,8 +4,8 @@
 
 The core was written with two features in mind:
 
-- mapping requests to methods
-- converting request parameters to typed objects
+ * mapping requests to methods
+ * converting request parameters to typed objects
 
 These features gave rise to some extra features. If you want to convert strings into typed objects something can go wrong: we need a validation feature. To indicate what went wrong you need to supply messages: we need a localization feature.
 
