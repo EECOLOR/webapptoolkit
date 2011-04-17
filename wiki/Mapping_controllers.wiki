@@ -8,11 +8,7 @@ This example binds the main (or root) controller:
 
 {{{
 handle("").with(MainController.class);
-}}}
 
-*MainController*
-
-{{{
 public class MainController {
 	public Result index() {
 		...
