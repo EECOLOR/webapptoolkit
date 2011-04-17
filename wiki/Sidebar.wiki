@@ -1,4 +1,5 @@
  * User's guide
   * [Introduction]
   * [Getting_started Getting started]
-  * [Mapping_controllers Mapping controllers]
+  * [Core]
+   * [Mapping_controllers Mapping controllers]
