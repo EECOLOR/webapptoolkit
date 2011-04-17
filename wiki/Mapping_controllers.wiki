@@ -1,0 +1,64 @@
+#summary How to map controllers
+
+= Mapping controllers =
+
+In the WebAppToolkit a controller is a simple Java class (or POJO). It's public methods are called 'actions'. URL's are mapped directly to methods.
+
+This example binds the main (or root) controller:
+
+{{{
+handle("").with(MainController.class);
+}}}
+
+*MainController*
+
+{{{
+public class MainController {
+	public Result index() {
+		...
+	}
+
+	public Result action1() {
+		...
+	}
+}
+}}}
+
+This gives you the following site map:
+
+{{{
+/
+/action1
+/index
+}}}
+
+= Sub controllers =
+
+Controllers can be placed in the context of another controller. This can be done in two ways: using annotations and by binding them in the configuration.
+
+The following example binds {{{SubController}}} as a sub controller of the main controller: the url {{{/subController}}} now points to the {{{index}}} action of the sub controller.
+
+{{{
+@SubController(name="subController", type=SubController.class)
+public class MainController {
+	...
+}
+}}}
+
+When you need to bind multiple sub controller you can use the {{{SubControllers}}} annotation.
+
+{{{
+@SubControllers({
+	@SubController(name="subController1", type=SubController1.class)
+	@SubController(name="subController2", type=SubController2.class)
+})
+}}}
+
+If you do not want a controller to have a dependency on a sub controller you can add controllers as sub controllers using the configuration.
+
+{{{
+handle("").with(MainController.class);
+handle("/subController").with(SubController.class);
+}}}
+
+This makes {{{SubController}}} a sub controller of {{{MainController}}}. This allows you to bind controllers as sub controllers of controllers you do not have control over (modules created by someone else or generic controllers).
