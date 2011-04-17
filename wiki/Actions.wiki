@@ -26,3 +26,30 @@ An action can have two different return types: {{{void}}} and {{{Result}}}. If t
  * content
  * headers
  * if this result may be wrapped
+
+= Arguments =
+
+Action arguments are resolved using the following strategy.
+
+If the argument has an annotation that is annotated with {{{@ActionArgument}}} it is resolved with an {{{ActionArgumentResolver}}}. These should be bound with Guice like this:
+
+{{{
+bind(ActionArgumentResolver.class).annotatedWith(Flash.class).to(FlashActionArgumentResolver.class)
+}}}
+
+If no {{{@ActionArgument}}} was found on the annotation the argument will be resolved using Guice.
+
+If no value could be resolved an exception is thrown. This can be prevented by annotating arguments with the {{{@Optional}}} annotation.
+
+The following arguments types are available by default (note that these are only the most commonly used):
+
+- @Path String
+- @Context String
+- SiteMap
+- RequestMethod
+- 
+
+Action argument resolvers are available by default for the following annotations:
+
+- @Flash
+- @Parameter
