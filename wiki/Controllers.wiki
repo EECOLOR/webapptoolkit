@@ -28,6 +28,8 @@ This gives you the following site map:
 /index
 }}}
 
+When the !WebAppToolkit receives a request it will try to match it to the deepest action available. {{{/action1/something}}} will result in a call to {{{action1}}}and {{{/action2}}} will result in a call to {{{index}}}
+
 = Sub controllers =
 
 Controllers can be placed in the context of another controller. This can be done in two ways: using annotations and by binding them in the configuration.
@@ -59,4 +61,22 @@ handle("/subController").with(SubController.class);
 
 This makes {{{SubController}}} a sub controller of {{{MainController}}}. This allows you to bind controllers as sub controllers of controllers you do not have control over (modules created by someone else or generic controllers).
 
-= Wrapping controllers = 
+= Wrapping = 
+
+Controllers can have control over the actions or sub controllers that are being executed and their result. This control is gained by implementing {{{WrappingController}}} which provides two methods.
+
+== beforeHandling ==
+
+{{{
+void beforeHandling(String memberName, Object controller)
+}}}
+
+This allows you to do stuff before the action or sub controller is called. This is mostly used to check stuff and perform redirects if certain information is missing or invalid.
+
+== wrapResult ==
+
+{{{
+Result wrapResult(Result result, String memberName, Object controller)
+}}}
+
+This allows you to modify or wrap the result of an action or sub controller. This can be useful to render results into part of the page. You can for example have your main controller render the site header and navigation and put the results of sub controllers into content area's. This allows you to create controllers that can be used in different parts of your application.
