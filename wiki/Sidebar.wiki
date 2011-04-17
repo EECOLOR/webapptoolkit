@@ -2,4 +2,4 @@
   * [Introduction]
   * [Getting_started Getting started]
   * [Core]
-   * [Mapping_controllers Mapping controllers]
+   * [Controllers]
