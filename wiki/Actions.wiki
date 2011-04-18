@@ -47,10 +47,8 @@ The following arguments types are available by default (note that these are only
  * {{{@Context String}}}
  * {{{SiteMap}}}
  * {{{RequestMethod}}}
- * {{{ValidationResults}}}
  * TODO add others
 
 Action argument resolvers are available by default for the following annotations:
 
  * {{{@Flash}}}
- * {{{@Parameter}}}
