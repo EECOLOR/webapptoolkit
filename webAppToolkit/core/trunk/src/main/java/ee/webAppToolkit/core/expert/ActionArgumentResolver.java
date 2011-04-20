@@ -10,5 +10,5 @@ import ee.webAppToolkit.core.expert.impl.ActionArgumentResolverImpl;
 @ImplementedBy(ActionArgumentResolverImpl.class)
 public interface ActionArgumentResolver
 {
-	public <T> T resolve(Key<T> key, boolean optional, Action action) throws EmptyValueException, ConfigurationException;
+	public <T> T resolve(Key<T> key, Action action) throws EmptyValueException, ConfigurationException;
 }

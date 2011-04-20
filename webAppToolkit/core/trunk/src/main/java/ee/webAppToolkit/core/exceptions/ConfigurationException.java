@@ -13,4 +13,8 @@ public class ConfigurationException extends Exception
 	{
 		super(message, cause);
 	}
+
+	public ConfigurationException(Throwable cause) {
+		super(cause);
+	}
 }

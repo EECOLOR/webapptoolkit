@@ -26,7 +26,7 @@ public class ActionArgumentResolverImpl implements ActionArgumentResolver
 	}
 	
 	@Override
-	public <T> T resolve(Key<T> key, boolean optional, Action action) throws EmptyValueException, ConfigurationException
+	public <T> T resolve(Key<T> key, Action action) throws EmptyValueException, ConfigurationException
 	{
 		Annotation annotation = key.getAnnotation();
 
@@ -35,7 +35,7 @@ public class ActionArgumentResolverImpl implements ActionArgumentResolver
 		{
 			ActionArgumentResolver realResolver = _injector.getInstance(Key.get(ActionArgumentResolver.class, annotation));
 			
-			return realResolver.resolve(key, optional, action);
+			return realResolver.resolve(key, action);
 		} else
 		{
 			try
@@ -43,14 +43,7 @@ public class ActionArgumentResolverImpl implements ActionArgumentResolver
 				return _injector.getInstance(key);
 			} catch (com.google.inject.ConfigurationException e)
 			{
-				if (optional)
-				{
-					//no problem
-					return null;
-				} else
-				{
-					throw e;
-				}
+				throw new ConfigurationException(e);
 			}
 		}
 	}

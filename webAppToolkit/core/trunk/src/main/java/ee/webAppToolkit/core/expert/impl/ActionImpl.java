@@ -154,7 +154,7 @@ public class ActionImpl implements Action
 			Key<?> key = parameterInformation.key;
 			try
 			{
-				args[l] = _actionArgumentResolver.resolve(key, optional, this);
+				args[l] = _actionArgumentResolver.resolve(key, this);
 			} catch (EmptyValueException e)
 			{
 				if (optional)
