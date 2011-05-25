@@ -4,7 +4,7 @@ import java.text.MessageFormat;
 
 import com.google.inject.Inject;
 
-import ee.webAppToolkit.core.exceptions.EmptyValueException;
+import ee.parameterConverter.EmptyValueException;
 import ee.webAppToolkit.core.locale.LocalizedString;
 
 public class EmptyValueExceptionConverter implements ExceptionConverter<EmptyValueException>

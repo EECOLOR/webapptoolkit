@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-public class ValidationResults extends ValidationResult implements Map<String, ValidationResultContainer>
+public class ValidationResults extends ValidationResult implements Map<String, ValidationResult>
 {
-	private Map<String, ValidationResultContainer> _validationResults;
+	private Map<String, ValidationResult> _validationResults;
 	
 	public ValidationResults()
 	{
@@ -18,14 +18,14 @@ public class ValidationResults extends ValidationResult implements Map<String, V
 	public ValidationResults(String errorMessage)
 	{
 		super(errorMessage);
-		_validationResults = new HashMap<String, ValidationResultContainer>();
+		_validationResults = new HashMap<String, ValidationResult>();
 	}
 	
 	private boolean _getSubResultsValidated()
 	{
 		if (size() > 0)
 		{
-			Iterator<ValidationResultContainer> iterator = values().iterator();
+			Iterator<ValidationResult> iterator = values().iterator();
 			
 			boolean validated = true;
 			
@@ -52,28 +52,12 @@ public class ValidationResults extends ValidationResult implements Map<String, V
 		return super.getValidated() && _getSubResultsValidated();
 	}
 	
-	public ValidationResultContainer put(String key, ValidationResult value)
-	{
-		ValidationResultContainer validationResultContainer;
-		
-		if (value instanceof ValidationResultContainer)
-		{
-			validationResultContainer = (ValidationResultContainer) value;
-		} else
-		{
-			validationResultContainer = new ValidationResultContainer();
-			validationResultContainer.add(value);
-		}
-		
-		return _validationResults.put(key, validationResultContainer);
-	}
-	
 	@Override
 	public String toString()
 	{
 		StringBuilder s = new StringBuilder();
 		s.append("[ValidationResults validated=" + getValidated() + "]");
-		for (Map.Entry<String, ValidationResultContainer> entry : entrySet())
+		for (Map.Entry<String, ValidationResult> entry : entrySet())
 		{
 			s.append("\n" + entry.getKey() + ": " + entry.getValue());
 		}
@@ -100,13 +84,13 @@ public class ValidationResults extends ValidationResult implements Map<String, V
 	}
 
 	@Override
-	public Set<Map.Entry<String, ValidationResultContainer>> entrySet()
+	public Set<Map.Entry<String, ValidationResult>> entrySet()
 	{
 		return _validationResults.entrySet();
 	}
 
 	@Override
-	public ValidationResultContainer get(Object key)
+	public ValidationResult get(Object key)
 	{
 		return _validationResults.get(key);
 	}
@@ -124,19 +108,19 @@ public class ValidationResults extends ValidationResult implements Map<String, V
 	}
 
 	@Override
-	public ValidationResultContainer put(String key, ValidationResultContainer value)
+	public ValidationResult put(String key, ValidationResult value)
 	{
 		return _validationResults.put(key, value);
 	}
 
 	@Override
-	public void putAll(Map<? extends String, ? extends ValidationResultContainer> map)
+	public void putAll(Map<? extends String, ? extends ValidationResult> map)
 	{
 		_validationResults.putAll(map);
 	}
 
 	@Override
-	public ValidationResultContainer remove(Object key)
+	public ValidationResult remove(Object key)
 	{
 		return _validationResults.remove(key);
 	}
@@ -148,7 +132,7 @@ public class ValidationResults extends ValidationResult implements Map<String, V
 	}
 
 	@Override
-	public Collection<ValidationResultContainer> values()
+	public Collection<ValidationResult> values()
 	{
 		return _validationResults.values();
 	}

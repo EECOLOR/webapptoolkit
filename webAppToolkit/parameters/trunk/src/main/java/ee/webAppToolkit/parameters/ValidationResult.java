@@ -49,6 +49,38 @@ public class ValidationResult
 		_originalValue = originalValue;
 	}
 	
+	public boolean isList()
+	{
+		return this instanceof ValidationResultContainer;
+	}
+	
+	public ValidationResultContainer asList()
+	{
+		if (isList())
+		{
+			return (ValidationResultContainer) this;
+		} else
+		{
+			throw new RuntimeException("Can not return ValidationResult as a list, please use the isList method before calling this method.");
+		}
+	}
+	
+	public boolean isMap()
+	{
+		return this instanceof ValidationResults;
+	}
+	
+	public ValidationResults asMap()
+	{
+		if (isMap())
+		{
+			return (ValidationResults) this;
+		} else
+		{
+			throw new RuntimeException("Can not return ValidationResult as a map, please use the isMap method before calling this method.");
+		}
+	}
+	
 	@Override
 	public String toString()
 	{
