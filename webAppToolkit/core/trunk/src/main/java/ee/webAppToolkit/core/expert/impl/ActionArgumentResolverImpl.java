@@ -9,7 +9,6 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 
 import ee.webAppToolkit.core.exceptions.ConfigurationException;
-import ee.webAppToolkit.core.exceptions.EmptyValueException;
 import ee.webAppToolkit.core.expert.Action;
 import ee.webAppToolkit.core.expert.ActionArgumentAnnotation;
 import ee.webAppToolkit.core.expert.ActionArgumentResolver;
@@ -26,7 +25,7 @@ public class ActionArgumentResolverImpl implements ActionArgumentResolver
 	}
 	
 	@Override
-	public <T> T resolve(Key<T> key, Action action) throws EmptyValueException, ConfigurationException
+	public <T> T resolve(Key<T> key, Action action) throws ConfigurationException
 	{
 		Annotation annotation = key.getAnnotation();
 

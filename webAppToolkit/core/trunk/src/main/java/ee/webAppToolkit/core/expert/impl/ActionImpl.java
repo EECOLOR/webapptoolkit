@@ -24,7 +24,6 @@ import ee.webAppToolkit.core.annotations.Optional;
 import ee.webAppToolkit.core.annotations.Post;
 import ee.webAppToolkit.core.annotations.Put;
 import ee.webAppToolkit.core.exceptions.ConfigurationException;
-import ee.webAppToolkit.core.exceptions.EmptyValueException;
 import ee.webAppToolkit.core.expert.Action;
 import ee.webAppToolkit.core.expert.ActionArgumentResolver;
 
@@ -154,17 +153,21 @@ public class ActionImpl implements Action
 			Key<?> key = parameterInformation.key;
 			try
 			{
-				args[l] = _actionArgumentResolver.resolve(key, this);
-			} catch (EmptyValueException e)
-			{
-				if (optional)
+				Object result = _actionArgumentResolver.resolve(key, this);
+				
+				if (result == null)
 				{
-					//no problem
-					args[l] = _getDefaultValue(key.getTypeLiteral().getRawType());
-				} else
-				{
-					throw new ConfigurationException("There was a problem resolving the argument value for argument " + l + " of method '" + getName() + "'. If it's optional, mark it with @Optional", e);
+					if (optional)
+					{
+						//no problem
+						result = _getDefaultValue(key.getTypeLiteral().getRawType());
+					} else
+					{
+						throw new ConfigurationException("There was a problem resolving the argument value for argument " + l + " of method '" + getName() + "'. If it's optional, mark it with @Optional");
+					}
 				}
+				
+				args[l] = result;
 			} catch (ConfigurationException e)
 			{
 				throw new ConfigurationException("There was a problem resolving the argument value for argument " + l + " of method '" + getName() + "'", e);
