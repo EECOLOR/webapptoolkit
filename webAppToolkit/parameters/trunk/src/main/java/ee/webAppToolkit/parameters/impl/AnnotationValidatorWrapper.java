@@ -1,15 +1,18 @@
-package ee.webAppToolkit.parameters;
+package ee.webAppToolkit.parameters.impl;
 
 import java.lang.annotation.Annotation;
 
 import ee.parameterConverter.Validator;
+import ee.webAppToolkit.parameters.AnnotationValidator;
+import ee.webAppToolkit.parameters.ValidationResult;
+import ee.webAppToolkit.parameters.ValidationResultException;
 
-public class ValidatorWrapper implements Validator 
+public class AnnotationValidatorWrapper implements Validator 
 {
 	private Annotation _annotation;
-	private ee.webAppToolkit.parameters.Validator<Object, Annotation> _validator;
+	private AnnotationValidator<Object, Annotation> _validator;
 
-	public ValidatorWrapper(Annotation annotation, ee.webAppToolkit.parameters.Validator<Object, Annotation> validator)
+	public AnnotationValidatorWrapper(Annotation annotation, AnnotationValidator<Object, Annotation> validator)
 	{
 		_annotation = annotation;
 		_validator = validator;

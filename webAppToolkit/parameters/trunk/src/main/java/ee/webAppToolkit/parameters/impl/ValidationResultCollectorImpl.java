@@ -1,4 +1,4 @@
-package ee.webAppToolkit.parameters;
+package ee.webAppToolkit.parameters.impl;
 
 import java.util.Iterator;
 import java.util.List;
@@ -13,6 +13,10 @@ import com.google.inject.util.Types;
 
 import ee.parameterConverter.ConversionFailedException;
 import ee.parameterConverter.ValidationResultCollector;
+import ee.webAppToolkit.parameters.ExceptionConverter;
+import ee.webAppToolkit.parameters.ValidationResult;
+import ee.webAppToolkit.parameters.ValidationResultContainer;
+import ee.webAppToolkit.parameters.ValidationResults;
 
 public class ValidationResultCollectorImpl implements ValidationResultCollector {
 

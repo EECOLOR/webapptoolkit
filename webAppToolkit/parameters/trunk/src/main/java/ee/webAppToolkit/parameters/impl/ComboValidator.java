@@ -1,19 +1,21 @@
-package ee.webAppToolkit.parameters;
+package ee.webAppToolkit.parameters.impl;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import ee.parameterConverter.Validator;
+import ee.webAppToolkit.parameters.ValidationResult;
+import ee.webAppToolkit.parameters.ValidationResultContainer;
+import ee.webAppToolkit.parameters.ValidationResultException;
 
-public class ComboValidator implements ee.parameterConverter.Validator 
+public class ComboValidator implements Validator 
 {
-	private List<ee.parameterConverter.Validator> _validators;
+	private List<Validator> _validators;
 	
-	public ComboValidator(ee.parameterConverter.Validator validator)
+	public ComboValidator(Validator validator)
 	{
-		_validators = new ArrayList<ee.parameterConverter.Validator>();
+		_validators = new ArrayList<Validator>();
 	}
 	
 	@Override
@@ -55,7 +57,7 @@ public class ComboValidator implements ee.parameterConverter.Validator
 		}
 	}
 
-	public void addValidator(ee.parameterConverter.Validator validator)
+	public void addValidator(Validator validator)
 	{
 		_validators.add(validator);
 	}
