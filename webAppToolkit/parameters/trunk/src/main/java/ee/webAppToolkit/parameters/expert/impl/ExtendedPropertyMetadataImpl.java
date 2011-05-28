@@ -1,4 +1,4 @@
-package ee.webAppToolkit.parameters.impl;
+package ee.webAppToolkit.parameters.expert.impl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -13,10 +13,10 @@ import com.google.inject.assistedinject.Assisted;
 import ee.parameterConverter.Validator;
 import ee.parameterConverter.impl.PropertyMetadataImpl;
 import ee.webAppToolkit.parameters.AnnotationValidator;
-import ee.webAppToolkit.parameters.AnnotationValidatorResolver;
-import ee.webAppToolkit.parameters.Default;
 import ee.webAppToolkit.parameters.DefaultValueProvider;
-import ee.webAppToolkit.parameters.ValidationAnnotation;
+import ee.webAppToolkit.parameters.annotations.Default;
+import ee.webAppToolkit.parameters.annotations.ValidationAnnotation;
+import ee.webAppToolkit.parameters.expert.AnnotationValidatorResolver;
 
 public class ExtendedPropertyMetadataImpl extends PropertyMetadataImpl {
 

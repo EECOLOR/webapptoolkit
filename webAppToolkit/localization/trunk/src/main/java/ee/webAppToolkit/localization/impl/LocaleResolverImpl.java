@@ -1,13 +1,12 @@
-package ee.webAppToolkit.core.locale;
+package ee.webAppToolkit.localization.impl;
 
 import java.util.Locale;
+
+import ee.webAppToolkit.localization.LocaleResolver;
 
 public class LocaleResolverImpl implements LocaleResolver
 {
 
-	/* (non-Javadoc)
-	 * @see ee.webAppToolkit.LocaleResolver#getLocale()
-	 */
 	@Override
 	public Locale getLocale()
 	{

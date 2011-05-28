@@ -1,10 +1,12 @@
-package ee.webAppToolkit.core.locale;
+package ee.webAppToolkit.localization.impl;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 
+import ee.webAppToolkit.localization.LocalizedString;
+
 @SuppressWarnings("all")
-final class LocalizedStringImp implements LocalizedString, Serializable
+public final class LocalizedStringImp implements LocalizedString, Serializable
 {
 	private static final long serialVersionUID = 0;	
 	
@@ -15,7 +17,6 @@ final class LocalizedStringImp implements LocalizedString, Serializable
 		this.value = value;
 	}
 
-	@Override
 	public String value()
 	{
 		return this.value;

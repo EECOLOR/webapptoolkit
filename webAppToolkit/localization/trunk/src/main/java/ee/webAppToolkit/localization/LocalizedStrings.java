@@ -1,4 +1,4 @@
-package ee.webAppToolkit.core.locale;
+package ee.webAppToolkit.localization;
 
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -8,6 +8,9 @@ import java.util.Properties;
 
 import com.google.inject.Binder;
 import com.google.inject.Key;
+
+import ee.webAppToolkit.localization.impl.LocalizedStringImp;
+import ee.webAppToolkit.localization.impl.LocalizedStringProvider;
 
 
 public class LocalizedStrings

@@ -1,4 +1,4 @@
-package ee.webAppToolkit.core.locale;
+package ee.webAppToolkit.localization;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

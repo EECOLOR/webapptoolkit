@@ -1,4 +1,4 @@
-package ee.webAppToolkit.parameters.impl;
+package ee.webAppToolkit.parameters.expert.impl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -11,7 +11,7 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.util.Types;
 
 import ee.webAppToolkit.parameters.AnnotationValidator;
-import ee.webAppToolkit.parameters.AnnotationValidatorResolver;
+import ee.webAppToolkit.parameters.expert.AnnotationValidatorResolver;
 
 public class AnnotationValidatorResolverImpl implements AnnotationValidatorResolver
 {

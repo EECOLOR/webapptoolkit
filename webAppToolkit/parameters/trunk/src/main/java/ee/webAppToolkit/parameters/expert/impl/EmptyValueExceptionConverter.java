@@ -1,11 +1,13 @@
-package ee.webAppToolkit.parameters;
+package ee.webAppToolkit.parameters.expert.impl;
 
 import java.text.MessageFormat;
 
 import com.google.inject.Inject;
 
 import ee.parameterConverter.EmptyValueException;
-import ee.webAppToolkit.core.locale.LocalizedString;
+import ee.webAppToolkit.localization.LocalizedString;
+import ee.webAppToolkit.parameters.ExceptionConverter;
+import ee.webAppToolkit.parameters.ValidationResult;
 
 public class EmptyValueExceptionConverter implements ExceptionConverter<EmptyValueException>
 {

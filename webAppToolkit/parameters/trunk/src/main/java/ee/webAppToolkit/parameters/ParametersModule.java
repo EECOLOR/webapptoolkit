@@ -10,8 +10,9 @@ import ee.parameterConverter.PropertyMetadata;
 import ee.parameterConverter.PropertyMetadataFactory;
 import ee.parameterConverter.ValidationResultCollector;
 import ee.parameterConverter.guice.ParameterConverterModule;
-import ee.webAppToolkit.parameters.impl.ExtendedPropertyMetadataImpl;
-import ee.webAppToolkit.parameters.impl.ValidationResultCollectorImpl;
+import ee.webAppToolkit.parameters.expert.impl.EmptyValueExceptionConverter;
+import ee.webAppToolkit.parameters.expert.impl.ExtendedPropertyMetadataImpl;
+import ee.webAppToolkit.parameters.expert.impl.ValidationResultCollectorImpl;
 
 public class ParametersModule extends AbstractModule {
 

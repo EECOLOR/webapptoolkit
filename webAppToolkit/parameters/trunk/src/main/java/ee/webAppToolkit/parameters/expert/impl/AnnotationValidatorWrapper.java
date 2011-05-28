@@ -1,11 +1,11 @@
-package ee.webAppToolkit.parameters.impl;
+package ee.webAppToolkit.parameters.expert.impl;
 
 import java.lang.annotation.Annotation;
 
 import ee.parameterConverter.Validator;
 import ee.webAppToolkit.parameters.AnnotationValidator;
 import ee.webAppToolkit.parameters.ValidationResult;
-import ee.webAppToolkit.parameters.ValidationResultException;
+import ee.webAppToolkit.parameters.exceptions.ValidationResultException;
 
 public class AnnotationValidatorWrapper implements Validator 
 {

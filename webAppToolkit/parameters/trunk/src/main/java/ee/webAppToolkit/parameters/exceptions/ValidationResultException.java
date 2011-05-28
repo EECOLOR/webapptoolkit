@@ -1,4 +1,6 @@
-package ee.webAppToolkit.parameters;
+package ee.webAppToolkit.parameters.exceptions;
+
+import ee.webAppToolkit.parameters.ValidationResult;
 
 public class ValidationResultException extends Exception {
 	

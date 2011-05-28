@@ -1,4 +1,4 @@
-package ee.webAppToolkit.parameters.impl;
+package ee.webAppToolkit.parameters.expert.impl;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,7 +7,7 @@ import java.util.List;
 import ee.parameterConverter.Validator;
 import ee.webAppToolkit.parameters.ValidationResult;
 import ee.webAppToolkit.parameters.ValidationResultContainer;
-import ee.webAppToolkit.parameters.ValidationResultException;
+import ee.webAppToolkit.parameters.exceptions.ValidationResultException;
 
 public class ComboValidator implements Validator 
 {
