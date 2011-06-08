@@ -1,5 +1,7 @@
 package ee.webAppToolkit.localization;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
@@ -9,8 +11,8 @@ import java.util.Properties;
 import com.google.inject.Binder;
 import com.google.inject.Key;
 
-import ee.webAppToolkit.localization.impl.LocalizedStringImp;
-import ee.webAppToolkit.localization.impl.LocalizedStringProvider;
+import ee.webAppToolkit.localization.expert.impl.LocalizedStringImp;
+import ee.webAppToolkit.localization.expert.impl.LocalizedStringProvider;
 
 
 public class LocalizedStrings
@@ -62,5 +64,22 @@ public class LocalizedStrings
 		_providers.put(key, provider);
 		
 		return provider;
+	}
+	
+	static public void bindPropertiesToLocale(Binder binder, ClassLoader classLoader, String propertiesName, Locale locale)
+	{
+		Properties properties = new Properties();
+		try
+		{
+			InputStream inputStream = classLoader.getResourceAsStream(
+					propertiesName + "_" + locale.toString() + ".properties");
+			InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+			properties.load(inputStreamReader);
+		} catch (Exception e)
+		{
+			throw new RuntimeException(e);
+		}
+
+		bindProperties(binder, properties, locale);
 	}
 }

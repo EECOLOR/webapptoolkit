@@ -12,22 +12,25 @@ import com.google.inject.servlet.ServletScopes;
 import com.google.inject.util.Types;
 
 import ee.webAppToolkit.core.annotations.Context;
+import ee.webAppToolkit.core.annotations.Flash;
 import ee.webAppToolkit.core.annotations.Path;
 import ee.webAppToolkit.core.expert.Action;
+import ee.webAppToolkit.core.expert.ActionArgumentResolver;
 import ee.webAppToolkit.core.expert.ActionFactory;
 import ee.webAppToolkit.core.expert.ControllerDescription;
 import ee.webAppToolkit.core.expert.ControllerDescriptionFactory;
 import ee.webAppToolkit.core.expert.DefaultCharacterEncoding;
 import ee.webAppToolkit.core.expert.DefaultContentType;
-import ee.webAppToolkit.core.expert.RequestMethodProvider;
-import ee.webAppToolkit.core.expert.StaticServlet;
 import ee.webAppToolkit.core.expert.ThreadLocalProvider;
 import ee.webAppToolkit.core.expert.WebAppToolkit;
-import ee.webAppToolkit.core.expert.WebAppToolkitServlet;
 import ee.webAppToolkit.core.expert.impl.ActionImpl;
 import ee.webAppToolkit.core.expert.impl.ControllerDescriptionImpl;
 import ee.webAppToolkit.core.expert.impl.DefaultResult;
+import ee.webAppToolkit.core.expert.impl.FlashActionArgumentResolver;
+import ee.webAppToolkit.core.expert.impl.RequestMethodProvider;
+import ee.webAppToolkit.core.expert.impl.StaticServlet;
 import ee.webAppToolkit.core.expert.impl.ThreadLocalProviderImpl;
+import ee.webAppToolkit.core.expert.impl.WebAppToolkitServlet;
 
 public abstract class WebAppToolkitModule extends ServletModule {
 
@@ -36,31 +39,37 @@ public abstract class WebAppToolkitModule extends ServletModule {
 	}
 
 	/**
-	 * This allows you to bind a thread local provider to Guice provider, it's a shortcut 
-	 * for statements like this:
+	 * This allows you to bind a thread local provider to Guice provider, it's a shortcut for statements like this:
 	 * 
-	 * <pre><code>
+	 * <pre>
+	 * <code>
 	 * Key&lt;ThreadLocalProvider&lt;String>> key = Key.get(new TypeLiteral&lt;ThreadLocalProvider&lt;String>>(){}, Context.class);
 	 * 
 	 * bind(key).to(new TypeLiteral&lt;ThreadLocalProviderImpl&lt;String>>(){}).asEagerSingleton();
 	 * bind(String.class).annotatedWith(Context.class).toProvider(key);
-	 * </code></pre>
-	 * 
-	 * <p>The new call would look like this: <code>bindThreadLocalProvider(String.class, Context.class)</code></p>
+	 * </code>
+	 * </pre>
 	 * 
 	 * <p>
-	 * This gives you the ability to request a <code>ThreadLocalProvider&lt;String></code> annotated 
-	 * with @Context in order to set the value for the current thread.
-	 * </p>
-	 * <p>
-	 * Then in the rest of the application you can simply request a String or Provider&lt;String> annotated 
-	 * with @Context to retrieve the value.
+	 * The new call would look like this: <code>bindThreadLocalProvider(String.class, Context.class)</code>
 	 * </p>
 	 * 
-	 * @param type				The type that you want to bind.
-	 * @param annotationType	The annotation that you want to bind it with
+	 * <p>
+	 * This gives you the ability to request a <code>ThreadLocalProvider&lt;String></code> annotated with @Context in
+	 * order to set the value for the current thread.
+	 * </p>
+	 * <p>
+	 * Then in the rest of the application you can simply request a String or Provider&lt;String> annotated with @Context
+	 * to retrieve the value.
+	 * </p>
+	 * 
+	 * @param type
+	 *            The type that you want to bind.
+	 * @param annotationType
+	 *            The annotation that you want to bind it with
 	 */
-	protected <T> void bindThreadLocalProvider(Class<T> type, Class<? extends Annotation> annotationType) {
+	protected <T> void bindThreadLocalProvider(Class<T> type,
+			Class<? extends Annotation> annotationType) {
 		@SuppressWarnings("unchecked")
 		TypeLiteral<ThreadLocalProvider<T>> threadLocalType = (TypeLiteral<ThreadLocalProvider<T>>) TypeLiteral
 				.get(Types.newParameterizedType(ThreadLocalProvider.class, type));
@@ -83,7 +92,7 @@ public abstract class WebAppToolkitModule extends ServletModule {
 
 		bindThreadLocalProvider(String.class, Path.class);
 		bindThreadLocalProvider(String.class, Context.class);
-		
+
 		bind(RequestMethod.class).toProvider(RequestMethodProvider.class).in(ServletScopes.REQUEST);
 
 		bind(String.class).annotatedWith(DefaultCharacterEncoding.class).toInstance("UTF-8");
@@ -97,18 +106,20 @@ public abstract class WebAppToolkitModule extends ServletModule {
 				ActionFactory.class));
 
 		bindStaticServlet();
-		
+
 		serve("/*").with(WebAppToolkitServlet.class);
+
+		bind(ActionArgumentResolver.class).annotatedWith(Flash.class).to(
+				FlashActionArgumentResolver.class);
 
 		configureControllers();
 	}
 
-	protected void bindStaticServlet()
-	{
+	protected void bindStaticServlet() {
 		serve("/favicon.ico").with(StaticServlet.class);
 		serve("/static/*").with(StaticServlet.class);
 	}
-	
+
 	abstract protected void configureControllers();
 
 	protected class Binder {

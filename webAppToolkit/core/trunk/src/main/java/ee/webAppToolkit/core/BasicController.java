@@ -9,20 +9,8 @@ import ee.webAppToolkit.core.expert.impl.DefaultResult;
 
 public class BasicController {
 	
-	/**
-	 * Using an inner class to keep the API in subclasses cleaner
-	 * 
-	 * @author EECOLOR
-	 */
-	public static class Internals
-	{
-		//@Inject public Renderer renderer;
-		//@Inject public TemplateResolver templateResolver;
-		//@Inject public ModelWrapper modelWrapper;
-		@Inject public @Context Provider<String> contextProvider; 
-	}
-	
-	@Inject protected Internals internals;
+	@Inject protected @Context Provider<String> contextProvider; 
+	@Inject protected FlashMemory flash;
 	
 	protected void redirect(String action)
 	{
@@ -36,7 +24,7 @@ public class BasicController {
 
 	protected void redirect(String action, QueryString queryString, String fragment)
 	{
-		StringBuilder stringBuilder = new StringBuilder(internals.contextProvider.get());
+		StringBuilder stringBuilder = new StringBuilder(contextProvider.get());
 		stringBuilder.append('/');
 		stringBuilder.append(action);
 		if (queryString != null)
