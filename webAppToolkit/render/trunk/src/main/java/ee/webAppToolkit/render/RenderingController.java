@@ -67,6 +67,18 @@ public class RenderingController extends BasicController implements WrappingCont
 	{
 		return render(model, template, null);
 	}
+	
+	/**
+	 * Calls render(model, template, null, preventWrapping)
+	 * 
+	 * @param model
+	 * @param template
+	 * @return
+	 */
+	protected Result render(Object model, String template, boolean preventWrapping)
+	{
+		return render(model, template, null, preventWrapping);
+	}
 
 	/**
 	 * Calls render(model, template, contentType, null)
@@ -80,9 +92,22 @@ public class RenderingController extends BasicController implements WrappingCont
 	{
 		return render(model, template, contentType, null);
 	}
-
-	//TODO place comment
+	
 	/**
+	 * Calls render(model, template, contentType, null, preventWrapping)
+	 * 
+	 * @param model
+	 * @param template
+	 * @param contentType
+	 * @return
+	 */
+	protected Result render(Object model, String template, String contentType, boolean preventWrapping)
+	{
+		return render(model, template, contentType, null, preventWrapping);
+	}
+
+	/**
+	 * Calls render(model, template, contentType, characterEncoding, false)
 	 * 
 	 * @param model
 	 * @param template
@@ -92,9 +117,23 @@ public class RenderingController extends BasicController implements WrappingCont
 	 */
 	protected Result render(Object model, String template, String contentType, String characterEncoding)
 	{
+		return render(model, template, contentType, characterEncoding, false);
+	}
+	
+	//TODO place comment
+	/**
+	 * 
+	 * @param model
+	 * @param template
+	 * @param contentType
+	 * @param characterEncoding
+	 * @return
+	 */
+	protected Result render(Object model, String template, String contentType, String characterEncoding, boolean preventWrapping)
+	{
 		model = modelWrapper.wrap(model);
 		
-		String templatePath = templateResolver.resolveTemplate(model, template);
+		String templatePath = templateResolver.resolveTemplate(this, template);
 		
 		String content;
 		try
@@ -104,12 +143,12 @@ public class RenderingController extends BasicController implements WrappingCont
 		{
 			throw new RuntimeException(e);
 		}
-
+		
 		if (contentType == null)
 		{
 			contentType = "text/html";
 		}
-
-		return new DefaultResult(contentType, content, characterEncoding);
+		
+		return new DefaultResult(contentType, content, characterEncoding, preventWrapping);
 	}
 }

@@ -45,4 +45,9 @@ public class BasicController {
 	{
 		return new DefaultResult(content);
 	}
+	
+	protected Result output(String content, boolean preventWrapping)
+	{
+		return new DefaultResult(content, preventWrapping);
+	}
 }

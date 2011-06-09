@@ -92,7 +92,8 @@ public class ActionImpl implements Action
 			
 			for (Annotation annotation : parameterAnnotations[i])
 			{
-				if (annotation instanceof Optional)
+				System.out.println(annotation.annotationType().getSimpleName());
+				if (annotation.annotationType().getSimpleName().equals("Optional"))
 				{
 					optional = true;
 				} else

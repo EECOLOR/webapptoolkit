@@ -19,6 +19,7 @@ import ee.webAppToolkit.core.annotations.Path;
 import ee.webAppToolkit.core.annotations.SubController;
 import ee.webAppToolkit.core.exceptions.ConfigurationException;
 import ee.webAppToolkit.core.exceptions.HttpException;
+import ee.webAppToolkit.core.exceptions.RedirectException;
 import ee.webAppToolkit.core.expert.Action;
 import ee.webAppToolkit.core.expert.ActionHandlerFactory;
 import ee.webAppToolkit.core.expert.ControllerDescription;
@@ -75,6 +76,9 @@ public class RequestHandlerImpl implements RequestHandler {
 		try {
 			return handler.handle();
 		} catch (HttpException e)
+		{
+			throw e;
+		} catch (RedirectException e)
 		{
 			throw e;
 		} catch (Throwable e) {
