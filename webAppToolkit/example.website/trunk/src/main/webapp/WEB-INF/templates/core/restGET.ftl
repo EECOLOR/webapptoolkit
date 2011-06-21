@@ -1,5 +1,5 @@
 <ul>
-	[#list model.store?keys as key]
-		<li>${key} - ${model.store[key]}</li>
+	[#list model?keys as key]
+		<li>${key} - ${model[key]}</li>
 	[/#list]
 </ul>

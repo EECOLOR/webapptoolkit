@@ -96,6 +96,7 @@ public class WebAppToolkitServlet extends HttpServlet {
 				StringWriter s = new StringWriter();
 				e.printStackTrace(new PrintWriter(s));
 				httpServletResponse.sendError(statusCode, s.toString());
+				_logger.info("StackTrace: " + s.toString());
 			} else {
 				httpServletResponse.sendError(statusCode, message);
 			}

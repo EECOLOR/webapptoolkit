@@ -137,7 +137,6 @@ public class RequestHandlerImpl implements RequestHandler {
 			_context = context;
 			_gatherHandlers();
 			
-			System.out.println(_siteMap);
 			return _handlers;
 		}
 
@@ -188,35 +187,8 @@ public class RequestHandlerImpl implements RequestHandler {
 			// create the handler chains for each action
 			for (Action action : actions) {
 				
-				
-				String memberName = action.getName();
-				Handler handler;
-				if (parentIsWrapping) {
-					handler = _actionHandlerFactory.create(action);
-				} else {
-					// only provide a controller provider if the direct parent is not wrapping
-					handler = _actionHandlerFactory.create(action, _injector.getProvider(controllerType), _context + path);
-				}
-
-				Provider<? extends WrappingController> controllerProvider;
-				for (ParentController parentController : controllerChain) {
-					controllerType = parentController.controllerType;
-					if (WrappingController.class.isAssignableFrom(controllerType))
-					{
-						controllerProvider = _injector.getProvider(controllerType.asSubclass(WrappingController.class));
-						handler = _controllerHandlerFactory.create(controllerProvider, _context + parentController.path, handler, memberName, parentController.previousIsMember);
-					}
-					memberName = parentController.name;
-				}
-
-				String actionName = action.getName();
-
-				// add it at the current key if the name is 'index'
-				if (actionName.equals(ControllerDescription.INDEX)) {
-					_addHandler(path, handler);
-				}
-				
-				_addHandler(path + "/" + actionName, handler);
+				controllerType = _processAction(action, path, controllerType, controllerChain,
+						parentIsWrapping);
 			}
 
 			// create controller chains
@@ -231,21 +203,68 @@ public class RequestHandlerImpl implements RequestHandler {
 			}
 		}
 
-		private Handler _addHandler(String path, Handler handler) throws ConfigurationException {
+		private Class<?> _processAction(Action action, String path, Class<?> controllerType,
+				List<ParentController> controllerChain, boolean parentIsWrapping)
+				throws ConfigurationException {
 			
-			path = _context + path;
+			String memberName = action.getName();
+			Handler handler;
 			
-			if (_siteMap.containsPath(path))
+			String fullPath = _context + path;
+			
+			boolean index = memberName.equals(ControllerDescription.INDEX);
+			String actualPath = fullPath + "/" + memberName;
+			
+			if (_handlers.containsKey(actualPath))
 			{
-				throw new ConfigurationException("The path '" + path + "' is registered more then once.");
+				//we already have a handler registered for this path
+				Handler existingHandler = _handlers.get(actualPath);
+				
+				existingHandler.addAction(action);
+			} else
+			{
+				if (parentIsWrapping) {
+					handler = _actionHandlerFactory.create(action);
+				} else {
+					// only provide a controller provider if the direct parent is not wrapping
+					handler = _actionHandlerFactory.create(action, _injector.getProvider(controllerType), fullPath);
+				}
+				
+				Provider<? extends WrappingController> controllerProvider;
+				for (ParentController parentController : controllerChain) {
+					controllerType = parentController.controllerType;
+					if (WrappingController.class.isAssignableFrom(controllerType))
+					{
+						controllerProvider = _injector.getProvider(controllerType.asSubclass(WrappingController.class));
+						handler = _controllerHandlerFactory.create(controllerProvider, _context + parentController.path, handler, memberName, parentController.previousIsMember);
+					}
+					memberName = parentController.name;
+				}
+				
+				// add it at the current key if the name is 'index'
+				if (index) {
+					_addHandler(fullPath, handler);
+				}
+				
+				_addHandler(actualPath, handler);
 			}
 			
-			if (path.length() > 0)
+			return controllerType;
+		}
+
+		private void _addHandler(String fullPath, Handler handler) throws ConfigurationException {
+			
+			if (_siteMap.containsPath(fullPath))
 			{
-				_siteMap.addPagesForPath(path);
+				throw new ConfigurationException("The path '" + fullPath + "' is registered more then once.");
 			}
 			
-			return _handlers.put(path, handler);
+			if (fullPath.length() > 0)
+			{
+				_siteMap.addPagesForPath(fullPath);
+			}
+			
+			_handlers.put(fullPath, handler);
 		}
 
 		private void _addToChain(Class<?> controllerType, List<ParentController> controllerChain, String path, boolean previousIsMember) {

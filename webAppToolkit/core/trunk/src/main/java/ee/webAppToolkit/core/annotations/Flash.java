@@ -13,6 +13,7 @@ import ee.webAppToolkit.core.expert.ActionArgumentAnnotation;
 @ActionArgumentAnnotation
 @Target(ElementType.PARAMETER)
 @BindingAnnotation
+@Optional
 public @interface Flash
 {
 	String value() default "";

@@ -4,6 +4,8 @@ import javax.inject.Provider;
 
 import ee.webAppToolkit.core.Result;
 import ee.webAppToolkit.core.WrappingController;
+import ee.webAppToolkit.core.exceptions.ConfigurationException;
+import ee.webAppToolkit.core.expert.Action;
 import ee.webAppToolkit.core.expert.ControllerHandler;
 import ee.webAppToolkit.core.expert.Handler;
 import ee.webAppToolkit.core.expert.ThreadLocalProvider;
@@ -83,6 +85,11 @@ public class ControllerHandlerImpl implements ControllerHandler {
 	@Override
 	public Provider<? extends WrappingController> getControllerProvider() {
 		return _controllerProvider;
+	}
+
+	@Override
+	public void addAction(Action action) throws ConfigurationException {
+		_childHandler.addAction(action);
 	}
 
 	@Override

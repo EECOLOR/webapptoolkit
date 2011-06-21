@@ -20,7 +20,6 @@ import ee.webAppToolkit.core.RequestMethod;
 import ee.webAppToolkit.core.Result;
 import ee.webAppToolkit.core.annotations.Delete;
 import ee.webAppToolkit.core.annotations.Get;
-import ee.webAppToolkit.core.annotations.Optional;
 import ee.webAppToolkit.core.annotations.Post;
 import ee.webAppToolkit.core.annotations.Put;
 import ee.webAppToolkit.core.exceptions.ConfigurationException;
@@ -92,21 +91,30 @@ public class ActionImpl implements Action
 			
 			for (Annotation annotation : parameterAnnotations[i])
 			{
-				System.out.println(annotation.annotationType().getSimpleName());
-				if (annotation.annotationType().getSimpleName().equals("Optional"))
+				Class<? extends Annotation> annotationType = annotation.annotationType();
+				
+				if (annotationType.getSimpleName().equals("Optional"))
 				{
 					optional = true;
 				} else
 				{
-					if (annotation.annotationType().isAnnotationPresent(BindingAnnotation.class))
+					if (annotationType.isAnnotationPresent(BindingAnnotation.class))
 					{
 						if (currentAnnotation == null)
 						{
 							currentAnnotation = annotation;
 							
-							if (annotation.getClass().isAnnotationPresent(Optional.class))
+							//check if the annotation itself is annotated with optional
+							
+							Annotation[] annotations = annotationType.getAnnotations();
+							
+							for (Annotation annotationAnnotation : annotations)
 							{
-								optional = true;
+								if (annotationAnnotation.annotationType().getSimpleName().equals("Optional"))
+								{
+									optional = true;
+									break;
+								}
 							}
 						} else
 						{
@@ -164,7 +172,7 @@ public class ActionImpl implements Action
 						result = _getDefaultValue(key.getTypeLiteral().getRawType());
 					} else
 					{
-						throw new ConfigurationException("There was a problem resolving the argument value for argument " + l + " of method '" + getName() + "'. If it's optional, mark it with @Optional");
+						throw new ConfigurationException("There was a problem resolving the argument value for argument " + l + " of method '" + getName() + "'. If it's optional, mark it (or the annotation that was used for resolving it) with @Optional");
 					}
 				}
 				

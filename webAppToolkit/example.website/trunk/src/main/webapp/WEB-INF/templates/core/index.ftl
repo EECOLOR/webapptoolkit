@@ -1,7 +1,6 @@
-<form action="${context}/indexHandler" method="POST">
+<form action="${path}" method="POST">
 	<select name="requestMethod">
 		<option>GET</option>
-		<option>POST</option>
 		<option>PUT</option>
 		<option>DELETE</option>
 	</select>
@@ -10,10 +9,10 @@
 	<input type="submit" value="Test" />
 </form>
 <hr />
-[#if model.result??]
+[#if model??]
 	<h2>Result:</h2>
 	
 	<p>
-		${model.result}
+		${model}
 	</p>
 [/#if]
