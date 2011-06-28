@@ -45,6 +45,17 @@ public class RenderingController extends BasicController implements WrappingCont
 	{
 		return render(null);
 	}
+	
+	/**
+	 * Calls render(model, currentMember.get(), preventWrapping)
+	 * 
+	 * @param model
+	 * @param preventWrapping
+	 */
+	protected Result render(Object model, boolean preventWrapping)
+	{
+		return render(model, currentMember.get(), preventWrapping);
+	}
 
 	/**
 	 * Calls render(model, currentMember.get())

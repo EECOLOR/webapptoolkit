@@ -1,5 +1,6 @@
 package ee.webAppToolkit.core.expert;
 
+import java.lang.annotation.Annotation;
 import java.util.Set;
 
 import com.google.inject.ImplementedBy;
@@ -15,4 +16,6 @@ public interface Action
 	public Set<RequestMethod> getRequestMethods();
 	public Class<?> getReturnType();
 	public Result invoke(Object instance) throws Throwable;
+	public Annotation[] getAnnotations();
+	boolean isAnnotationPresent(Class<? extends Annotation> annotationClass);
 }

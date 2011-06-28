@@ -7,6 +7,7 @@ import java.util.Map;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.google.inject.multibindings.Multibinder;
 import com.google.inject.servlet.ServletModule;
 import com.google.inject.servlet.ServletScopes;
 import com.google.inject.util.Types;
@@ -17,8 +18,10 @@ import ee.webAppToolkit.core.annotations.Path;
 import ee.webAppToolkit.core.expert.Action;
 import ee.webAppToolkit.core.expert.ActionArgumentResolver;
 import ee.webAppToolkit.core.expert.ActionFactory;
+import ee.webAppToolkit.core.expert.ActionRegistrationListener;
 import ee.webAppToolkit.core.expert.ControllerDescription;
 import ee.webAppToolkit.core.expert.ControllerDescriptionFactory;
+import ee.webAppToolkit.core.expert.ControllerRegistrationListener;
 import ee.webAppToolkit.core.expert.DefaultCharacterEncoding;
 import ee.webAppToolkit.core.expert.DefaultContentType;
 import ee.webAppToolkit.core.expert.ThreadLocalProvider;
@@ -112,6 +115,9 @@ public abstract class WebAppToolkitModule extends ServletModule {
 		bind(ActionArgumentResolver.class).annotatedWith(Flash.class).to(
 				FlashActionArgumentResolver.class);
 
+		Multibinder.newSetBinder(binder(), ActionRegistrationListener.class);
+		Multibinder.newSetBinder(binder(), ControllerRegistrationListener.class);
+		
 		configureControllers();
 	}
 

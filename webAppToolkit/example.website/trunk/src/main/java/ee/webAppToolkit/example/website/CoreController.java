@@ -25,6 +25,7 @@ import ee.webAppToolkit.core.annotations.Get;
 import ee.webAppToolkit.core.annotations.Optional;
 import ee.webAppToolkit.core.annotations.Post;
 import ee.webAppToolkit.core.annotations.Put;
+import ee.webAppToolkit.navigation.HideFromNavigation;
 import ee.webAppToolkit.parameters.annotations.Parameter;
 import ee.webAppToolkit.render.RenderingController;
 
@@ -53,9 +54,10 @@ public class CoreController extends RenderingController {
 	}
 
 	@Get
+	@HideFromNavigation
 	public Result rest(@Named("store") Map<String, String> store)
 	{
-		return render(store, "restGET", true);
+		return render(store, true);
 	}
 	
 	@Put

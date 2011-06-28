@@ -3,8 +3,8 @@ package ee.webAppToolkit.example.website;
 import javax.inject.Inject;
 
 import ee.webAppToolkit.core.Result;
-import ee.webAppToolkit.core.SiteMap;
 import ee.webAppToolkit.core.annotations.SubController;
+import ee.webAppToolkit.navigation.SiteMap;
 import ee.webAppToolkit.render.RenderingController;
 
 @SubController(name="core", type=CoreController.class)

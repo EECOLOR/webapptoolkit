@@ -2,19 +2,21 @@ package ee.webAppToolkit.freemarker;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
-import javax.servlet.ServletContext;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
+import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
 
 import ee.webAppToolkit.localization.LocaleResolver;
 import ee.webAppToolkit.render.Renderer;
 import freemarker.cache.ClassTemplateLoader;
+import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;
 import freemarker.ext.util.ModelFactory;
 import freemarker.template.Configuration;
@@ -41,6 +43,9 @@ public class FreemarkerModule extends AbstractModule {
 		
 		//TODO change to another ObjectWrapper (for metadata)
 		bind(ObjectWrapper.class).to(DynamicObjectWrapper.class);
+		
+		Multibinder<TemplateLoader> templateLoaders = Multibinder.newSetBinder(binder(), TemplateLoader.class);
+		templateLoaders.addBinding().toInstance(new ClassTemplateLoader(FreemarkerModule.class, "templates"));
 	}
 	
 	protected void bindModelFactory(Class<?> type, ModelFactory modelFactory)
@@ -65,8 +70,8 @@ public class FreemarkerModule extends AbstractModule {
 	
 	@Provides
 	@Singleton
-	protected TemplateLoader templateLoader(ServletContext servletContext)
+	protected TemplateLoader templateLoader(Set<TemplateLoader> templateLoaders)
 	{
-		return new ClassTemplateLoader(FreemarkerModule.class, "templates");
+		return new MultiTemplateLoader(templateLoaders.toArray(new TemplateLoader[templateLoaders.size()]));
 	}
 }

@@ -253,6 +253,17 @@ public class ActionImpl implements Action
 		return _method.getReturnType();
 	}
 	
+	@Override
+	public Annotation[] getAnnotations() {
+		return _method.getAnnotations();
+	}
+	
+	@Override
+	public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass)
+	{
+		return _method.isAnnotationPresent(annotationClass);
+	}
+
 	class ArgumentInformation
 	{
 		Key<?> key;
