@@ -4,15 +4,17 @@ import javax.inject.Inject;
 
 import ee.webAppToolkit.core.Result;
 import ee.webAppToolkit.core.annotations.SubController;
+import ee.webAppToolkit.navigation.HideFromNavigation;
 import ee.webAppToolkit.navigation.SiteMap;
 import ee.webAppToolkit.render.RenderingController;
 
-@SubController(name="core", type=CoreController.class)
+@SubController(name="rest", type=RestController.class)
 public class MainController extends RenderingController {
 
 	@Inject
 	protected SiteMap siteMap;
 
+	@HideFromNavigation
 	public Result index() {
 		return output("This is index of the main controller");
 	}

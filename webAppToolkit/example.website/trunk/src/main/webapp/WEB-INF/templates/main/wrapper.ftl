@@ -5,11 +5,11 @@
  	<head>
  	</head>
  	<body>
- 		<h1>${model.title}</h1>
- 	
  		<div id="navigation">
  			[@navigation model.siteMap /]	
  		</div>
+ 		
+ 		<h1>${model.title}</h1>
  		
  		<div id="content">${model.content}</div>
  	<body>

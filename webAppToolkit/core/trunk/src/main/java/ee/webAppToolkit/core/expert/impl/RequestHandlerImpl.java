@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.inject.Injector;
 
+import ee.webAppToolkit.core.FlashMemory;
 import ee.webAppToolkit.core.Result;
 import ee.webAppToolkit.core.WrappingController;
 import ee.webAppToolkit.core.annotations.Path;
@@ -37,18 +38,21 @@ public class RequestHandlerImpl implements RequestHandler {
 	private Map<String, Handler> _handlers;
 	private Provider<String> _pathProvider;
 	private BindingProcessor _bindingProcessor;
-
+	private Provider<FlashMemory> _flashMemoryProvider;
+	
 	@Inject
 	public RequestHandlerImpl(Injector injector, ControllerDescriptionFactory descriptionFactory,
 			ActionHandlerFactory actionHandlerFactory,
 			ControllerHandlerFactory controllerHandlerFactory,
 			@WebAppToolkit Map<String, Class<?>> bindings, @Path Provider<String> pathProvider,
 			Set<ActionRegistrationListener> actionRegistrationListeners,
-			Set<ControllerRegistrationListener> controllerRegistrationListeners)
+			Set<ControllerRegistrationListener> controllerRegistrationListeners,
+			Provider<FlashMemory> flashMemoryProvider)
 			throws ConfigurationException {
 
 		_pathProvider = pathProvider;
-
+		_flashMemoryProvider = flashMemoryProvider;	
+		
 		/*
 		 * Handlers are created using an instance in order to keep their methods simple and have members like injector,
 		 * descriptionFactory and bindings released for garbage collection.
@@ -68,6 +72,10 @@ public class RequestHandlerImpl implements RequestHandler {
 
 	@Override
 	public Result handleRequest() throws HttpException {
+		
+		//notify the FlashMemory that we are moving on to the next request
+		_flashMemoryProvider.get().next();
+		
 		// TODO Implement caching
 
 		String testPath = _pathProvider.get();

@@ -29,7 +29,7 @@ import ee.webAppToolkit.navigation.HideFromNavigation;
 import ee.webAppToolkit.parameters.annotations.Parameter;
 import ee.webAppToolkit.render.RenderingController;
 
-public class CoreController extends RenderingController {
+public class RestController extends RenderingController {
 	
 	@Get
 	public Result index(@Flash("result") String result)
