@@ -73,6 +73,6 @@ public String render(Object model, String template) throws RenderFailedException
 If you do not override the {{{ModelWrapper}}} and {{{TemplateResolver}}} it will receive an instance of {{{SimpleModel}}} and "controllerName/template" as parameters.
 
 
-= dependencies =
+== Dependencies ==
 
  * [Core]
