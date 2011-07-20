@@ -31,5 +31,5 @@ public void action1(@Parameter("key") String key)
 == Dependencies ==
 
  * [Core]
- * [http://code.google.com/p/java-parameter-converter/ java-parameter-converter-core] and {{{java-parameter-converter-guice}}}
  * [Localization]
+ * [http://code.google.com/p/java-parameter-converter/ java-parameter-converter-core] and {{{java-parameter-converter-guice}}}
