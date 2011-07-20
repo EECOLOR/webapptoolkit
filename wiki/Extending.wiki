@@ -1,0 +1,15 @@
+#summary Extending information
+
+= !Extending =
+
+The core has two points that can be used by extensions:
+
+ * {{{ActionRegistrationListener}}}: Is called when an action is registered at a specific path
+ * {{{ControllerRegistrationListener}}}: Is called when a controller is registered at a specific path
+
+Listeners can be added like this:
+
+{{{
+Multibinder<ActionRegistrationListener> listeners = Multibinder.newSetBinder(binder(), ActionRegistrationListener.class);
+listeners.addBinding().to(ActionRegistrationListenerImpl.class).asEagerSingleton();
+}}}
