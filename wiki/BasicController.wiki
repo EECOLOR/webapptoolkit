@@ -10,6 +10,6 @@ Methods and properties available in the {{{BasicController}}}:
  * output - Creates a {{{Result}}} from a {{{String}}}
  * redirect - Allows you to redirect the client to another url
  * flash - Access to the flash memory
- * internals - Access to injected objects used by {{{BasicController}}}
+ * contextProvider - Access to the {{{Provider}}} for the {{{@Context}}} {{{String}}}
 
 Check the Javadocs for more detailed information of these methods and the source to see how they are implemented.
