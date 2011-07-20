@@ -49,3 +49,7 @@ install(Modules.override(new LocalizationModule()).with(new AbstractModule() {
 
 	};
 }}}
+
+== Dependencies ==
+
+ * [Core]
