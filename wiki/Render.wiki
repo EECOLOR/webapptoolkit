@@ -43,7 +43,7 @@ public Result action3()
 
 The {{{render}}} method performs a few actions before it creates a {{{Result}}}:
 
- # Wraps the given model using the injected {{{ModelWrapper}}
+ # Wraps the given model using the injected {{{ModelWrapper}}}
  # Resolves the template using the injected {{{TemplateResolver}}}
  # Renders the content using the injected {{{Renderer}}}
 
