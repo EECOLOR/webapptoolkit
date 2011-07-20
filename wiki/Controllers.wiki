@@ -25,7 +25,6 @@ This gives you the following site map:
 {{{
 /
 /action1
-/index
 }}}
 
 When the !WebAppToolkit receives a request it will try to match it to the deepest action available. {{{/action1/something}}} will result in a call to {{{action1}}}and {{{/action2}}} will result in a call to {{{index}}}
