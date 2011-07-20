@@ -45,7 +45,8 @@ The following arguments types are available by default (note that these are only
 
  * {{{@Path String}}}
  * {{{@Context String}}}
- * {{{SiteMap}}}
+ * {{{@DefaultCharacterEncoding String}}}
+ * {{{@DefaultContentType String}}}
  * {{{RequestMethod}}}
  * TODO add others
 
