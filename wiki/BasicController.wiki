@@ -6,7 +6,6 @@ The {{{BasicController}}} class was created to provide some common methods with 
 
 Methods and properties available in the {{{BasicController}}}:
 
- * render - Creates a {{{Result}}} using a {{{Renderer}}} implementation
  * output - Creates a {{{Result}}} from a {{{String}}}
  * redirect - Allows you to redirect the client to another url
  * flash - Access to the flash memory
