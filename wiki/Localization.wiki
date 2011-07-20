@@ -6,6 +6,21 @@ The localization module provides a few simple tools that can be used for localiz
 
 The {{{LocalizedStrings}}} class provides methods to bind the contents of{{{java.util.Properties}}} to a specific {{{Locale}}}. These in turn are turned into implementations of {{{@LocalizedString String}}}.
 
+A common use to install localized strings is this:
+
+{{{
+LocalizedStrings.bindPropertiesToLocale(binder(), getClass().getClassLoader(),
+				"module.validationMessages", Locale.ENGLISH);
+}}}
+
+The above statement assumes that a file called {{{module.validationMessages_en.properties}}} is present, contents of that file could look like this:
+
+{{{
+validation.empty=Did not receive input
+}}}
+
+A {{{String}}} annotated with {{{@LocalizedString("validation.empty")}}} would be injected with {{{"Did not receive input"}}}.
+
 At runtime, when an {{{@LocalizedString String}}} is requested the {{{LocalizedStringProvider}}} will use the implementation of {{{LocaleResolver}}} to determine the locale that should be used to determine the correct {{{String}}}.
 
 The default implementation of {{{LocaleResolver}}} always returns {{{Locale.ENGLISH}}}. You can override the default binding like this:
