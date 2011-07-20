@@ -2,17 +2,4 @@
 
 = Core =
 
-The core was written with two features in mind:
-
- * mapping requests to methods
- * converting request parameters to typed objects
-
-These features gave rise to some extra features. If you want to convert strings into typed objects something can go wrong: we need a validation feature. To indicate what went wrong you need to supply messages: we need a localization feature.
-
-Sometimes you want to be able to redirect to another page and keep information for that next request: we need a flash memory (from Grails and Rails) feature.
-
-This gives the following extra features:
-
- * validation
- * localization
- * flash memory
+The core was written with a single feature in mind: mapping requests to methods
