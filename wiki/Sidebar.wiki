@@ -5,4 +5,5 @@
    * [Controllers]
    * [Actions]
    * [BasicController]
+   * [Extending]
   * [Examples]
