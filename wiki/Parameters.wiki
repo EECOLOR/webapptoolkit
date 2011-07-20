@@ -1,0 +1,35 @@
+#summary Parameters information
+
+= Parameters =
+
+This module provides an {{{ActionArgumentResolver}}} (see [Core]) that resolves action arguments from request parameters. These parameters are provided by Guice as a {{{Map<String, String[]>}}} and are injected if the type is annotated with {{{@RequestParameters}}}.
+
+For exmaple:
+
+{{{
+// incoming parameters
+{
+   "one": ["1"]
+   "two": ["2"]
+}
+
+// action
+public void action1(@Parameter Map<String, Integer> params)
+{
+   //params is an instance of HashMap with {"one": 1, "two": 2}
+}
+}}}
+
+This makes form and query string handling a breeze. Internally it uses the [http://code.google.com/p/java-parameter-converter/ java-parameter-converter] to do it's magic. Please check the project homepage for the features of this little tool.
+
+If you need a specific key from the request parameters map you can specify it in the {{{@Parameter}}} annotation like this:
+
+{{{
+public void action1(@Parameter("key") String key)
+}}}
+
+== Dependencies ==
+
+- [Core]
+- [http://code.google.com/p/java-parameter-converter/ java-parameter-converter-core] and {{{java-parameter-converter-guice}}}
+- [Localization]
