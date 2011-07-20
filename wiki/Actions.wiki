@@ -48,7 +48,6 @@ The following arguments types are available by default (note that these are only
  * {{{@DefaultCharacterEncoding String}}}
  * {{{@DefaultContentType String}}}
  * {{{RequestMethod}}}
- * TODO add others
 
 Action argument resolvers are available by default for the following annotations:
 
