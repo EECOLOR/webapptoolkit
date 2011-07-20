@@ -1,0 +1,36 @@
+#summary Localization information
+
+= Localization =
+
+The localization module provides a few simple tools that can be used for localization. The first tool is the {{{@LocalizedString}}} annotation which is used in conjunction with the {{{LocalizedStrings}}} class and the {{{LocaleResolver}}} interface.
+
+The {{{LocalizedStrings}}} class provides methods to bind the contents of{{{java.util.Properties}}} to a specific {{{Locale}}}. These in turn are turned into implementations of {{{@LocalizedString String}}}.
+
+At runtime, when an {{{@LocalizedString String}}} is requested the {{{LocalizedStringProvider}}} will use the implementation of {{{LocaleResolver}}} to determine the locale that should be used to determine the correct {{{String}}}.
+
+The default implementation of {{{LocaleResolver}}} always returns {{{Locale.ENGLISH}}}. You can override the default binding like this:
+
+{{{
+install(Modules.override(new LocalizationModule()).with(new AbstractModule() {
+
+	@Override
+	protected void configure() 
+	{
+	
+		bind(LocaleResolver.class).toInstance(new LocaleResolver()
+		{
+			@Override
+			public Locale getLocale()
+			{
+				if (something)
+				{
+					return Locale.FRENCH;
+				} else
+				{
+					return Locale.ENGLISH;
+				}
+			}
+		});		
+
+	};
+}}}
