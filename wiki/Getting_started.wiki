@@ -5,8 +5,9 @@
 In order to use this toolkit you need to have the following:
 
  * A servlet container
- * [http://code.google.com/p/google-guice/ Google Guice] with {{{assisted inject}}} and {{{servlet}}} extensions
- * !WebAppToolkit Core
+ * [http://code.google.com/p/google-guice/ Google Guice] with {{{assisted inject}}}, {{{multibinding}}} and {{{servlet}}} extensions
+ * !WebAppToolkit [Core]
+ * {{{servlet api 2.5}}}
  * (Optional) Other !WebAppToolkit extensions
 
 = Server configuration =
