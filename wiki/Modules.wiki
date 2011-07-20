@@ -1,0 +1,5 @@
+#summary Modules information
+
+= Modules =
+
+The !WebAppToolkit consists of several modules. Core is the only module you need to create a very simple web application. You can add other modules to expand the capabilities of the [Core] module and get extra tools to build your web application.
