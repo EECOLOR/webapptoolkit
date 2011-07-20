@@ -1,6 +1,6 @@
 #summary Extending information
 
-= !Extending =
+= Extending =
 
 The core has two points that can be used by extensions:
 
