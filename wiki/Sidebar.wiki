@@ -6,4 +6,4 @@
    * [Actions]
    * [BasicController]
    * [Extending]
-  * [Examples]
+  * [Navigation]
