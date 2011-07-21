@@ -6,6 +6,7 @@ import java.util.Map;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 
+import ee.webAppToolkit.amf.AmfModule;
 import ee.webAppToolkit.website.WebsiteModule;
 
 public class ExampleWebsiteModule extends WebsiteModule {
@@ -13,6 +14,8 @@ public class ExampleWebsiteModule extends WebsiteModule {
 	@Override
 	protected void configureControllers() {
 		super.configureControllers();
+		
+		install(new AmfModule());
 		
 		bind(new TypeLiteral<Map<String, String>>(){}).annotatedWith(Names.named("store")).to(new TypeLiteral<HashMap<String, String>>(){}).asEagerSingleton();
 		

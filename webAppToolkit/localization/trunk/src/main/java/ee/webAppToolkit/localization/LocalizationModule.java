@@ -17,9 +17,4 @@ public class LocalizationModule extends AbstractModule {
 			}
 		});
 	}
-
-	protected void bindPropertiesToLocale(String propertiesName, Locale locale)
-	{
-		LocalizedStrings.bindPropertiesToLocale(binder(), getClass().getClassLoader(), propertiesName, locale);
-	}
 }

@@ -5,7 +5,6 @@ import javax.inject.Inject;
 import ee.webAppToolkit.core.RequestMethod;
 import ee.webAppToolkit.core.expert.Action;
 import ee.webAppToolkit.core.expert.ActionRegistrationListener;
-import ee.webAppToolkit.core.expert.ControllerDescription;
 import ee.webAppToolkit.navigation.HideFromNavigation;
 import ee.webAppToolkit.navigation.SiteMap;
 
@@ -63,14 +62,10 @@ public class ActionRegistrationListenerImpl implements ActionRegistrationListene
 	
 	@Override
 	public void actionRegistered(String path, Action action) {
-		System.out.println("Action registered at " + path);
-		
 		if (action.getRequestMethods().contains(RequestMethod.GET) &&
 			!action.isAnnotationPresent(HideFromNavigation.class) &&
-			!path.endsWith(ControllerDescription.INDEX) &&
 			!_containsPath(path))
 		{
-			System.out.println("adding action for " + path);
 			_addPagesForPath(path);
 		}
 	}

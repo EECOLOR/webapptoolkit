@@ -277,9 +277,10 @@ public class RequestHandlerImpl implements RequestHandler {
 				// add it at the current key if the name is 'index'
 				if (index) {
 					_handlers.put(fullPath, handler);
+				} else
+				{
+					_handlers.put(actualPath, handler);
 				}
-
-				_handlers.put(actualPath, handler);
 			}
 
 			return controllerType;

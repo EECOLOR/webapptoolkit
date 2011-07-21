@@ -4,11 +4,15 @@ import javax.inject.Inject;
 
 import ee.webAppToolkit.core.Result;
 import ee.webAppToolkit.core.annotations.SubController;
+import ee.webAppToolkit.core.annotations.SubControllers;
 import ee.webAppToolkit.navigation.HideFromNavigation;
 import ee.webAppToolkit.navigation.SiteMap;
 import ee.webAppToolkit.render.RenderingController;
 
-@SubController(name="rest", type=RestController.class)
+@SubControllers({
+	@SubController(name="rest", type=RestController.class),
+	@SubController(name="amf", type=AmfController.class)
+})
 public class MainController extends RenderingController {
 
 	@Inject
