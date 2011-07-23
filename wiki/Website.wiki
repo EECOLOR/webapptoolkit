@@ -9,7 +9,7 @@ Website is a module that can be used as a base for web applications that are web
  * [Render]
  * [Navigation]
  * [Freemarker]
- * [FreemarkerNavigation]
+ * [Freemarker_navigation]
 
 On top of that it does the following:
 
