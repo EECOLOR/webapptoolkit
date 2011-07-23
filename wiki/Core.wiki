@@ -6,4 +6,5 @@ The core was written with a single feature in mind: mapping requests to methods
 
 == Dependencies ==
 
- * 
+ * [http://code.google.com/p/google-guice/ Google Guice] with {{{assisted inject}}}, {{{multibinding}}} and {{{servlet}}} extensions
+ * [servlet-api 2.5]
