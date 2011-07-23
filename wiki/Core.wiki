@@ -3,3 +3,7 @@
 = Core =
 
 The core was written with a single feature in mind: mapping requests to methods
+
+== Dependencies ==
+
+ * 
