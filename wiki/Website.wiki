@@ -1,0 +1,18 @@
+#summary Website information
+
+= Website =
+
+Website is a module that can be used as a base for web applications that are websites. It installs the following modules:
+
+ * [Localization]
+ * [Parameters]
+ * [Render]
+ * [Navigation]
+ * [Freemarker]
+ * [FreemarkerNavigation]
+
+On top of that it does the following:
+
+ * overrides the {{{ModelWrapper}}} factory of {{{RenderModule}}} in order to supply a new {{{Model}}} that extends {{{SimpleModel}}} with {{{ValidationResults}}} and {{{SiteMap}}}.
+ * adds a {{{TemplateLoader}}} with the path {{{WEB-INF/templates}}}.
+ * adds an {{{ExceptionConverter}}} for {{{NumberFormatException}}}.
