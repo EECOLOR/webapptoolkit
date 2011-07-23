@@ -11,3 +11,8 @@ The macro is used like this:
 
 [@navigation siteMap /]	
 }}}
+
+== Dependencies ==
+
+ * [Navigation]
+ * [Freemarker]
