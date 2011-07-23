@@ -16,6 +16,10 @@ Validation works like this:
  * It then calls the {{{validate}}} method of the {{{AnnotationValidator}}}
  * If the returned {{{ValidationResult}}} is not validated it is placed into the requests {{{ValidationResults}}} object in the correct location
 
+= !ValidationResults =
+
+{{{ValidationResults}}} are available to Guice and thus can be injected automatically if you need them. The {{{Model}}} provided by the [Website] module provides it by default.
+
 = !ExceptionConverter =
 
 The [Website] module provides an {{{ExceptionConverter}}} for {{{NumberFormatException}}} by default: 
