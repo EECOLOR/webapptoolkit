@@ -1,7 +1,7 @@
  * User's guide
   * [Introduction]
   * [Getting_started Getting started]
-  * Modules
+  * [Modules]
    * [Core]
     * [Controllers]
     * [Actions]
