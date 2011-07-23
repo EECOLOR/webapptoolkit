@@ -16,3 +16,13 @@ On top of that it does the following:
  * overrides the {{{ModelWrapper}}} factory of {{{RenderModule}}} in order to supply a new {{{Model}}} that extends {{{SimpleModel}}} with {{{ValidationResults}}} and {{{SiteMap}}}.
  * adds a {{{TemplateLoader}}} with the path {{{WEB-INF/templates}}}.
  * adds an {{{ExceptionConverter}}} for {{{NumberFormatException}}}.
+
+== Dependencies ==
+
+ * [Core]
+ * [Localization]
+ * [Parameters]
+ * [Render]
+ * [Navigation]
+ * [Freemarker]
+ * [Freemarker_navigation]
