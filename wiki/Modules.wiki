@@ -3,3 +3,22 @@
 = Modules =
 
 The !WebAppToolkit consists of several modules. Core is the only module you need to create a very simple web application. You can add other modules to expand the capabilities of the [Core] module and get extra tools to build your web application.
+
+Modules are usually installed from within the {{{configureControllers}}} method like this:
+
+{{{
+install(new ModuleName());
+}}}
+
+In some cases you might want to override a particular binding in a module. The code below overrides some bindings and then installs the result.
+
+{{{
+install(Modules.override(new ModuleName()).with(new AbstractModule() {
+	@Override
+	protected void configure() {
+		//create bindings
+	}
+}));
+}}}
+
+More information can be found at the [http://code.google.com/p/google-guice/ Guice] project page.
