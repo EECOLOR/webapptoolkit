@@ -1,7 +1,5 @@
 package ee.webAppToolkit.freemarker;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Named;
@@ -9,7 +7,6 @@ import javax.inject.Singleton;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
 
@@ -26,11 +23,8 @@ public class FreemarkerModule extends AbstractModule {
 
 	static public final String TAG_SYNTAX = "freemarkerTagSyntax";
 	
-	private Map<Class<?>, ModelFactory> _modelFactories;
-	
 	public FreemarkerModule()
 	{
-		_modelFactories = new HashMap<Class<?>, ModelFactory>();
 	}
 	
 	@Override
@@ -39,9 +33,6 @@ public class FreemarkerModule extends AbstractModule {
 		
 		bindConstant().annotatedWith(Names.named(TAG_SYNTAX)).to(Configuration.SQUARE_BRACKET_TAG_SYNTAX);
 		
-		bind(new TypeLiteral<Map<Class<?>, ModelFactory>>(){}).toInstance(_modelFactories);
-		
-		//TODO change to another ObjectWrapper (for metadata)
 		bind(ObjectWrapper.class).to(DynamicObjectWrapper.class);
 		
 		Multibinder<TemplateLoader> templateLoaders = Multibinder.newSetBinder(binder(), TemplateLoader.class);
@@ -50,7 +41,8 @@ public class FreemarkerModule extends AbstractModule {
 	
 	protected void bindModelFactory(Class<?> type, ModelFactory modelFactory)
 	{
-		_modelFactories.put(type, modelFactory);
+		Multibinder<ModelFactoryRegistration> modelFactories = Multibinder.newSetBinder(binder(), ModelFactoryRegistration.class);
+		modelFactories.addBinding().toInstance(new ModelFactoryRegistration(type, modelFactory));
 	}
 	
 	@Provides

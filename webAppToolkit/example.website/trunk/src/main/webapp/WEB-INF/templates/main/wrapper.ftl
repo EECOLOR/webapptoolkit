@@ -6,7 +6,7 @@
  	</head>
  	<body>
  		<div id="navigation">
- 			[@navigation model.siteMap /]	
+ 			[@navigation siteMap /]	
  		</div>
  		
  		<h1>${model.title}</h1>

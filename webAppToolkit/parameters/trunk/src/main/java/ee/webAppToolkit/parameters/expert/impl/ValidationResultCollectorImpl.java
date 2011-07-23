@@ -17,6 +17,7 @@ import ee.webAppToolkit.parameters.ExceptionConverter;
 import ee.webAppToolkit.parameters.ValidationResult;
 import ee.webAppToolkit.parameters.ValidationResultContainer;
 import ee.webAppToolkit.parameters.ValidationResults;
+import ee.webAppToolkit.parameters.exceptions.ValidationResultException;
 
 public class ValidationResultCollectorImpl implements ValidationResultCollector {
 
@@ -42,22 +43,29 @@ public class ValidationResultCollectorImpl implements ValidationResultCollector 
 			exception = conversionFailedException.getCause();
 		}
 		
-		@SuppressWarnings("unchecked")
-		TypeLiteral<?> typeLiteral = (TypeLiteral<ExceptionConverter<?>>) TypeLiteral.get(Types.newParameterizedType(ExceptionConverter.class, exception.getClass()));
-		
-		List<?> bindings = _injector.findBindingsByType(typeLiteral);
-		
 		ValidationResult validationResult;
 		
-		if (bindings.size() > 0)
+		if (exception instanceof ValidationResultException)
 		{
-			@SuppressWarnings("unchecked")
-			ExceptionConverter<Throwable> converter = (ExceptionConverter<Throwable>) ((Binding<?>) bindings.get(0)).getProvider().get();
-			
-			validationResult = converter.convert(exception, originalValue);
+			validationResult = ((ValidationResultException) exception).getValidationResult();
 		} else
 		{
-			throw new RuntimeException("Could not find an exception converter for " + exception);
+			@SuppressWarnings("unchecked")
+			TypeLiteral<?> typeLiteral = (TypeLiteral<ExceptionConverter<?>>) TypeLiteral.get(Types.newParameterizedType(ExceptionConverter.class, exception.getClass()));
+			
+			List<?> bindings = _injector.findBindingsByType(typeLiteral);
+			
+			
+			if (bindings.size() > 0)
+			{
+				@SuppressWarnings("unchecked")
+				ExceptionConverter<Throwable> converter = (ExceptionConverter<Throwable>) ((Binding<?>) bindings.get(0)).getProvider().get();
+				
+				validationResult = converter.convert(exception, originalValue);
+			} else
+			{
+				throw new RuntimeException("Could not find an exception converter for " + exception, exception);
+			}
 		}
 
 		//add the validation result

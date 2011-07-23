@@ -6,13 +6,6 @@
   <dependencies>
   	<dependency>
   		<groupId>ee.webAppToolkit</groupId>
-  		<artifactId>display</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>ee.webAppToolkit</groupId>
   		<artifactId>render</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   		<type>jar</type>
@@ -22,6 +15,12 @@
   		<groupId>freemarker</groupId>
   		<artifactId>freemarker</artifactId>
   		<version>2.3.9</version>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>ee.webAppToolkit</groupId>
+  		<artifactId>localization</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
   		<scope>compile</scope>
   	</dependency>
   </dependencies>

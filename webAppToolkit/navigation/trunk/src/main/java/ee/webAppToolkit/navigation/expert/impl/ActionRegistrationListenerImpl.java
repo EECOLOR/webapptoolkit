@@ -2,19 +2,25 @@ package ee.webAppToolkit.navigation.expert.impl;
 
 import javax.inject.Inject;
 
+import com.google.inject.Injector;
+
 import ee.webAppToolkit.core.RequestMethod;
 import ee.webAppToolkit.core.expert.Action;
 import ee.webAppToolkit.core.expert.ActionRegistrationListener;
-import ee.webAppToolkit.navigation.HideFromNavigation;
+import ee.webAppToolkit.localization.LocalizedString;
 import ee.webAppToolkit.navigation.SiteMap;
+import ee.webAppToolkit.navigation.annotations.HideFromNavigation;
+import ee.webAppToolkit.navigation.annotations.NavigationDisplayName;
 
 public class ActionRegistrationListenerImpl implements ActionRegistrationListener {
 
+	private Injector _injector;
 	private SiteMap _siteMap;
 	
 	@Inject
-	public ActionRegistrationListenerImpl(SiteMap siteMap)
+	public ActionRegistrationListenerImpl(Injector injector, SiteMap siteMap)
 	{
+		_injector = injector;
 		_siteMap = siteMap;
 	}
 	
@@ -26,26 +32,31 @@ public class ActionRegistrationListenerImpl implements ActionRegistrationListene
 		return path.split("/");
 	}
 
-	private void _addPagesForPath(String path) {
+	private void _addPagesForPath(String[] pathSegments, String displayName, LocalizedString localizedString) {
 
-		String[] pathSegments = _getPathSegments(path);
 		SiteMap current = _siteMap;
 		SiteMap newSiteMap;
 
-		for (String pathSegment : pathSegments) {
-			newSiteMap = new SiteMapImpl();
+		for (int i = 0; i < pathSegments.length; i++) {
+			String pathSegment = pathSegments[i];
 			if (current.containsKey(pathSegment)) {
 				current = current.get(pathSegment);
 			} else {
+				newSiteMap = new SiteMapImpl(_injector);
+				
+				if (i == pathSegments.length - 1)
+				{
+					newSiteMap.setDisplayName(displayName);
+					newSiteMap.setDisplayName(localizedString);
+				}
+				
 				current.put(pathSegment, newSiteMap);
 				current = newSiteMap;
 			}
 		}
 	}
 
-	private boolean _containsPath(String path) {
-
-		String[] pathSegments = _getPathSegments(path);
+	private boolean _containsPath(String[] pathSegments) {
 
 		SiteMap current = _siteMap;
 
@@ -62,11 +73,25 @@ public class ActionRegistrationListenerImpl implements ActionRegistrationListene
 	
 	@Override
 	public void actionRegistered(String path, Action action) {
+		String[] pathSegments = _getPathSegments(path);
+		
 		if (action.getRequestMethods().contains(RequestMethod.GET) &&
 			!action.isAnnotationPresent(HideFromNavigation.class) &&
-			!_containsPath(path))
+			!_containsPath(pathSegments))
 		{
-			_addPagesForPath(path);
+			String displayName = null;
+			LocalizedString localizedString = null;
+			
+			if (action.isAnnotationPresent(NavigationDisplayName.class))
+			{
+				NavigationDisplayName displayNameAnnotation = action.getAnnotation(NavigationDisplayName.class);
+				localizedString = displayNameAnnotation.value();
+			} else
+			{
+				displayName = pathSegments[pathSegments.length - 1];
+			}
+
+			_addPagesForPath(pathSegments, displayName, localizedString);
 		}
 	}
 

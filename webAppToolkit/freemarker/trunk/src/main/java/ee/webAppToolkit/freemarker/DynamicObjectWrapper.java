@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -31,7 +31,7 @@ public class DynamicObjectWrapper extends DefaultObjectWrapper implements Object
 	private Map<Class<?>, ModelFactory> _typeCache;
 	
 	@Inject
-	public DynamicObjectWrapper(Map<Class<?>, ModelFactory> modelFactories)
+	public DynamicObjectWrapper(Set<ModelFactoryRegistration> modelFactories)
 	{
 		setExposureLevel(EXPOSE_PROPERTIES_ONLY);
 		setExposeFields(true);
@@ -39,12 +39,12 @@ public class DynamicObjectWrapper extends DefaultObjectWrapper implements Object
 		_registeredModels = Collections.synchronizedList(new ArrayList<ModelRegistration>());
 		_typeCache = Collections.synchronizedMap(new HashMap<Class<?>, ModelFactory>());
 		
-		Iterator<Entry<Class<?>, ModelFactory>> iterator = modelFactories.entrySet().iterator();
+		Iterator<ModelFactoryRegistration> iterator = modelFactories.iterator();
 		
 		while (iterator.hasNext())
 		{
-			Entry<Class<?>, ModelFactory> entry = iterator.next();
-			registerModelFactory(entry.getKey(), entry.getValue());
+			ModelFactoryRegistration modelFactoryRegistration = iterator.next();
+			registerModelFactory(modelFactoryRegistration.type, modelFactoryRegistration.modelFactory);
 		}
 	}
 	

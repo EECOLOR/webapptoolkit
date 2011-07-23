@@ -1,0 +1,185 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x000000006dba8a00, pid=5244, tid=6140
+#
+# JRE version: 6.0_22-b04
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (17.1-b03 mixed mode windows-amd64 )
+# Problematic frame:
+# V  [jvm.dll+0x318a00]
+#
+# If you would like to submit a bug report, please visit:
+#   http://java.sun.com/webapps/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000000004ba28000):  JavaThread "JDWP Transport Listener: dt_socket" daemon [_thread_in_vm, id=6140, stack(0x000000004c300000,0x000000004c400000)]
+
+siginfo: ExceptionCode=0xc0000005, reading address 0x0000000000000000
+
+Registers:
+EAX=0x0000000000000000, EBX=0x0000000051deb0b8, ECX=0x000000006ddecb10, EDX=0x0000000000000000
+ESP=0x000000004c3ff420, EBP=0x0000000000000000, ESI=0x0000000051deb0c0, EDI=0x0000000051deb0a0
+EIP=0x000000006dba8a00, EFLAGS=0x0000000000010246
+
+Top of Stack: (sp=0x000000004c3ff420)
+0x000000004c3ff420:   0000000051deb0b8 0000000000000000
+0x000000004c3ff430:   0000000051deb0c0 0000000051deb0a0
+0x000000004c3ff440:   0000000200000002 0000000051de0001
+0x000000004c3ff450:   0000000000000002 000000004ba0e710
+0x000000004c3ff460:   000000004ba0eaa8 0000000000000002
+0x000000004c3ff470:   000000004ba28000 0000000000000000
+0x000000004c3ff480:   0000000051de3020 000000000000043a
+0x000000004c3ff490:   0000000051deb0a0 0000000051deb138
+0x000000004c3ff4a0:   0000000051deb0b8 000000004ba28000
+0x000000004c3ff4b0:   000000004ba27920 0000000051deb000
+0x000000004c3ff4c0:   0000000051deb0b8 0000000051df2fe8
+0x000000004c3ff4d0:   000000004c3ffbf0 0000000000000012
+0x000000004c3ff4e0:   000000004ba0e930 000000004ba28000
+0x000000004c3ff4f0:   000000004c3ff760 000000004ba225e0
+0x000000004c3ff500:   000000004ba0e6c0 0000000006be6c88
+0x000000004c3ff510:   0000000000000000 000000004ba278f0 
+
+Instructions: (pc=0x000000006dba8a00)
+0x000000006dba89f0:   24 28 01 00 00 4c 8b 03 41 8b 50 34 85 d2 75 0c
+0x000000006dba8a00:   48 8b 08 41 8b 40 2c 89 41 34 eb 06 48 8b 08 89 
+
+
+Stack: [0x000000004c300000,0x000000004c400000],  sp=0x000000004c3ff420,  free space=3fd0000000000000000k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x318a00]
+
+[error occurred during error reporting (printing native stack), id 0xc0000005]
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x000000004ca38000 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=5240, stack(0x0000000050d30000,0x0000000050e30000)]
+  0x000000004d434000 JavaThread "Timer-20" daemon [_thread_blocked, id=6960, stack(0x000000004cf00000,0x000000004d000000)]
+  0x000000004ca37000 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=2548, stack(0x0000000050c30000,0x0000000050d30000)]
+  0x000000004ca36800 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=628, stack(0x0000000050b30000,0x0000000050c30000)]
+  0x000000004ca36000 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=4980, stack(0x0000000050a30000,0x0000000050b30000)]
+  0x000000004ca34800 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=6864, stack(0x0000000050930000,0x0000000050a30000)]
+  0x000000004ca35000 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=2652, stack(0x000000004d900000,0x000000004da00000)]
+  0x000000004ca33800 JavaThread "1764857337@qtp-1180915164-2" [_thread_blocked, id=848, stack(0x0000000050830000,0x0000000050930000)]
+  0x000000004ca33000 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=6688, stack(0x0000000050730000,0x0000000050830000)]
+  0x000000004ca32000 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=6616, stack(0x0000000050500000,0x0000000050600000)]
+  0x000000004ca31800 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=6712, stack(0x0000000050630000,0x0000000050730000)]
+  0x000000004d43b000 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=6692, stack(0x0000000050400000,0x0000000050500000)]
+  0x000000004d43a800 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=6888, stack(0x0000000050300000,0x0000000050400000)]
+  0x000000004d439800 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=7156, stack(0x0000000050200000,0x0000000050300000)]
+  0x000000004d439000 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=6604, stack(0x0000000050100000,0x0000000050200000)]
+  0x000000004d438000 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=7008, stack(0x000000004fef0000,0x000000004fff0000)]
+  0x000000004d437800 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=6204, stack(0x0000000050000000,0x0000000050100000)]
+  0x000000004d436800 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=6756, stack(0x000000004fca0000,0x000000004fda0000)]
+  0x000000004d436000 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=6772, stack(0x000000004fdf0000,0x000000004fef0000)]
+  0x000000004d435800 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=2092, stack(0x000000004ebd0000,0x000000004ecd0000)]
+  0x000000004d434800 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=1756, stack(0x000000004ead0000,0x000000004ebd0000)]
+  0x000000004d554000 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=5736, stack(0x000000004e9d0000,0x000000004ead0000)]
+  0x000000004ba99000 JavaThread "2135760193@qtp-1180915164-1 - Acceptor0 SelectChannelConnector@0.0.0.0:8080" [_thread_in_native, id=820, stack(0x000000004d000000,0x000000004d100000)]
+  0x000000004cbdf800 JavaThread "Timer-0" daemon [_thread_blocked, id=4872, stack(0x000000004ce00000,0x000000004cf00000)]
+  0x000000004ba56800 JavaThread "Low Memory Detector" daemon [_thread_blocked, id=3096, stack(0x000000004c800000,0x000000004c900000)]
+  0x000000004ba46800 JavaThread "CompilerThread1" daemon [_thread_blocked, id=1988, stack(0x000000004c700000,0x000000004c800000)]
+  0x000000004ba44800 JavaThread "CompilerThread0" daemon [_thread_blocked, id=5036, stack(0x000000004c600000,0x000000004c700000)]
+  0x000000004ba2b000 JavaThread "JDWP Command Reader" daemon [_thread_in_native, id=2544, stack(0x000000004c500000,0x000000004c600000)]
+  0x000000004ba29800 JavaThread "JDWP Event Helper Thread" daemon [_thread_blocked, id=5864, stack(0x000000004c400000,0x000000004c500000)]
+=>0x000000004ba28000 JavaThread "JDWP Transport Listener: dt_socket" daemon [_thread_in_vm, id=6140, stack(0x000000004c300000,0x000000004c400000)]
+  0x000000004ba12000 JavaThread "Attach Listener" daemon [_thread_blocked, id=2112, stack(0x000000004bcc0000,0x000000004bdc0000)]
+  0x000000004ba0d000 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=5316, stack(0x000000004bbc0000,0x000000004bcc0000)]
+  0x0000000000525000 JavaThread "Finalizer" daemon [_thread_blocked, id=3384, stack(0x000000004b8c0000,0x000000004b9c0000)]
+  0x0000000000523000 JavaThread "Reference Handler" daemon [_thread_blocked, id=5232, stack(0x000000004b7c0000,0x000000004b8c0000)]
+  0x000000000032d000 JavaThread "main" [_thread_blocked, id=340, stack(0x0000000002420000,0x0000000002520000)]
+
+Other Threads:
+  0x000000000051e000 VMThread [stack: 0x000000004b6c0000,0x000000004b7c0000] [id=4708]
+  0x000000004ba64000 WatcherThread [stack: 0x000000004c900000,0x000000004ca00000] [id=5220]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ PSYoungGen      total 12160K, used 0K [0x0000000035490000, 0x00000000361b0000, 0x000000004a9e0000)
+  eden space 10944K, 0% used [0x0000000035490000,0x0000000035490000,0x0000000035f40000)
+  from space 1216K, 0% used [0x0000000035f40000,0x0000000035f40000,0x0000000036070000)
+  to   space 1216K, 0% used [0x0000000036080000,0x0000000036080000,0x00000000361b0000)
+ PSOldGen        total 699072K, used 10535K [0x000000000a9e0000, 0x0000000035490000, 0x0000000035490000)
+  object space 699072K, 1% used [0x000000000a9e0000,0x000000000b429ed0,0x0000000035490000)
+ PSPermGen       total 86016K, used 86015K [0x00000000055e0000, 0x000000000a9e0000, 0x000000000a9e0000)
+  object space 86016K, 99% used [0x00000000055e0000,0x000000000a9dfc00,0x000000000a9e0000)
+
+Dynamic libraries:
+0x0000000000400000 - 0x000000000042e000 	C:\Program Files\Java\jdk1.6.0_22\bin\javaw.exe
+0x0000000077550000 - 0x00000000776fb000 	C:\Windows\SYSTEM32\ntdll.dll
+0x0000000077330000 - 0x000000007744f000 	C:\Windows\system32\kernel32.dll
+0x000007fefcd80000 - 0x000007fefcdeb000 	C:\Windows\system32\KERNELBASE.dll
+0x000007fefecf0000 - 0x000007fefedcb000 	C:\Windows\system32\ADVAPI32.dll
+0x000007fefd510000 - 0x000007fefd5af000 	C:\Windows\system32\msvcrt.dll
+0x000007fefd4f0000 - 0x000007fefd50f000 	C:\Windows\SYSTEM32\sechost.dll
+0x000007fefd130000 - 0x000007fefd25e000 	C:\Windows\system32\RPCRT4.dll
+0x0000000077450000 - 0x000000007754a000 	C:\Windows\system32\USER32.dll
+0x000007fefe720000 - 0x000007fefe787000 	C:\Windows\system32\GDI32.dll
+0x000007fefea70000 - 0x000007fefea7e000 	C:\Windows\system32\LPK.dll
+0x000007fefd060000 - 0x000007fefd12a000 	C:\Windows\system32\USP10.dll
+0x000007fefd030000 - 0x000007fefd05e000 	C:\Windows\system32\IMM32.DLL
+0x000007fefd3e0000 - 0x000007fefd4e9000 	C:\Windows\system32\MSCTF.dll
+0x000000006d890000 - 0x000000006df61000 	C:\Program Files\Java\jdk1.6.0_22\jre\bin\server\jvm.dll
+0x000007fefa3d0000 - 0x000007fefa40b000 	C:\Windows\system32\WINMM.dll
+0x000000006d800000 - 0x000000006d80e000 	C:\Program Files\Java\jdk1.6.0_22\jre\bin\verify.dll
+0x000000006d450000 - 0x000000006d477000 	C:\Program Files\Java\jdk1.6.0_22\jre\bin\java.dll
+0x000000006d3b0000 - 0x000000006d3ba000 	C:\Program Files\Java\jdk1.6.0_22\jre\bin\hpi.dll
+0x0000000077710000 - 0x0000000077717000 	C:\Windows\system32\PSAPI.DLL
+0x000000006d4c0000 - 0x000000006d4f4000 	C:\Program Files\Java\jdk1.6.0_22\jre\bin\jdwp.dll
+0x000000006d6d0000 - 0x000000006d6d8000 	C:\Program Files\Java\jdk1.6.0_22\jre\bin\npt.dll
+0x000000006d850000 - 0x000000006d862000 	C:\Program Files\Java\jdk1.6.0_22\jre\bin\zip.dll
+0x000000006d310000 - 0x000000006d319000 	C:\Program Files\Java\jdk1.6.0_22\jre\bin\dt_socket.dll
+0x000007fefeb70000 - 0x000007fefebbd000 	C:\Windows\system32\WS2_32.dll
+0x000007fefd020000 - 0x000007fefd028000 	C:\Windows\system32\NSI.dll
+0x000007fefa7e0000 - 0x000007fefa7f5000 	C:\Windows\system32\NLAapi.dll
+0x000007fefc260000 - 0x000007fefc2b4000 	C:\Windows\System32\mswsock.dll
+0x000007fefc0f0000 - 0x000007fefc14b000 	C:\Windows\system32\DNSAPI.dll
+0x000007fef7f90000 - 0x000007fef7f9b000 	C:\Windows\System32\winrnr.dll
+0x000007fef7f70000 - 0x000007fef7f85000 	C:\Windows\system32\napinsp.dll
+0x000007fefaa30000 - 0x000007fefaa57000 	C:\Windows\system32\IPHLPAPI.DLL
+0x000007fefa9e0000 - 0x000007fefa9eb000 	C:\Windows\system32\WINNSI.DLL
+0x000007fefa1f0000 - 0x000007fefa243000 	C:\Windows\System32\fwpuclnt.dll
+0x000007fef8260000 - 0x000007fef8268000 	C:\Windows\system32\rasadhlp.dll
+0x000007fefbc40000 - 0x000007fefbc47000 	C:\Windows\System32\wshtcpip.dll
+0x000000006d6a0000 - 0x000000006d6b7000 	C:\Program Files\Java\jdk1.6.0_22\jre\bin\net.dll
+0x000007fefc550000 - 0x000007fefc557000 	C:\Windows\System32\wship6.dll
+0x000000006d5e0000 - 0x000000006d5ea000 	C:\Program Files\Java\jdk1.6.0_22\jre\bin\management.dll
+0x000000006d6c0000 - 0x000000006d6cb000 	C:\Program Files\Java\jdk1.6.0_22\jre\bin\nio.dll
+0x000007fefc2c0000 - 0x000007fefc2d7000 	C:\Windows\system32\CRYPTSP.dll
+0x000007fefbfd0000 - 0x000007fefc017000 	C:\Windows\system32\rsaenh.dll
+0x000007fefbd60000 - 0x000007fefbd7e000 	C:\Windows\system32\USERENV.dll
+0x000007fefca20000 - 0x000007fefca2f000 	C:\Windows\system32\profapi.dll
+0x000007fefc950000 - 0x000007fefc95f000 	C:\Windows\system32\CRYPTBASE.dll
+
+VM Arguments:
+jvm_args: -agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:49253 -Drjrcontext=/ -Drjrwebapp=D:\workspaces\webAppToolkit\example.website\src\main\webapp -Drjrport=8080 -Drjrsslport=8443 -Drjrkeystore=C:\Users\EECOLOR\.keystore -Drjrkeypassword=changeit -Drjrpassword=changeit -Drjrscanintervalseconds=5 -Drjrenablescanner=true -Drjrenablessl=false -Drjrneedclientauth=false -Drjrparentloaderpriority=true -DrjrenbaleJNDI=false -Drjrclasspath=file://D:\workspaces\webAppToolkit\.metadata\.plugins\runjettyrun\example.website.classpath -DrjrResourceMapping= -Dorg.eclipse.jetty.util.log.DEBUG=true -Dfile.encoding=UTF-8 
+java_command: runjettyrun.Bootstrap
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=C:\Program Files\Java\jdk1.6.0_22\jre\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\
+USERNAME=EECOLOR
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 15 Stepping 11, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 7 Build 7600 
+
+CPU:total 4 (4 cores per cpu, 1 threads per core) family 6 model 15 stepping 11, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3
+
+Memory: 4k page, physical 4193400k(1029208k free), swap 8384904k(3243548k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (17.1-b03) for windows-amd64 JRE (1.6.0_22-b04), built on Sep 15 2010 00:45:56 by "java_re" with MS VC++ 8.0 (VS2005)
+
+time: Sat Jul 23 14:22:59 2011
+elapsed time: 44696 seconds
+

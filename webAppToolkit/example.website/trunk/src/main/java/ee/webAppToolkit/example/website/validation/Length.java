@@ -1,4 +1,4 @@
-package ee.webAppToolkit.website.validation;
+package ee.webAppToolkit.example.website.validation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,6 +13,6 @@ import ee.webAppToolkit.parameters.annotations.ValidationAnnotation;
 @ValidationAnnotation
 public @interface Length
 {
-	int maxLength() default 0;
-	int minLength() default 0;
+	int max() default 0;
+	int min() default 0;
 }

@@ -48,7 +48,7 @@
   	</dependency>
   	<dependency>
   		<groupId>ee.webAppToolkit</groupId>
-  		<artifactId>navigation.freemarker</artifactId>
+  		<artifactId>freemarker.navigation</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   		<type>jar</type>
   		<scope>compile</scope>

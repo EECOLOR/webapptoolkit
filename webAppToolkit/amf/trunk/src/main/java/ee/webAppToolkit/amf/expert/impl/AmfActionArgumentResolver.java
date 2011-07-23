@@ -26,6 +26,8 @@ public class AmfActionArgumentResolver implements ActionArgumentResolver {
 	@Override
 	public <T> T resolve(Key<T> key, Action action) throws ConfigurationException {
 
+		
+		
 		HttpServletRequest request = _requestProvider.get();
 
 		String contentType = request.getHeader("Content-type");

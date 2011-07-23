@@ -9,7 +9,7 @@
 			[#local url = url + key /]
 			
 			<li>
-				<a[#if path?starts_with(url)] class="active"[/#if] href="${url}">${url}</a>
+				<a[#if path?starts_with(url)] class="active"[/#if] href="${url}">${value.displayName!"[no display name]"}</a>
 				[#if value?values?size > 0]
 					[@navigation siteMap=value context=url /]	
 				[/#if]

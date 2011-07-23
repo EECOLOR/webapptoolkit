@@ -1,4 +1,4 @@
-package ee.webAppToolkit.website.validation;
+package ee.webAppToolkit.example.website.validation;
 
 import java.text.MessageFormat;
 
@@ -32,13 +32,13 @@ public class LengthValidator implements AnnotationValidator<String, Length>
 		
 		ValidationResult validationResult = new ValidationResult();
 		
-		int minLength = validationAnnotation.minLength();
+		int minLength = validationAnnotation.min();
 		if (minLength > 0 && length < minLength)
 		{
 			validationResult.setErrorMessage(MessageFormat.format(_min, minLength));
 		}
 		
-		int maxLength = validationAnnotation.maxLength();
+		int maxLength = validationAnnotation.max();
 		if (maxLength > 0 && length > maxLength)
 		{
 			validationResult.setErrorMessage(MessageFormat.format(_max, maxLength));

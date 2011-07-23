@@ -81,6 +81,9 @@ public class RequestHandlerImpl implements RequestHandler {
 		String testPath = _pathProvider.get();
 		Handler handler = _handlers.get(testPath);
 
+		System.out.println(testPath);
+		System.out.println(_handlers.keySet());
+		
 		while (handler == null && testPath.length() > 0) {
 			testPath = testPath.substring(0, testPath.lastIndexOf('/'));
 			handler = _handlers.get(testPath);
@@ -242,14 +245,17 @@ public class RequestHandlerImpl implements RequestHandler {
 				if (index)
 				{
 					actionRegistrationListener.actionRegistered(fullPath, action);
+				} else
+				{
+					actionRegistrationListener.actionRegistered(actualPath, action);
 				}
-				
-				actionRegistrationListener.actionRegistered(actualPath, action);
 			}
 			
-			if (_handlers.containsKey(actualPath)) {
+			boolean handlerPresent = index ? _handlers.containsKey(fullPath) : _handlers.containsKey(actualPath); 
+			
+			if (handlerPresent) {
 				// we already have a handler registered for this path
-				Handler existingHandler = _handlers.get(actualPath);
+				Handler existingHandler = index ? _handlers.get(fullPath) : _handlers.get(actualPath);
 
 				existingHandler.addAction(action);
 			} else {

@@ -18,4 +18,5 @@ public interface Action
 	public Result invoke(Object instance) throws Throwable;
 	public Annotation[] getAnnotations();
 	boolean isAnnotationPresent(Class<? extends Annotation> annotationClass);
+	public <T extends Annotation> T getAnnotation(Class<T> annotationClass);
 }

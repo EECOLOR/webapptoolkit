@@ -59,6 +59,9 @@ public class ActionHandlerImpl implements ActionHandler {
 		{
 			return _actions.get(requestMethod).invoke(controller);
 		}
+		
+		System.out.println(_actions.keySet());
+		
 		throw new HttpException(HttpServletResponse.SC_FORBIDDEN);
 	}
 

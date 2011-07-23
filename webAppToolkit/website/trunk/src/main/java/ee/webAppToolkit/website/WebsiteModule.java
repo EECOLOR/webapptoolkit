@@ -3,6 +3,7 @@ package ee.webAppToolkit.website;
 import java.util.Locale;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
@@ -10,14 +11,16 @@ import com.google.inject.util.Modules;
 
 import ee.webAppToolkit.core.WebAppToolkitModule;
 import ee.webAppToolkit.freemarker.FreemarkerModule;
+import ee.webAppToolkit.freemarker.navigation.FreemarkerNavigationModule;
 import ee.webAppToolkit.localization.LocalizationModule;
 import ee.webAppToolkit.localization.LocalizedStrings;
 import ee.webAppToolkit.navigation.NavigationModule;
-import ee.webAppToolkit.navigation.freemarker.NavigationFreemarkerModule;
+import ee.webAppToolkit.parameters.ExceptionConverter;
 import ee.webAppToolkit.parameters.ParametersModule;
 import ee.webAppToolkit.render.ModelWrapper;
 import ee.webAppToolkit.render.RenderModule;
 import ee.webAppToolkit.website.expert.impl.GuiceWebappTemplateLoader;
+import ee.webAppToolkit.website.validation.NumberFormatExceptionConverter;
 import freemarker.cache.TemplateLoader;
 
 public class WebsiteModule extends WebAppToolkitModule {
@@ -40,7 +43,7 @@ public class WebsiteModule extends WebAppToolkitModule {
 		}));
 		
 		install(new NavigationModule());
-		install(new NavigationFreemarkerModule());
+		install(new FreemarkerNavigationModule());
 		
 		bind(String.class).annotatedWith(Names.named("templatePath")).toInstance("WEB-INF/templates");
 		
@@ -48,6 +51,8 @@ public class WebsiteModule extends WebAppToolkitModule {
 		templateLoaders.addBinding().to(GuiceWebappTemplateLoader.class);
 		
 		install(new FreemarkerModule());
+		
+		bind(new TypeLiteral<ExceptionConverter<NumberFormatException>>(){}).to(NumberFormatExceptionConverter.class);
 		
 		bindPropertiesToLocale("website.validationMessages", Locale.ENGLISH);
 	}

@@ -30,6 +30,7 @@ public class ExtendedPropertyMetadataImpl extends PropertyMetadataImpl {
 	{
 		super(field, optionalAnnotationName);
 		
+		_injector = injector;
 		_annotationValidatorResolver = annotationValidatorResolver;
 
 		_processAnnotations(field.getAnnotations());

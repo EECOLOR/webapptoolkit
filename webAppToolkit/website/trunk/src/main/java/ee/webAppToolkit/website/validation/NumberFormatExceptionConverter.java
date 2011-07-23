@@ -24,5 +24,4 @@ public class NumberFormatExceptionConverter implements ExceptionConverter<Number
 	{
 		return new ValidationResult(originalValue, MessageFormat.format(_conversion, originalValue));
 	}
-	
 }

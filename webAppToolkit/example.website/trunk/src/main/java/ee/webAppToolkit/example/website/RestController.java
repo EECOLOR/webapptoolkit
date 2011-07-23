@@ -25,13 +25,16 @@ import ee.webAppToolkit.core.annotations.Get;
 import ee.webAppToolkit.core.annotations.Optional;
 import ee.webAppToolkit.core.annotations.Post;
 import ee.webAppToolkit.core.annotations.Put;
-import ee.webAppToolkit.navigation.HideFromNavigation;
+import ee.webAppToolkit.localization.LocalizedString;
+import ee.webAppToolkit.navigation.annotations.HideFromNavigation;
+import ee.webAppToolkit.navigation.annotations.NavigationDisplayName;
 import ee.webAppToolkit.parameters.annotations.Parameter;
 import ee.webAppToolkit.render.RenderingController;
 
 public class RestController extends RenderingController {
 	
 	@Get
+	@NavigationDisplayName(@LocalizedString("navigation.rest"))
 	public Result index(@Flash("result") String result)
 	{
 		return render(result);
