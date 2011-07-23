@@ -15,3 +15,101 @@ Validation works like this:
  * If any annotation is found it will try to find an {{{AnnotationValidator}}} for the annotation in combination with the type of the property
  * It then calls the {{{validate}}} method of the {{{AnnotationValidator}}}
  * If the returned {{{ValidationResult}}} is not validated it is placed into the requests {{{ValidationResults}}} object in the correct location
+
+= ExceptionConverter =
+
+The [Website] module provides an {{{ExceptionConverter}}} for {{{NumberFormatException}}} by default: 
+
+{{{
+public class NumberFormatExceptionConverter implements ExceptionConverter<NumberFormatException>
+{
+	private String _conversion;
+	
+	@Inject
+	public NumberFormatExceptionConverter(
+			@LocalizedString("validation.number.conversion") String conversion)
+	{
+		_conversion = conversion;
+	}
+	
+	@Override
+	public ValidationResult convert(NumberFormatException e, Object originalValue)
+	{
+		return new ValidationResult(originalValue, MessageFormat.format(_conversion, originalValue));
+	}
+}
+}}}
+
+The following code is used to register it:
+
+{{{
+bind(new TypeLiteral<ExceptionConverter<NumberFormatException>>(){}).to(NumberFormatExceptionConverter.class);
+}}}
+
+= AnnotationValidator =
+
+Let's say we want to create a validator for the length of a string. The first thing we do is create an annotation:
+
+{{{
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+@ValidationAnnotation
+public @interface Length
+{
+	int max() default 0;
+	int min() default 0;
+}
+}}}
+
+The validator implementation:
+
+{{{
+public class LengthValidator implements AnnotationValidator<String, Length>
+{
+	private String _min;
+	private String _max;
+	
+	@Inject
+	public LengthValidator(
+			@LocalizedString("validation.length.min") String min,
+			@LocalizedString("validation.length.max") String max)
+	{
+		_min = min;
+		_max = max;
+	}
+	
+	@Override
+	public ValidationResult validate(String value, Length validationAnnotation)
+	{
+		int length = value.length();
+		
+		ValidationResult validationResult = new ValidationResult();
+		
+		int minLength = validationAnnotation.min();
+		if (minLength > 0 && length < minLength)
+		{
+			validationResult.setErrorMessage(MessageFormat.format(_min, minLength));
+		}
+		
+		int maxLength = validationAnnotation.max();
+		if (maxLength > 0 && length > maxLength)
+		{
+			validationResult.setErrorMessage(MessageFormat.format(_max, maxLength));
+		}
+		
+		if (!validationResult.getValidated())
+		{
+			validationResult.setOriginalValue(value);
+		}
+		
+		return validationResult;
+	}
+	
+}
+}}}
+
+The following code is used to register it:
+
+{{{
+bind(new TypeLiteral<AnnotationValidator<String, Length>>(){}).to(LengthValidator.class);
+}}}
