@@ -1,0 +1,24 @@
+#summary Default values information
+
+= Default values =
+
+If an object is converted you can tell the parameter converter to supply a default value if no value was given. In order to do this you need to create a {{{DefaultValueProvider}}}. An example:
+
+{{{
+public class DefaultTitleProvider implements DefaultValueProvider<String> {
+
+	@Override
+	public String provide(Object context) {
+		return "No title";
+	}
+	
+}
+}}}
+
+The {{{DefaultValueProvider}}} is then added to a property using the {{{@Default}}} annotation:
+
+{{{
+@Optional
+@Default(DefaultTitleProvider.class)
+public String title;
+}}}
