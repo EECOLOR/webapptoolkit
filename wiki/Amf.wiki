@@ -31,7 +31,7 @@ private function _completeHandler(e:Event):void
 
 If you send typed objects, don't forget to use the native {{{registerClassAlias}}} function in your ActionScript project.
 
-= Dependencies =
+== Dependencies ==
 
  * [Core]
  * [http://mavenhub.com/mvn/central/com.exadel.flamingo.flex/amf-serializer/1.5.0 amf-serializer]
