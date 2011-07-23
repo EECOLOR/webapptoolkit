@@ -1,0 +1,18 @@
+#summary Validation information
+
+= Validation =
+
+If you are converting from strings to arbitrary types accidents happen. This is the reason the parameters module handles validation.
+
+To reach the results of the validation you can request and instance of {{{ValidationResults}}} which is bound to the request scope. It has a {{{getValidated()}}} method that determines if it contains any results of validation.
+
+Validation works like this:
+
+ - If the converter fails to convert a value, it throws an exception
+ - The parameters module tries to find an {{{ExceptionConverter}}} that can convert the exception into a {{{ValidationResult}}}
+ - The {{{ValidationResult}}} is placed into the requests {{{ValidationResults}}} object in the correct location
+ - If conversion was successful (and it was converting for a property of an object) it will check for any annotations that themselves are marked with {{{@ValidationAnnotation}}}
+- If any annotation is found it will try to find an {{{AnnotationValidator}}} for the annotation in combination with the type of the property
+- It then calls the {{{validate}}} method of the {{{AnnotationValidator}}}
+- If the returned {{{ValidationResult}}} is not validated it is placed into the requests {{{ValidationResults}}} object in the correct location
+
