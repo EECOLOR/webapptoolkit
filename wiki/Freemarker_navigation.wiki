@@ -1,3 +1,13 @@
 #summary Freemarker navigation information
 
 = Freemarker navigation =
+
+This module provides a Freemarker template model for {{{SiteMap}}} and a navigation macro for Freemarker.
+
+The macro is used like this:
+
+{{{
+[#include "/navigation.ftl" /]
+
+[@navigation siteMap /]	
+}}}
