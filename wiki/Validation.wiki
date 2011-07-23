@@ -117,3 +117,10 @@ The following code is used to register it:
 {{{
 bind(new TypeLiteral<AnnotationValidator<String, Length>>(){}).to(LengthValidator.class);
 }}}
+
+Now you can use the {{{@Length}}} annotation on a property:
+
+{{{
+@Length(min=12)
+public String content;
+}}}
