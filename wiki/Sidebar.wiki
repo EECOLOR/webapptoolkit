@@ -7,7 +7,7 @@
     * [Actions]
     * [BasicController]
     * [Extending]
-   * [Render]
+   * [Render Render*]
    * [Localization]
    * [Navigation]
    * [Parameters]
