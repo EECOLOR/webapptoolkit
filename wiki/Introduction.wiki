@@ -11,9 +11,4 @@ The !WebAppToolkit project was created in order to provide a minimal and lightwe
  * build the core of the toolkit with Guice as only dependency
  * keep the functionality to a minimum
  * keep it open and allow developers to replace each part of the toolkit
-
-The following modules are part of the toolkit:
-
- * [Core] - Provides request mapping and handling, conversion of parameters to typed  objects, validation and localization
- * [Display] - Provides a set of annotations that can be used for display purposes
- * [Freemarker] - An implementation of a renderer with quite a lot of utilities
+ * add functionality in the form of modules that can be installed
