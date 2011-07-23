@@ -18,3 +18,5 @@
    * [Website]
    * [Amf]
    * [Json]
+
+* Module is an _abstract_ module and can not be used without an implementation. For example [Freemarker] is an implementation of the [Render] module.
