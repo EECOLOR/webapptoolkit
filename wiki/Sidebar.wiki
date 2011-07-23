@@ -15,8 +15,10 @@
     * [Default_values Default values]
    * [Freemarker]
     * [Freemarker_navigation Freemarker navigation]
-   * [Website]
+   * [Website Website **]
    * [Amf]
    * [Json]
 
 `*` Module is an _abstract_ module and can not be used without an implementation. For example [Freemarker] is an implementation of the [Render] module.
+
+`**` Module can best be extended by your applications module
