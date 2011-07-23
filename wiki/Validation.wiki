@@ -16,7 +16,7 @@ Validation works like this:
  * It then calls the {{{validate}}} method of the {{{AnnotationValidator}}}
  * If the returned {{{ValidationResult}}} is not validated it is placed into the requests {{{ValidationResults}}} object in the correct location
 
-= ExceptionConverter =
+= !ExceptionConverter =
 
 The [Website] module provides an {{{ExceptionConverter}}} for {{{NumberFormatException}}} by default: 
 
@@ -46,7 +46,7 @@ The following code is used to register it:
 bind(new TypeLiteral<ExceptionConverter<NumberFormatException>>(){}).to(NumberFormatExceptionConverter.class);
 }}}
 
-= AnnotationValidator =
+= !AnnotationValidator =
 
 Let's say we want to create a validator for the length of a string. The first thing we do is create an annotation:
 
