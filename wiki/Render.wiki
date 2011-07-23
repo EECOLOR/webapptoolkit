@@ -76,3 +76,7 @@ If you do not override the {{{ModelWrapper}}} and {{{TemplateResolver}}} it will
 == Dependencies ==
 
  * [Core]
+
+== Implementations ==
+
+ * [Freemarker]
