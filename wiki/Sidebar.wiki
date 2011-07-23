@@ -16,3 +16,4 @@
    * [Freemarker]
     * [Freemarker_navigation Freemarker navigation]
    * [Website]
+   * [Amf]
