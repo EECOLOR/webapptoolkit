@@ -15,6 +15,7 @@
     * [Default_values Default values]
    * [Freemarker]
     * [Freemarker_navigation Freemarker navigation]
+    * [Freemarker_metadata Freemarker metadata]
    * [Website Website **]
    * [Amf]
    * [Json]
