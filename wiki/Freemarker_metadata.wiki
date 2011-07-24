@@ -21,3 +21,7 @@ If you want the metadata of a specific property you can do the following:
 	[@dump data=model.title_metadata /]
 [/#if]
 }}}
+
+== Dependencies ==
+
+ * [Freemarker]
