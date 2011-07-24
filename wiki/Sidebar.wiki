@@ -16,6 +16,7 @@
    * [Freemarker]
     * [Freemarker_navigation Freemarker navigation]
     * [Freemarker_metadata Freemarker metadata]
+    * [Freemarker_forms Freemarker forms ***]
    * [Website Website **]
    * [Amf]
    * [Json]
@@ -23,3 +24,5 @@
 `*` Module is an _abstract_ module and can not be used without an implementation. For example [Freemarker] is an implementation of the [Render] module.
 
 `**` Module can best be extended by your applications module. For example {{{MyApplicationModule extends WebsiteModule}}}.
+
+`***` Overrides bindings in another module and should be installed specifically
