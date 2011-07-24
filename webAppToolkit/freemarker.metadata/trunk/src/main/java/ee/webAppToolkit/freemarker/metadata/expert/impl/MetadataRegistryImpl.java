@@ -63,9 +63,7 @@ public class MetadataRegistryImpl implements MetadataRegistry {
 			
 			for (Field field : declaredFields)
 			{
-				boolean allowed = !field.getName().startsWith("this$");
-
-				if (allowed)
+				if (isAllowed(field))
 				{
 					PropertyMetadata propertyMetadata = _propertyMetadataFactory.create(field);
 					propertyMetadataMap.put(propertyMetadata.getName(), propertyMetadata);
@@ -76,5 +74,10 @@ public class MetadataRegistryImpl implements MetadataRegistry {
 		}
 		
 		_propertyMetadata.put(type, propertyMetadataMap);
-	}	
+	}
+	
+	protected boolean isAllowed(Field field)
+	{
+		return !field.getName().startsWith("this$");
+	}
 }

@@ -11,6 +11,7 @@ import com.google.inject.util.Modules;
 
 import ee.webAppToolkit.core.WebAppToolkitModule;
 import ee.webAppToolkit.freemarker.FreemarkerModule;
+import ee.webAppToolkit.freemarker.forms.FreemarkerFormsModule;
 import ee.webAppToolkit.freemarker.metadata.FreemarkerMetadataModule;
 import ee.webAppToolkit.freemarker.navigation.FreemarkerNavigationModule;
 import ee.webAppToolkit.localization.LocalizationModule;
@@ -46,7 +47,7 @@ public class WebsiteModule extends WebAppToolkitModule {
 		install(new NavigationModule());
 		install(new FreemarkerModule());
 		install(new FreemarkerNavigationModule());
-		install(new FreemarkerMetadataModule());
+		install(Modules.override(new FreemarkerMetadataModule()).with(new FreemarkerFormsModule()));
 		
 		bind(String.class).annotatedWith(Names.named("templatePath")).toInstance("WEB-INF/templates");
 		

@@ -2,12 +2,14 @@ package ee.webAppToolkit.example.website;
 
 import ee.webAppToolkit.core.annotations.Optional;
 import ee.webAppToolkit.example.website.validation.Length;
+import ee.webAppToolkit.forms.Display;
 import ee.webAppToolkit.parameters.annotations.Default;
 
 public class ParametersTestObject {
 	
 	@Default(DefaultTitleProvider.class)
 	@Optional
+	@Display()
 	public String title;
 	
 	public int version;

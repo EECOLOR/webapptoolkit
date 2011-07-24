@@ -6,4 +6,5 @@ import java.util.Map;
 public interface PropertyMetadata {
 	public String getName();
 	public Map<String, Annotation> getAnnotations();
+	public Class<?> getType();
 }

@@ -13,6 +13,7 @@ import ee.webAppToolkit.freemarker.metadata.expert.CustomObjectTemplateModelFact
 import ee.webAppToolkit.freemarker.metadata.expert.PropertyMetadata;
 import ee.webAppToolkit.freemarker.metadata.expert.PropertyMetadataFactory;
 import ee.webAppToolkit.freemarker.metadata.expert.impl.AnnotationModelFactory;
+import ee.webAppToolkit.freemarker.metadata.expert.impl.ClassModelFactory;
 import ee.webAppToolkit.freemarker.metadata.expert.impl.MetadataObjectWrapper;
 import ee.webAppToolkit.freemarker.metadata.expert.impl.MetadataTemplateModel;
 import ee.webAppToolkit.freemarker.metadata.expert.impl.PropertyMetadataImpl;
@@ -32,5 +33,6 @@ public class FreemarkerMetadataModule extends AbstractModule {
 		
 		MapBinder<Class<?>, ModelFactory> modelFactories = MapBinder.newMapBinder(binder(), new TypeLiteral<Class<?>>(){}, new TypeLiteral<ModelFactory>(){});
 		modelFactories.addBinding(Annotation.class).to(AnnotationModelFactory.class);
+		modelFactories.addBinding(Class.class).to(ClassModelFactory.class);
 	}
 }

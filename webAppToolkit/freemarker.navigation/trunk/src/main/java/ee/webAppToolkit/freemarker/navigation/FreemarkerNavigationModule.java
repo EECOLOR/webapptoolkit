@@ -16,7 +16,7 @@ public class FreemarkerNavigationModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		Multibinder<TemplateLoader> listeners = Multibinder.newSetBinder(binder(), TemplateLoader.class);
-		listeners.addBinding().toInstance(new ClassTemplateLoader(FreemarkerNavigationModule.class, "templates"));
+		listeners.addBinding().toInstance(new ClassTemplateLoader(getClass(), "templates"));
 		
 		MapBinder<Class<?>, ModelFactory> modelFactories = MapBinder.newMapBinder(binder(), new TypeLiteral<Class<?>>(){}, new TypeLiteral<ModelFactory>(){});
 		modelFactories.addBinding(SiteMap.class).to(SiteMapModelFactory.class);

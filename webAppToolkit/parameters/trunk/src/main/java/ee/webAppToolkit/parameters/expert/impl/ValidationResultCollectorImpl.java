@@ -50,11 +50,9 @@ public class ValidationResultCollectorImpl implements ValidationResultCollector 
 			validationResult = ((ValidationResultException) exception).getValidationResult();
 		} else
 		{
-			@SuppressWarnings("unchecked")
-			TypeLiteral<?> typeLiteral = (TypeLiteral<ExceptionConverter<?>>) TypeLiteral.get(Types.newParameterizedType(ExceptionConverter.class, exception.getClass()));
+			TypeLiteral<?> typeLiteral = TypeLiteral.get(Types.newParameterizedType(ExceptionConverter.class, exception.getClass()));
 			
 			List<?> bindings = _injector.findBindingsByType(typeLiteral);
-			
 			
 			if (bindings.size() > 0)
 			{

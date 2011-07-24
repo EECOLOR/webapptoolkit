@@ -16,6 +16,7 @@ public class PropertyMetadataImpl implements PropertyMetadata {
 	private Field _field;
 	private String _name;
 	private Map<String, Annotation> _annotations;
+	private Class<?> _type;
 	
 	@Inject
 	public PropertyMetadataImpl(@Assisted Field field)
@@ -49,6 +50,15 @@ public class PropertyMetadataImpl implements PropertyMetadata {
 		
 		return _annotations;
 	}
-	
-	
+
+	@Override
+	public Class<?> getType() {
+		
+		if (_type == null)
+		{
+			_type = _field.getType();
+		}
+		
+		return _type;
+	}
 }

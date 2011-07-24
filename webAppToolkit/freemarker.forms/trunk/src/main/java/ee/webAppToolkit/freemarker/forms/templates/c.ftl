@@ -1,0 +1,1 @@
+[#macro c value][#if value?is_number]${value?c}[#else]${value}[/#if][/#macro]
