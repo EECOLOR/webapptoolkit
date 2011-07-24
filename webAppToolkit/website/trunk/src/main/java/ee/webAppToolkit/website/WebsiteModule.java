@@ -11,6 +11,7 @@ import com.google.inject.util.Modules;
 
 import ee.webAppToolkit.core.WebAppToolkitModule;
 import ee.webAppToolkit.freemarker.FreemarkerModule;
+import ee.webAppToolkit.freemarker.metadata.FreemarkerMetadataModule;
 import ee.webAppToolkit.freemarker.navigation.FreemarkerNavigationModule;
 import ee.webAppToolkit.localization.LocalizationModule;
 import ee.webAppToolkit.localization.LocalizedStrings;
@@ -43,14 +44,14 @@ public class WebsiteModule extends WebAppToolkitModule {
 		}));
 		
 		install(new NavigationModule());
+		install(new FreemarkerModule());
 		install(new FreemarkerNavigationModule());
+		install(new FreemarkerMetadataModule());
 		
 		bind(String.class).annotatedWith(Names.named("templatePath")).toInstance("WEB-INF/templates");
 		
 		Multibinder<TemplateLoader> templateLoaders = Multibinder.newSetBinder(binder(), TemplateLoader.class);
 		templateLoaders.addBinding().to(GuiceWebappTemplateLoader.class);
-		
-		install(new FreemarkerModule());
 		
 		bind(new TypeLiteral<ExceptionConverter<NumberFormatException>>(){}).to(NumberFormatExceptionConverter.class);
 		

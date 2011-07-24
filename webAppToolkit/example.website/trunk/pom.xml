@@ -16,6 +16,13 @@
     </dependency>
     <dependency>
     	<groupId>ee.webAppToolkit</groupId>
+    	<artifactId>json</artifactId>
+    	<version>0.0.1-SNAPSHOT</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
+    <dependency>
+    	<groupId>ee.webAppToolkit</groupId>
     	<artifactId>website</artifactId>
     	<version>0.0.1-SNAPSHOT</version>
     	<type>jar</type>
@@ -24,13 +31,6 @@
     <dependency>
     	<groupId>ee.webAppToolkit</groupId>
     	<artifactId>amf</artifactId>
-    	<version>0.0.1-SNAPSHOT</version>
-    	<type>jar</type>
-    	<scope>compile</scope>
-    </dependency>
-    <dependency>
-    	<groupId>ee.webAppToolkit</groupId>
-    	<artifactId>json</artifactId>
     	<version>0.0.1-SNAPSHOT</version>
     	<type>jar</type>
     	<scope>compile</scope>

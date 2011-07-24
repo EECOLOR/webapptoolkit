@@ -30,6 +30,7 @@ public class ExampleWebsiteModule extends WebsiteModule {
 		handle("").with(MainController.class);
 		
 		bindPropertiesToLocale("navigation", Locale.ENGLISH);
+		bindPropertiesToLocale("example.website.validationMessages", Locale.ENGLISH);
 	}
 
 }

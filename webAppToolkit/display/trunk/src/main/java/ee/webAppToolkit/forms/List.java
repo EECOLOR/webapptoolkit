@@ -1,4 +1,4 @@
-package ee.webAppToolkit.display;
+package ee.webAppToolkit.forms;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
