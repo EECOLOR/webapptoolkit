@@ -2,13 +2,13 @@
 
 = Freemarker metadata =
 
-This module adds metadata capabilities to custom objects. For an object you can request the properties by appending {{{_properties}}} to the object you are requesting:
+This module adds metadata capabilities to custom objects. For an object you can request the properties by accessing {{{_properties}}}:
 
 {{{
 [#include "/shared/dump.ftl" /]
 
 [#if model??]
-	[@dump data=model_properties /]
+	[@dump data=model._properties /]
 [/#if]
 }}}
 
