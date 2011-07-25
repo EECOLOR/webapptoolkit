@@ -10,7 +10,8 @@ import ee.webAppToolkit.render.RenderingController;
 	@SubController(name="rest", type=RestController.class),
 	@SubController(name="amf", type=AmfController.class),
 	@SubController(name="json", type=JsonController.class),
-	@SubController(name="parameters", type=ParametersController.class)
+	@SubController(name="parameters", type=ParametersController.class),
+	@SubController(name="forms", type=FormsController.class)
 })
 public class MainController extends RenderingController {
 

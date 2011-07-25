@@ -49,20 +49,9 @@ public class MetadataTemplateModel extends StringModel implements CustomObjectTe
 			{
 				return wrap(propertyMetadata);
 			}
-		} else if (key.endsWith("_properties"))
+		} else if (key.equals("_properties"))
 		{
-			key = key.replace("_properties", "");
-			TemplateModel templateModel = super.get(key);
-
-			if (templateModel instanceof MetadataTemplateModel)
-			{
-				MetadataTemplateModel metadataTemplateModel = (MetadataTemplateModel) templateModel;
-				
-				return wrap(_metadataRegistry.getPropertyMetadata(metadataTemplateModel.object.getClass()));
-			} else
-			{
-				return super.get(key);
-			}
+			return wrap(_metadataRegistry.getPropertyMetadata(object.getClass()));
 		} else
 		{
 			return super.get(key);

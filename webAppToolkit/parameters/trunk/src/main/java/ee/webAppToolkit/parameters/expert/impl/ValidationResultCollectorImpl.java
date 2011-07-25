@@ -40,7 +40,12 @@ public class ValidationResultCollectorImpl implements ValidationResultCollector 
 		{
 			ConversionFailedException conversionFailedException = (ConversionFailedException) exception;
 			originalValue = conversionFailedException.getOriginalValue();
-			exception = conversionFailedException.getCause();
+			
+			Throwable cause = conversionFailedException.getCause();
+			if (cause != null)
+			{
+				exception = cause;
+			}
 		}
 		
 		ValidationResult validationResult;

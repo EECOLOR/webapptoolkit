@@ -1,13 +1,3 @@
-[#include "/shared/dump.ftl" /]
-
-[#if model??]
-	[@dump data=model.title_metadata /]
-[/#if]
-
-[#import "/form.ftl" as form /]
-
-[@form.create action=path submitLabel="Save" key="model" /]
-
 <form action="${path}" method="POST">
 	[#assign value = (model.title)! /]
 	[#if (validationResults.title.validated)?? && !validationResults.title.validated]

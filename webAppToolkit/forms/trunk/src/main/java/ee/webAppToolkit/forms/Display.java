@@ -11,7 +11,7 @@ import ee.webAppToolkit.localization.LocalizedString;
 @Target(ElementType.FIELD)
 public @interface Display
 {
-	enum Type {HIDDEN, TEXT, LIST, TEXTAREA, DATE};
+	enum Type {HIDDEN, TEXT, LIST, TEXTAREA, DATE, COMPONENT, COMPONENT_LIST};
 	
 	LocalizedString label() default @LocalizedString("");
 	int order() default 0;
