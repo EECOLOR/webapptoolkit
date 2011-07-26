@@ -50,6 +50,22 @@ install(Modules.override(new LocalizationModule()).with(new AbstractModule() {
 	};
 }}}
 
+If you need a localized string at runtime it's best to use a provider:
+
+{{{
+private Provider<String> _string;
+
+public Constructor(@LocalizedString("property") Provider<String> string)
+{
+	_string = string;
+}
+
+public String method()
+{
+	return _string.get();
+}
+}}}
+
 == Dependencies ==
 
  * [Core]
