@@ -3,6 +3,7 @@ package ee.webAppToolkit.parameters.expert.impl;
 import java.text.MessageFormat;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 import ee.parameterConverter.EmptyValueException;
 import ee.webAppToolkit.localization.LocalizedString;
@@ -11,11 +12,11 @@ import ee.webAppToolkit.parameters.ValidationResult;
 
 public class EmptyValueExceptionConverter implements ExceptionConverter<EmptyValueException>
 {
-	private String _empty;
+	private Provider<String> _empty;
 	
 	@Inject
 	public EmptyValueExceptionConverter(
-			@LocalizedString("validation.empty") String empty)
+			@LocalizedString("validation.empty") Provider<String> empty)
 	{
 		_empty = empty;
 	}
@@ -23,7 +24,7 @@ public class EmptyValueExceptionConverter implements ExceptionConverter<EmptyVal
 	@Override
 	public ValidationResult convert(EmptyValueException e, Object originalValue)
 	{
-		return new ValidationResult(originalValue, MessageFormat.format(_empty, originalValue));
+		return new ValidationResult(originalValue, MessageFormat.format(_empty.get(), originalValue));
 	}
 	
 }
