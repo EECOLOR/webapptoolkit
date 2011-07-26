@@ -2,9 +2,11 @@
 
 [#import "/validation.ftl" as validation /]
 
-[#macro create action submitLabel value]
+[#macro create action submitLabel value showValidationErrorList=false]
 	
-	[@validation.displayValidation /]
+	[#if showValidationErrorList]
+		[@validation.displayValidation /]
+	[/#if]
 	
 	<form action="${action}" method="POST">
 		

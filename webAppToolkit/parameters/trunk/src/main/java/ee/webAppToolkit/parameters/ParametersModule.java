@@ -16,6 +16,8 @@ import ee.parameterConverter.guice.ParameterConverterModule;
 import ee.webAppToolkit.core.expert.ActionArgumentResolver;
 import ee.webAppToolkit.localization.LocalizedStrings;
 import ee.webAppToolkit.parameters.annotations.Parameter;
+import ee.webAppToolkit.parameters.exceptions.CustomEmptyValueException;
+import ee.webAppToolkit.parameters.expert.impl.CustomEmptyValueExceptionConverter;
 import ee.webAppToolkit.parameters.expert.impl.EmptyValueExceptionConverter;
 import ee.webAppToolkit.parameters.expert.impl.ExtendedPropertyMetadataImpl;
 import ee.webAppToolkit.parameters.expert.impl.ParameterActionArgumentResolver;
@@ -44,6 +46,8 @@ public class ParametersModule extends AbstractModule {
 
 		bind(new TypeLiteral<ExceptionConverter<EmptyValueException>>() {
 		}).to(EmptyValueExceptionConverter.class).asEagerSingleton();
+		bind(new TypeLiteral<ExceptionConverter<CustomEmptyValueException>>() {
+		}).to(CustomEmptyValueExceptionConverter.class).asEagerSingleton();
 		
 		bind(ActionArgumentResolver.class).annotatedWith(Parameter.class).to(
 				ParameterActionArgumentResolver.class);

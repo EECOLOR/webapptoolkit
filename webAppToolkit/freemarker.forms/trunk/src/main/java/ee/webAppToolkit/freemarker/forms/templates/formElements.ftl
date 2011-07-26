@@ -19,7 +19,7 @@
 				[#case "component"]
 				[#case "component_list"]
 					[#if value[propertyName]??]
-						<div>
+						<div class="${type}">
 							[@.namespace[type] 
 								value=value[propertyName] 
 								name=subName 
@@ -57,7 +57,7 @@
 			[#local subName = name + "." + subName]
 		[/#if]
 	
-		<div>
+		<div class="component">
 			[@.namespace.component value=component name=subName /]
 		</div>
 	[/#list]
@@ -67,10 +67,10 @@
 	<label ${error?string('class="error"', '')} for=${name}>${label}${optional?string("", " *")}</label>	
 [/#macro]
 
-[#macro text 		label name value optional=true property=false]
+[#macro text label name value optional=true property=false]
 	[#local error = validation.hasValidationErrors(name) /]
 	[#if error]
-		[#local value = validation.getValidationResults(name).originalValue!]
+		[#local value = validation.getOriginalValue(name)]
 	[/#if]
 	[#local value][@c value /][/#local]
 	[@.namespace.label label=label name=name optional=optional error=error /]
@@ -82,12 +82,13 @@
 			maxLength="${property.annotations.Text.maxLength}"
 		[/#if] 
 	/>
+	[@validation.showValidationError name=name /]
 [/#macro]
 
-[#macro textarea 	label name value optional=true property=false]
+[#macro textarea label name value optional=true property=false]
 	[#local error = validation.hasValidationErrors(name) /]
 	[#if error]
-		[#local value = validationResults[name].originalValue!]
+		[#local value = validation.getOriginalValue(name)]
 	[/#if]
 	[#local value][@c value /][/#local]
 	[@.namespace.label label=label name=name optional=optional error=error /]
@@ -95,9 +96,10 @@
 		${error?string('class="error"', '')} 
 		id="${name}" name="${name}" 
 	>${value}</textarea>
+	[@validation.showValidationError name=name /]
 [/#macro]
 
-[#macro list 		label name value optional=true property=false]
+[#macro list label name value optional=true property=false]
 	[#local error = validation.hasValidationErrors(name) /]
 	[@.namespace.label label=label name=name optional=optional error=error /]
 	<select ${error?string('class="error"', '')} name="${name}">
@@ -112,12 +114,15 @@
 			<option value="${element.value}"${selected}>${element.label}</option>
 		[/#list]
 	</select>
+	[@validation.showValidationError name=name /]
 [/#macro]
 
-[#macro date 		label name value optional=true property=false]
+[#macro date label name value optional=true property=false]
 	[#local error = validation.hasValidationErrors(name) /]
 	[#if error]
-		[#local value = validation.getValidationResults(name).originalValue!]
+		[#local value = validation.getOriginalValue(name) /]
+	[#else]
+		[#local value = value?string("yyyy-MM-dd") ]
 	[/#if]
 	[@.namespace.label label=label name=name optional=optional error=error /]
 	<input type="date" 
@@ -125,6 +130,7 @@
 		id="${name}" name="${name}" 
 		value="${value}"
 	/>
+	[@validation.showValidationError name=name /]
 [/#macro]
 
 [#macro hidden name value]

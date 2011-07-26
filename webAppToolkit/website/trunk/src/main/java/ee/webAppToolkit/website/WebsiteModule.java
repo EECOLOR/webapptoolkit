@@ -1,5 +1,6 @@
 package ee.webAppToolkit.website;
 
+import java.util.Date;
 import java.util.Locale;
 
 import com.google.inject.AbstractModule;
@@ -9,6 +10,7 @@ import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
 import com.google.inject.util.Modules;
 
+import ee.parameterConverter.Converter;
 import ee.webAppToolkit.core.WebAppToolkitModule;
 import ee.webAppToolkit.freemarker.FreemarkerModule;
 import ee.webAppToolkit.freemarker.forms.FreemarkerFormsModule;
@@ -22,6 +24,7 @@ import ee.webAppToolkit.parameters.ParametersModule;
 import ee.webAppToolkit.render.ModelWrapper;
 import ee.webAppToolkit.render.RenderModule;
 import ee.webAppToolkit.website.expert.impl.GuiceWebappTemplateLoader;
+import ee.webAppToolkit.website.parameters.DateConverter;
 import ee.webAppToolkit.website.validation.NumberFormatExceptionConverter;
 import freemarker.cache.TemplateLoader;
 
@@ -55,6 +58,7 @@ public class WebsiteModule extends WebAppToolkitModule {
 		templateLoaders.addBinding().to(GuiceWebappTemplateLoader.class);
 		
 		bind(new TypeLiteral<ExceptionConverter<NumberFormatException>>(){}).to(NumberFormatExceptionConverter.class);
+		bind(new TypeLiteral<Converter<String, Date>>(){}).to(DateConverter.class);
 		
 		bindPropertiesToLocale("website.validationMessages", Locale.ENGLISH);
 	}
