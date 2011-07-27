@@ -2,7 +2,7 @@
   * [Introduction]
   * [Getting_started Getting started]
   * [Modules]
-   * [Core]
+   * [core]
     * [Controllers]
     * [Actions]
     * [BasicController]
