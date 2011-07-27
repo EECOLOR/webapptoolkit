@@ -20,11 +20,12 @@ On top of that it does the following:
 
 == Dependencies ==
 
- * [Core]
- * [Localization]
- * [Parameters]
- * [Render]
- * [Navigation]
- * [Freemarker]
-  * [Freemarker_navigation Freemarker navigation]
-  * [Freemarker_metadata Freemarker metadata]
+ * [core]
+ * [localization]
+ * [parameters]
+ * [rendering]
+ * [navigation]
+ * [rendering]
+ * [rendering_freemarker rendering.freemarker]
+ * [rendering_freemarker_navigation rendering.freemarker.navigation]
+ * [rendering_freemarker_metadata rendering.freemarker.metadata]
