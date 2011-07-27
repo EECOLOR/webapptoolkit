@@ -33,5 +33,5 @@ If you send typed objects, don't forget to use the native {{{registerClassAlias}
 
 == Dependencies ==
 
- * [Core]
+ * [core]
  * [http://mavenhub.com/mvn/central/com.exadel.flamingo.flex/amf-serializer/1.5.0 amf-serializer]
