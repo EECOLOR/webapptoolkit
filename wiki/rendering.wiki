@@ -79,4 +79,4 @@ If you do not override the {{{ModelWrapper}}} and {{{TemplateResolver}}} it will
 
 == Implementations ==
 
- * [rendering.freemarker]
+ * [rendering_freemarker rendering.freemarker]
