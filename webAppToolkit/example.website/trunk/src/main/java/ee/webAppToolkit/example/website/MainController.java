@@ -4,7 +4,7 @@ import ee.webAppToolkit.core.Result;
 import ee.webAppToolkit.core.annotations.SubController;
 import ee.webAppToolkit.core.annotations.SubControllers;
 import ee.webAppToolkit.navigation.annotations.HideFromNavigation;
-import ee.webAppToolkit.render.RenderingController;
+import ee.webAppToolkit.rendering.RenderingController;
 
 @SubControllers({
 	@SubController(name="rest", type=RestController.class),

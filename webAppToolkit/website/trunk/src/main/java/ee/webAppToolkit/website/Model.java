@@ -8,7 +8,7 @@ import ee.webAppToolkit.core.annotations.Nullable;
 import ee.webAppToolkit.core.annotations.Path;
 import ee.webAppToolkit.navigation.SiteMap;
 import ee.webAppToolkit.parameters.ValidationResults;
-import ee.webAppToolkit.render.SimpleModel;
+import ee.webAppToolkit.rendering.SimpleModel;
 
 public class Model extends SimpleModel {
 	

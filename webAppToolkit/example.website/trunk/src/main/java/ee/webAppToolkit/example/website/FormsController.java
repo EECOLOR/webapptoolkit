@@ -11,7 +11,7 @@ import ee.webAppToolkit.example.website.forms.TestObject;
 import ee.webAppToolkit.example.website.forms.TestSubObject;
 import ee.webAppToolkit.parameters.ValidationResults;
 import ee.webAppToolkit.parameters.annotations.Parameter;
-import ee.webAppToolkit.render.RenderingController;
+import ee.webAppToolkit.rendering.RenderingController;
 
 public class FormsController extends RenderingController {
 	

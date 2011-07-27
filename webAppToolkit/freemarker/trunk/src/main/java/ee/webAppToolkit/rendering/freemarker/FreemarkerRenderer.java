@@ -1,4 +1,4 @@
-package ee.webAppToolkit.freemarker;
+package ee.webAppToolkit.rendering.freemarker;
 
 import java.io.StringWriter;
 import java.io.Writer;
@@ -6,8 +6,8 @@ import java.io.Writer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import ee.webAppToolkit.render.Renderer;
-import ee.webAppToolkit.render.exceptions.RenderFailedException;
+import ee.webAppToolkit.rendering.Renderer;
+import ee.webAppToolkit.rendering.exceptions.RenderFailedException;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 

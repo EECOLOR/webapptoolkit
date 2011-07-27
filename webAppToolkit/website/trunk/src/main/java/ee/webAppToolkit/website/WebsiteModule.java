@@ -12,7 +12,6 @@ import com.google.inject.util.Modules;
 
 import ee.parameterConverter.Converter;
 import ee.webAppToolkit.core.WebAppToolkitModule;
-import ee.webAppToolkit.freemarker.FreemarkerModule;
 import ee.webAppToolkit.freemarker.forms.FreemarkerFormsModule;
 import ee.webAppToolkit.freemarker.metadata.FreemarkerMetadataModule;
 import ee.webAppToolkit.freemarker.navigation.FreemarkerNavigationModule;
@@ -21,8 +20,9 @@ import ee.webAppToolkit.localization.LocalizedStrings;
 import ee.webAppToolkit.navigation.NavigationModule;
 import ee.webAppToolkit.parameters.ExceptionConverter;
 import ee.webAppToolkit.parameters.ParametersModule;
-import ee.webAppToolkit.render.ModelWrapper;
-import ee.webAppToolkit.render.RenderModule;
+import ee.webAppToolkit.rendering.ModelWrapper;
+import ee.webAppToolkit.rendering.RenderingModule;
+import ee.webAppToolkit.rendering.freemarker.FreemarkerModule;
 import ee.webAppToolkit.website.expert.impl.GuiceWebappTemplateLoader;
 import ee.webAppToolkit.website.parameters.DateConverter;
 import ee.webAppToolkit.website.validation.NumberFormatExceptionConverter;
@@ -37,7 +37,7 @@ public class WebsiteModule extends WebAppToolkitModule {
 		install(new ParametersModule());
 		
 		//Override the ModelWrapper in order to create a different kind of Model
-		install(Modules.override(new RenderModule()).with(new AbstractModule() {
+		install(Modules.override(new RenderingModule()).with(new AbstractModule() {
 
 			@Override
 			protected void configure() {

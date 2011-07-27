@@ -1,4 +1,4 @@
-package ee.webAppToolkit.freemarker.expert.impl;
+package ee.webAppToolkit.rendering.freemarker.expert.impl;
 
 import java.util.Collections;
 import java.util.HashMap;

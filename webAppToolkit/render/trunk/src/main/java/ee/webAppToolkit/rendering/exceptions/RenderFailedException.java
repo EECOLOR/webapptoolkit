@@ -1,4 +1,4 @@
-package ee.webAppToolkit.render.exceptions;
+package ee.webAppToolkit.rendering.exceptions;
 
 public class RenderFailedException extends Exception
 {

@@ -1,4 +1,4 @@
-package ee.webAppToolkit.render;
+package ee.webAppToolkit.rendering;
 
 import javax.inject.Inject;
 
@@ -6,8 +6,8 @@ import ee.webAppToolkit.core.BasicController;
 import ee.webAppToolkit.core.Result;
 import ee.webAppToolkit.core.WrappingController;
 import ee.webAppToolkit.core.expert.impl.DefaultResult;
-import ee.webAppToolkit.render.exceptions.RenderFailedException;
-import ee.webAppToolkit.render.expert.TemplateResolver;
+import ee.webAppToolkit.rendering.exceptions.RenderFailedException;
+import ee.webAppToolkit.rendering.expert.TemplateResolver;
 
 public class RenderingController extends BasicController implements WrappingController {
 

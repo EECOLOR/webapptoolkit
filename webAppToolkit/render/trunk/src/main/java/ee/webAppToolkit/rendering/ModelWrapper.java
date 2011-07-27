@@ -1,4 +1,4 @@
-package ee.webAppToolkit.render;
+package ee.webAppToolkit.rendering;
 
 
 public interface ModelWrapper

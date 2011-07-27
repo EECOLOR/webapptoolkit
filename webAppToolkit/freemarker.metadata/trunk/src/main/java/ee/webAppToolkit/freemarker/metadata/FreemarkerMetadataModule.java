@@ -7,7 +7,6 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.multibindings.MapBinder;
 
-import ee.webAppToolkit.freemarker.expert.impl.GuiceObjectWrapper;
 import ee.webAppToolkit.freemarker.metadata.expert.CustomObjectTemplateModel;
 import ee.webAppToolkit.freemarker.metadata.expert.CustomObjectTemplateModelFactory;
 import ee.webAppToolkit.freemarker.metadata.expert.PropertyMetadata;
@@ -17,6 +16,7 @@ import ee.webAppToolkit.freemarker.metadata.expert.impl.ClassModelFactory;
 import ee.webAppToolkit.freemarker.metadata.expert.impl.MetadataObjectWrapper;
 import ee.webAppToolkit.freemarker.metadata.expert.impl.MetadataTemplateModel;
 import ee.webAppToolkit.freemarker.metadata.expert.impl.PropertyMetadataImpl;
+import ee.webAppToolkit.rendering.freemarker.expert.impl.GuiceObjectWrapper;
 import freemarker.ext.util.ModelFactory;
 
 public class FreemarkerMetadataModule extends AbstractModule {

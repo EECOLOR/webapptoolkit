@@ -1,4 +1,4 @@
-package ee.webAppToolkit.freemarker;
+package ee.webAppToolkit.rendering.freemarker;
 
 import java.util.Set;
 
@@ -12,9 +12,9 @@ import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
 
-import ee.webAppToolkit.freemarker.expert.impl.GuiceObjectWrapper;
 import ee.webAppToolkit.localization.LocaleResolver;
-import ee.webAppToolkit.render.Renderer;
+import ee.webAppToolkit.rendering.Renderer;
+import ee.webAppToolkit.rendering.freemarker.expert.impl.GuiceObjectWrapper;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;

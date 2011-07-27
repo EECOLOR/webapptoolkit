@@ -7,7 +7,7 @@ import ee.webAppToolkit.example.website.parameters.TestObject;
 import ee.webAppToolkit.localization.LocalizedString;
 import ee.webAppToolkit.navigation.annotations.NavigationDisplayName;
 import ee.webAppToolkit.parameters.annotations.Parameter;
-import ee.webAppToolkit.render.RenderingController;
+import ee.webAppToolkit.rendering.RenderingController;
 
 public class ParametersController extends RenderingController {
 	

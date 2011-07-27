@@ -1,4 +1,4 @@
-package ee.webAppToolkit.freemarker.expert.impl;
+package ee.webAppToolkit.rendering.freemarker.expert.impl;
 
 import com.google.inject.ImplementedBy;
 

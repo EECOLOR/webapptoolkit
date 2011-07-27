@@ -1,4 +1,4 @@
-package ee.webAppToolkit.render;
+package ee.webAppToolkit.rendering;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;

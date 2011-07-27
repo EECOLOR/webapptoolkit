@@ -4,8 +4,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import ee.webAppToolkit.freemarker.expert.impl.DynamicObjectWrapper;
 import ee.webAppToolkit.freemarker.metadata.expert.CustomObjectTemplateModelFactory;
+import ee.webAppToolkit.rendering.freemarker.expert.impl.DynamicObjectWrapper;
 import freemarker.ext.util.ModelFactory;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;

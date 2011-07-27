@@ -1,4 +1,4 @@
-package ee.webAppToolkit.render.expert;
+package ee.webAppToolkit.rendering.expert;
 
 import com.google.inject.ImplementedBy;
 

@@ -1,6 +1,6 @@
-package ee.webAppToolkit.render;
+package ee.webAppToolkit.rendering;
 
-import ee.webAppToolkit.render.exceptions.RenderFailedException;
+import ee.webAppToolkit.rendering.exceptions.RenderFailedException;
 
 public interface Renderer
 {
