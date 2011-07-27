@@ -14,5 +14,5 @@ The macro is used like this:
 
 == Dependencies ==
 
- * [Navigation]
- * [Freemarker]
+ * [navigation]
+ * [rendering_freemarker rendering.freemarker]
