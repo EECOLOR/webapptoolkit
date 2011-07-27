@@ -15,5 +15,5 @@ public Result echo(@Json("data") Map<String, String> map)
 
 == Dependencies ==
 
- * [Core]
+ * [core]
  * [http://mavenhub.com/mvn/central/com.google.code.gson/gson/1.7.1 gson]
