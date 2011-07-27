@@ -23,5 +23,5 @@ The [Website] module includes the {{{SiteMap}}} into the model by default.
 
 === Dependencies ===
 
- * [Core]
- * [Localization]
+ * [core]
+ * [localization]
