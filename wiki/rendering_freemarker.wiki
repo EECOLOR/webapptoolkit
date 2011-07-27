@@ -30,6 +30,6 @@ If you extend the {{{FreemarkerModule}}} class you can use the {{{bindModelFacto
 
 == Dependencies ==
 
- * [Render]
- * [Localization]
+ * [rendering]
+ * [localization]
  * [http://freemarker.sourceforge.net/ Freemarker]
