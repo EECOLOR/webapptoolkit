@@ -7,22 +7,22 @@
     * [Actions]
     * [BasicController]
     * [Extending]
-   * [Render Render *]
-   * [Localization]
-   * [Navigation]
-   * [Parameters]
+   * [rendering Render *]
+   * [localization]
+   * [navigation]
+   * [parameters]
     * [Validation]
     * [Default_values Default values]
     * [Converters]
-   * [Freemarker]
-   * [Freemarker_navigation Freemarker navigation]
+   * [rendering_freemarker rendering.freemarker]
+   * [rendering_freemarker_navigation rendering.freemarker.navigation]
    * [rendering_freemarker_metadata rendering.freemarker.metadata]
-   * [Freemarker_forms Freemarker forms ***]
-   * [Website Website **]
-   * [Amf]
-   * [Json]
+   * [rendering_freemarker_forms rendering.freemarker.forms ***]
+   * [website Website **]
+   * [amf]
+   * [json]
 
-`*` Module is an _abstract_ module and can not be used without an implementation. For example [Freemarker] is an implementation of the [Render] module.
+`*` Module is an _abstract_ module and can not be used without an implementation. For example [rendering.freemarker] is an implementation of the [rendering] module.
 
 `**` Module can best be extended by your applications module. For example {{{MyApplicationModule extends WebsiteModule}}}.
 
