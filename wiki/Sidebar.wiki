@@ -16,7 +16,7 @@
     * [Converters]
    * [Freemarker]
    * [Freemarker_navigation Freemarker navigation]
-   * [rendering.freemarker.metadata]
+   * [rendering_freemarker_metadata]
    * [Freemarker_forms Freemarker forms ***]
    * [Website Website **]
    * [Amf]
