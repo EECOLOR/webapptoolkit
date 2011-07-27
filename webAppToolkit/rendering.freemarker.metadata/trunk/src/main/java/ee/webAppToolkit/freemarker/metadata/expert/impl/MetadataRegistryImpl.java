@@ -57,6 +57,7 @@ public class MetadataRegistryImpl implements MetadataRegistry {
 		Class<?> currentType = type;
 		Map<String, PropertyMetadata> propertyMetadataMap = new HashMap<String, PropertyMetadata>();
 		
+		//TODO add a switch to allow the use getters and setters as well
 		while (!Object.class.equals(currentType))
 		{
 			Field[] declaredFields = currentType.getDeclaredFields();
