@@ -8,9 +8,9 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.servlet.ServletScopes;
 import com.google.inject.util.Modules;
 
+import ee.metadataUtils.PropertyMetadataFactory;
 import ee.parameterConverter.EmptyValueException;
-import ee.parameterConverter.PropertyMetadata;
-import ee.parameterConverter.PropertyMetadataFactory;
+import ee.parameterConverter.ParameterPropertyMetadata;
 import ee.parameterConverter.ValidationResultCollector;
 import ee.parameterConverter.guice.ParameterConverterModule;
 import ee.webAppToolkit.core.expert.ActionArgumentResolver;
@@ -34,7 +34,7 @@ public class ParametersModule extends AbstractModule {
 				bind(ValidationResultCollector.class).to(ValidationResultCollectorImpl.class)
 						.asEagerSingleton();
 				
-				install(new FactoryModuleBuilder().implement(PropertyMetadata.class,
+				install(new FactoryModuleBuilder().implement(ParameterPropertyMetadata.class,
 						ExtendedPropertyMetadataImpl.class).build(PropertyMetadataFactory.class));
 			}
 		}));

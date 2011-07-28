@@ -11,14 +11,14 @@ import com.google.inject.Injector;
 import com.google.inject.assistedinject.Assisted;
 
 import ee.parameterConverter.Validator;
-import ee.parameterConverter.impl.PropertyMetadataImpl;
+import ee.parameterConverter.impl.ParameterPropertyMetadataImpl;
 import ee.webAppToolkit.parameters.AnnotationValidator;
 import ee.webAppToolkit.parameters.DefaultValueProvider;
 import ee.webAppToolkit.parameters.annotations.Default;
 import ee.webAppToolkit.parameters.annotations.ValidationAnnotation;
 import ee.webAppToolkit.parameters.expert.AnnotationValidatorResolver;
 
-public class ExtendedPropertyMetadataImpl extends PropertyMetadataImpl {
+public class ExtendedPropertyMetadataImpl extends ParameterPropertyMetadataImpl {
 
 	private Injector _injector;
 	private DefaultValueProvider<?> _defaultValueProvider;
@@ -50,11 +50,11 @@ public class ExtendedPropertyMetadataImpl extends PropertyMetadataImpl {
 				Class<? extends Annotation> annotationType = annotation.annotationType();
 				if (annotationType.isAnnotationPresent(ValidationAnnotation.class))
 				{
-					AnnotationValidator<Object, Annotation> annotationValidator = _annotationValidatorResolver.resolve(getType(), annotationType);
+					AnnotationValidator<Object, Annotation> annotationValidator = _annotationValidatorResolver.resolve(getGenericType(), annotationType);
 					
 					if (annotationValidator == null)
 					{
-						throw new ConfigurationException("Could not find validator for " + getType() + " and annotation type " + annotationType);
+						throw new ConfigurationException("Could not find validator for " + getGenericType() + " and annotation type " + annotationType);
 					}
 					
 					AnnotationValidatorWrapper annotationValidatorWrapper = new AnnotationValidatorWrapper(annotation, annotationValidator);

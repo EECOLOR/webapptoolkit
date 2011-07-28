@@ -37,7 +37,7 @@ public class MetadataRegistryImpl implements MetadataRegistry {
 	}
 	
 	@Override
-	public Map<String, PropertyMetadata> getPropertyMetadata(Class<? extends Object> type) {
+	public Map<String, PropertyMetadata> getPropertyMetadata(Class<?> type) {
 		
 		if (!_propertyMetadata.containsKey(type))
 		{
