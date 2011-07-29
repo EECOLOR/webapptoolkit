@@ -122,7 +122,9 @@
 	[#if error]
 		[#local value = validation.getOriginalValue(name) /]
 	[#else]
-		[#local value = value?string("yyyy-MM-dd") ]
+		[#if value?is_date]
+			[#local value = value?string("yyyy-MM-dd") ]
+		[/#if]
 	[/#if]
 	[@.namespace.label label=label name=name optional=optional error=error /]
 	<input type="date" 

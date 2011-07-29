@@ -3,9 +3,10 @@ package ee.webAppToolkit.freemarker.forms.expert.impl;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
+import ee.metadataUtils.PropertyMetadataRegistry;
+import ee.metadataUtils.impl.AdapterNotFoundException;
 import ee.webAppToolkit.freemarker.forms.expert.EnumerationResolver;
-import ee.webAppToolkit.freemarker.metadata.expert.MetadataRegistry;
-import ee.webAppToolkit.freemarker.metadata.expert.PropertyMetadata;
+import ee.webAppToolkit.freemarker.metadata.expert.FreemarkerPropertyMetadata;
 import ee.webAppToolkit.freemarker.metadata.expert.impl.MetadataTemplateModel;
 import freemarker.template.ObjectWrapper;
 import freemarker.template.TemplateModel;
@@ -14,11 +15,11 @@ import freemarker.template.TemplateModelException;
 public class EnumerationTemplateModel extends MetadataTemplateModel {
 
 	private EnumerationResolver _enumerationResolver;
-	private MetadataRegistry _propertyMetadataRegistry;
+	private PropertyMetadataRegistry _propertyMetadataRegistry;
 	
 	@Inject
 	public EnumerationTemplateModel(
-			MetadataRegistry propertyMetadataRegistry,
+			PropertyMetadataRegistry propertyMetadataRegistry,
 			@Assisted Object object, 
 			@Assisted ObjectWrapper wrapper,
 			EnumerationResolver enumerationResolver)
@@ -41,7 +42,12 @@ public class EnumerationTemplateModel extends MetadataTemplateModel {
 		{
 			key = key.replace("_enumeration", "");
 			
-			PropertyMetadata propertyMetadata = _propertyMetadataRegistry.getPropertyMetadata(object.getClass(), key);
+			FreemarkerPropertyMetadata propertyMetadata;
+			try {
+				propertyMetadata = _propertyMetadataRegistry.getPropertyMetadata(object.getClass(), key, FreemarkerPropertyMetadata.class);
+			} catch (AdapterNotFoundException e) {
+				throw new TemplateModelException(e);
+			}
 			
 			if (propertyMetadata == null)
 			{
@@ -50,9 +56,9 @@ public class EnumerationTemplateModel extends MetadataTemplateModel {
 			{
 				return wrap(_enumerationResolver.resolve(propertyMetadata.getType()));
 			}
-		} else if (object instanceof PropertyMetadata && key.equals("enumeration"))
+		} else if (object instanceof FreemarkerPropertyMetadata && key.equals("enumeration"))
 		{
-			return wrap(_enumerationResolver.resolve(((PropertyMetadata) object).getType()));
+			return wrap(_enumerationResolver.resolve(((FreemarkerPropertyMetadata) object).getType()));
 		} else
 		{
 			try

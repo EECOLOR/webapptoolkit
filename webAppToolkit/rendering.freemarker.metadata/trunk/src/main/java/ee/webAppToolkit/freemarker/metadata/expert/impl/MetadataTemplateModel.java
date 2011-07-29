@@ -3,9 +3,10 @@ package ee.webAppToolkit.freemarker.metadata.expert.impl;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
+import ee.metadataUtils.PropertyMetadataRegistry;
+import ee.metadataUtils.impl.AdapterNotFoundException;
 import ee.webAppToolkit.freemarker.metadata.expert.CustomObjectTemplateModel;
-import ee.webAppToolkit.freemarker.metadata.expert.MetadataRegistry;
-import ee.webAppToolkit.freemarker.metadata.expert.PropertyMetadata;
+import ee.webAppToolkit.freemarker.metadata.expert.FreemarkerPropertyMetadata;
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.ext.beans.StringModel;
 import freemarker.template.ObjectWrapper;
@@ -14,17 +15,17 @@ import freemarker.template.TemplateModelException;
 
 public class MetadataTemplateModel extends StringModel implements CustomObjectTemplateModel
 {
-	private MetadataRegistry _metadataRegistry;
+	private PropertyMetadataRegistry _propertyMetadataRegistry;
 	
 	@Inject
 	public MetadataTemplateModel(
-			MetadataRegistry propertyMetadataRegistry,
+			PropertyMetadataRegistry propertyMetadataRegistry,
 			@Assisted Object object, 
 			@Assisted ObjectWrapper wrapper)
 	{
 		super(object, (BeansWrapper) wrapper);
 		
-		_metadataRegistry = propertyMetadataRegistry;
+		_propertyMetadataRegistry = propertyMetadataRegistry;
 	}
 
 	@Override
@@ -40,7 +41,12 @@ public class MetadataTemplateModel extends StringModel implements CustomObjectTe
 			//find the setter for the requested property
 			key = key.replace("_metadata", "");
 			
-			PropertyMetadata propertyMetadata = _metadataRegistry.getPropertyMetadata(object.getClass(), key);
+			FreemarkerPropertyMetadata propertyMetadata;
+			try {
+				propertyMetadata = _propertyMetadataRegistry.getPropertyMetadata(object.getClass(), key, FreemarkerPropertyMetadata.class);
+			} catch (AdapterNotFoundException e) {
+				throw new TemplateModelException(e);
+			}
 			
 			if (propertyMetadata == null)
 			{
@@ -51,7 +57,11 @@ public class MetadataTemplateModel extends StringModel implements CustomObjectTe
 			}
 		} else if (key.equals("_properties"))
 		{
-			return wrap(_metadataRegistry.getPropertyMetadata(object.getClass()));
+			try {
+				return wrap(_propertyMetadataRegistry.getPropertyMetadataMap(object.getClass(), FreemarkerPropertyMetadata.class));
+			} catch (AdapterNotFoundException e) {
+				throw new TemplateModelException(e);
+			}
 		} else
 		{
 			return super.get(key);

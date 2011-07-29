@@ -17,6 +17,7 @@ import ee.webAppToolkit.freemarker.metadata.FreemarkerMetadataModule;
 import ee.webAppToolkit.freemarker.navigation.FreemarkerNavigationModule;
 import ee.webAppToolkit.localization.LocalizationModule;
 import ee.webAppToolkit.localization.LocalizedStrings;
+import ee.webAppToolkit.metadata.MetadataModule;
 import ee.webAppToolkit.navigation.NavigationModule;
 import ee.webAppToolkit.parameters.ExceptionConverter;
 import ee.webAppToolkit.parameters.ParametersModule;
@@ -50,6 +51,7 @@ public class WebsiteModule extends WebAppToolkitModule {
 		install(new NavigationModule());
 		install(new FreemarkerModule());
 		install(new FreemarkerNavigationModule());
+		install(new MetadataModule());
 		install(Modules.override(new FreemarkerMetadataModule()).with(new FreemarkerFormsModule()));
 		
 		bind(String.class).annotatedWith(Names.named("templatePath")).toInstance("WEB-INF/templates");

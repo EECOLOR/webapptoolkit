@@ -8,7 +8,7 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.servlet.ServletScopes;
 import com.google.inject.util.Modules;
 
-import ee.metadataUtils.PropertyMetadataFactory;
+import ee.metadataUtils.PropertyMetadataAdapterFactory;
 import ee.parameterConverter.EmptyValueException;
 import ee.parameterConverter.ParameterPropertyMetadata;
 import ee.parameterConverter.ValidationResultCollector;
@@ -34,8 +34,7 @@ public class ParametersModule extends AbstractModule {
 				bind(ValidationResultCollector.class).to(ValidationResultCollectorImpl.class)
 						.asEagerSingleton();
 				
-				install(new FactoryModuleBuilder().implement(ParameterPropertyMetadata.class,
-						ExtendedPropertyMetadataImpl.class).build(PropertyMetadataFactory.class));
+				install(new FactoryModuleBuilder().implement(ParameterPropertyMetadata.class, ExtendedPropertyMetadataImpl.class).build(new TypeLiteral<PropertyMetadataAdapterFactory<ParameterPropertyMetadata>>(){}));
 			}
 		}));
 

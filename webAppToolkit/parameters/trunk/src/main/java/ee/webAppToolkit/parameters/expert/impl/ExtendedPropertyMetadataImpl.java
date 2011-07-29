@@ -1,7 +1,6 @@
 package ee.webAppToolkit.parameters.expert.impl;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -10,85 +9,81 @@ import javax.naming.ConfigurationException;
 import com.google.inject.Injector;
 import com.google.inject.assistedinject.Assisted;
 
+import ee.metadataUtils.PropertyMetadata;
 import ee.parameterConverter.Validator;
-import ee.parameterConverter.impl.ParameterPropertyMetadataImpl;
+import ee.parameterConverter.guice.GuiceParameterPropertyMetadata;
 import ee.webAppToolkit.parameters.AnnotationValidator;
 import ee.webAppToolkit.parameters.DefaultValueProvider;
 import ee.webAppToolkit.parameters.annotations.Default;
 import ee.webAppToolkit.parameters.annotations.ValidationAnnotation;
 import ee.webAppToolkit.parameters.expert.AnnotationValidatorResolver;
 
-public class ExtendedPropertyMetadataImpl extends ParameterPropertyMetadataImpl {
+public class ExtendedPropertyMetadataImpl extends GuiceParameterPropertyMetadata {
 
 	private Injector _injector;
 	private DefaultValueProvider<?> _defaultValueProvider;
 	private Validator _validator;
 	private AnnotationValidatorResolver _annotationValidatorResolver;
-	
+
 	@Inject
-	public ExtendedPropertyMetadataImpl(Injector injector, AnnotationValidatorResolver annotationValidatorResolver, @Named("optionalAnnotationName") String optionalAnnotationName, @Assisted Field field) throws ConfigurationException
-	{
-		super(field, optionalAnnotationName);
-		
+	public ExtendedPropertyMetadataImpl(Injector injector,
+			AnnotationValidatorResolver annotationValidatorResolver,
+			@Named("optionalAnnotationName") String optionalAnnotationName,
+			@Assisted PropertyMetadata propertyMetadata) throws ConfigurationException {
+		super(optionalAnnotationName, propertyMetadata);
+
 		_injector = injector;
 		_annotationValidatorResolver = annotationValidatorResolver;
-
-		_processAnnotations(field.getAnnotations());
+		
+		_processAnnotations(propertyMetadata.getAnnotations());
 	}
-	
+
 	private void _processAnnotations(Annotation[] annotations) throws ConfigurationException {
-		
+
 		Validator validator = null;
-		
-		for (Annotation annotation : annotations)
-		{
-			if (annotation instanceof Default)
-			{
+
+		for (Annotation annotation : annotations) {
+			if (annotation instanceof Default) {
 				_defaultValueProvider = _injector.getInstance(((Default) annotation).value());
-			} else
-			{
+			} else {
 				Class<? extends Annotation> annotationType = annotation.annotationType();
-				if (annotationType.isAnnotationPresent(ValidationAnnotation.class))
-				{
-					AnnotationValidator<Object, Annotation> annotationValidator = _annotationValidatorResolver.resolve(getGenericType(), annotationType);
-					
-					if (annotationValidator == null)
-					{
-						throw new ConfigurationException("Could not find validator for " + getGenericType() + " and annotation type " + annotationType);
+				if (annotationType.isAnnotationPresent(ValidationAnnotation.class)) {
+					AnnotationValidator<Object, Annotation> annotationValidator = _annotationValidatorResolver
+							.resolve(getGenericType(), annotationType);
+
+					if (annotationValidator == null) {
+						throw new ConfigurationException("Could not find validator for "
+								+ getGenericType() + " and annotation type " + annotationType);
 					}
-					
-					AnnotationValidatorWrapper annotationValidatorWrapper = new AnnotationValidatorWrapper(annotation, annotationValidator);
-					
-					if (validator == null)
-					{
+
+					AnnotationValidatorWrapper annotationValidatorWrapper = new AnnotationValidatorWrapper(
+							annotation, annotationValidator);
+
+					if (validator == null) {
 						validator = annotationValidatorWrapper;
-					} else if (validator instanceof AnnotationValidatorWrapper)
-					{
+					} else if (validator instanceof AnnotationValidatorWrapper) {
 						ComboValidator comboValidator = new ComboValidator(validator);
 						comboValidator.addValidator(annotationValidatorWrapper);
 						validator = comboValidator;
-					} else if (validator instanceof ComboValidator)
-					{
+					} else if (validator instanceof ComboValidator) {
 						((ComboValidator) validator).addValidator(annotationValidatorWrapper);
 					}
 				}
 			}
 		}
-		
+
 		_validator = validator;
 	}
 
 	@Override
 	public Object getDefaultValue(Object context) {
-		if (_defaultValueProvider == null)
-		{
+		if (_defaultValueProvider == null) {
 			return null;
-		} else
-		{
+		} else {
 			return _defaultValueProvider.provide(context);
 		}
 	}
-	
+
 	@Override
 	public Validator getValidator() {
 		return _validator;
