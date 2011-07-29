@@ -5,4 +5,4 @@ Provides access to components of the [http://code.google.com/p/java-metadata-uti
 
 == Dependencies ==
 
- * [http://code.google.com/p/java-metadata-utils/ java-metadata-utils] 
+ * [http://code.google.com/p/java-metadata-utils/ java-metadata-utils-core] and java-metadata-utils-guice 
