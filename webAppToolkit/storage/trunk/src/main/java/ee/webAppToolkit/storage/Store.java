@@ -11,11 +11,9 @@ import java.util.List;
  * 		only one level deep matching is used
  */
 
-//TODO add exceptions
 public interface Store {
 	
 	public <T> T load(Class<T> entityClass, Object key);
-	public <T> T load(T exampleEntity);
 	
 	public void save(Object entity);
 	public void remove(Object entity);	

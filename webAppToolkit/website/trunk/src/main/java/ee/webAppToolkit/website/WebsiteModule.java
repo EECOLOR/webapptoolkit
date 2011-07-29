@@ -10,6 +10,7 @@ import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
 import com.google.inject.util.Modules;
 
+import ee.metadataUtils.PropertyMetadataType;
 import ee.parameterConverter.Converter;
 import ee.webAppToolkit.core.WebAppToolkitModule;
 import ee.webAppToolkit.freemarker.forms.FreemarkerFormsModule;
@@ -51,7 +52,13 @@ public class WebsiteModule extends WebAppToolkitModule {
 		install(new NavigationModule());
 		install(new FreemarkerModule());
 		install(new FreemarkerNavigationModule());
-		install(new MetadataModule());
+		install(Modules.override(new MetadataModule()).with(new AbstractModule(){
+
+			@Override
+			protected void configure() {
+				bind(PropertyMetadataType.class).toInstance(PropertyMetadataType.FIELDS);
+			}
+		}));
 		install(Modules.override(new FreemarkerMetadataModule()).with(new FreemarkerFormsModule()));
 		
 		bind(String.class).annotatedWith(Names.named("templatePath")).toInstance("WEB-INF/templates");
