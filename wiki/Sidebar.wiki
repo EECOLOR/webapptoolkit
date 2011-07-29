@@ -9,6 +9,7 @@
     * [Extending]
    * [localization]
    * [navigation]
+   * [metadata]
    * [parameters]
     * [Validation]
     * [Default_values Default values]
