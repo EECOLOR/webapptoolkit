@@ -1,5 +1,6 @@
 package ee.webAppToolkit.website;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 
@@ -28,6 +29,7 @@ import ee.webAppToolkit.rendering.freemarker.FreemarkerModule;
 import ee.webAppToolkit.website.expert.impl.GuiceWebappTemplateLoader;
 import ee.webAppToolkit.website.parameters.DateConverter;
 import ee.webAppToolkit.website.validation.NumberFormatExceptionConverter;
+import ee.webAppToolkit.website.validation.ParseExceptionConverter;
 import freemarker.cache.TemplateLoader;
 
 public class WebsiteModule extends WebAppToolkitModule {
@@ -67,6 +69,7 @@ public class WebsiteModule extends WebAppToolkitModule {
 		templateLoaders.addBinding().to(GuiceWebappTemplateLoader.class);
 		
 		bind(new TypeLiteral<ExceptionConverter<NumberFormatException>>(){}).to(NumberFormatExceptionConverter.class);
+		bind(new TypeLiteral<ExceptionConverter<ParseException>>(){}).to(ParseExceptionConverter.class);
 		bind(new TypeLiteral<Converter<String, Date>>(){}).to(DateConverter.class);
 		
 		bindPropertiesToLocale("website.validationMessages", Locale.ENGLISH);
