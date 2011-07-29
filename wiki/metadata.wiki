@@ -1,0 +1,8 @@
+#summary Metadata information
+= Metadata =
+
+Provides access to components of the [http://code.google.com/p/java-metadata-utils/ java-metadata-utils] project.
+
+== Dependencies ==
+
+ * [http://code.google.com/p/java-metadata-utils/ java-metadata-utils] 
