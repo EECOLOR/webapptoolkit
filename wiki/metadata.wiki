@@ -3,6 +3,21 @@
 
 Provides access to components of the [http://code.google.com/p/java-metadata-utils/ java-metadata-utils] project.
 
+You could override the {{{PropertyMetadataType}}} using the following construct:
+
+{{{
+install(Modules.override(new MetadataModule()).with(new AbstractModule(){
+
+			@Override
+			protected void configure() {
+				bind(PropertyMetadataType.class).toInstance(PropertyMetadataType.FIELDS);
+			}
+		}));
+
+}}}
+
+The default value is {{{PropertyMetadataType.BOTH}}}.
+
 == Dependencies ==
 
  * [http://code.google.com/p/java-metadata-utils/ java-metadata-utils-core] and java-metadata-utils-guice 
