@@ -8,11 +8,11 @@ You could override the {{{PropertyMetadataType}}} using the following construct:
 {{{
 install(Modules.override(new MetadataModule()).with(new AbstractModule(){
 
-			@Override
-			protected void configure() {
-				bind(PropertyMetadataType.class).toInstance(PropertyMetadataType.FIELDS);
-			}
-		}));
+	@Override
+	protected void configure() {
+		bind(PropertyMetadataType.class).toInstance(PropertyMetadataType.FIELDS);
+	}
+}));
 
 }}}
 
