@@ -136,7 +136,9 @@ public class ActionImpl implements Action
 				key = Key.get(parameterType, currentAnnotation);
 			}
 			
-			_argumentInformation.add(i, new ArgumentInformation(key, optional));
+			boolean isPrimitive = parameterType instanceof Class && ((Class<?>) parameterType).isPrimitive();
+			
+			_argumentInformation.add(i, new ArgumentInformation(key, optional, isPrimitive));
 		}
 	}
 	
@@ -169,7 +171,7 @@ public class ActionImpl implements Action
 					if (optional)
 					{
 						//no problem
-						result = _getDefaultValue(key.getTypeLiteral().getRawType());
+						result = _getDefaultValue(key.getTypeLiteral().getRawType(), parameterInformation.isPrimitive);
 					} else
 					{
 						throw new ConfigurationException("There was a problem resolving the argument value for argument " + l + " of method '" + getName() + "'. If it's optional, mark it (or the annotation that was used for resolving it) with @Optional");
@@ -206,32 +208,38 @@ public class ActionImpl implements Action
 		return (Result) result;
 	}
 	
-	private Object _getDefaultValue(Class<?> rawType)
+	private Object _getDefaultValue(Class<?> rawType, boolean isPrimitive)
 	{
-		if (rawType.equals(Byte.class))
+		if (isPrimitive)
 		{
-			return 0;
-		} else if (rawType.equals(Short.class))
-		{
-			return 0;
-		} else if (rawType.equals(Integer.class))
-		{
-			return 0;
-		} else if (rawType.equals(Long.class))
-		{
-			return 0L;
-		} else if (rawType.equals(Float.class))
-		{
-			return 0.0f;
-		} else if (rawType.equals(Double.class))
-		{
-			return 0.0d;
-		} else if (rawType.equals(Character.class))
-		{
-			return '\u0000';
-		} else if (rawType.equals(Boolean.class))
-		{
-			return false;
+			if (rawType.equals(Byte.class))
+			{
+				return 0;
+			} else if (rawType.equals(Short.class))
+			{
+				return 0;
+			} else if (rawType.equals(Integer.class))
+			{
+				return 0;
+			} else if (rawType.equals(Long.class))
+			{
+				return 0L;
+			} else if (rawType.equals(Float.class))
+			{
+				return 0.0f;
+			} else if (rawType.equals(Double.class))
+			{
+				return 0.0d;
+			} else if (rawType.equals(Character.class))
+			{
+				return '\u0000';
+			} else if (rawType.equals(Boolean.class))
+			{
+				return false;
+			} else
+			{
+				return null;
+			}
 		} else
 		{
 			return null;
@@ -272,12 +280,14 @@ public class ActionImpl implements Action
 	class ArgumentInformation
 	{
 		Key<?> key;
+		boolean isPrimitive;
 		boolean optional;
 		
-		ArgumentInformation(Key<?> key, boolean optional)
+		ArgumentInformation(Key<?> key, boolean optional, boolean isPrimitive)
 		{
 			this.key = key;
 			this.optional = optional;
+			this.isPrimitive = isPrimitive;
 		}
 	}
 }

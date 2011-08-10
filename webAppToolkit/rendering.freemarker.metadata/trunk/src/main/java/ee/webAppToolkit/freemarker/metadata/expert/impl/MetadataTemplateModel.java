@@ -38,7 +38,7 @@ public class MetadataTemplateModel extends StringModel implements CustomObjectTe
 		
 		if (key.endsWith("_metadata"))
 		{
-			//find the setter for the requested property
+			//find the getter for the requested property
 			key = key.replace("_metadata", "");
 			
 			FreemarkerPropertyMetadata propertyMetadata;
@@ -50,7 +50,7 @@ public class MetadataTemplateModel extends StringModel implements CustomObjectTe
 			
 			if (propertyMetadata == null)
 			{
-				throw new TemplateModelException("Could not find property metadata for '" + key + "'");
+				throw new TemplateModelException("Could not find property metadata for '" + key + "' in type '" + object.getClass() + "'");
 			} else
 			{
 				return wrap(propertyMetadata);

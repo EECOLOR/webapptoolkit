@@ -3,6 +3,7 @@ package ee.webAppToolkit.example.website.forms;
 import java.util.Date;
 import java.util.List;
 
+import ee.webAppToolkit.core.annotations.Optional;
 import ee.webAppToolkit.forms.Display;
 import ee.webAppToolkit.forms.Display.Type;
 import ee.webAppToolkit.localization.LocalizedString;
@@ -10,7 +11,8 @@ import ee.webAppToolkit.localization.LocalizedString;
 public class TestObject {
 	
 	@Display(type=Type.HIDDEN)
-	public long id;
+	@Optional
+	public Integer id;
 	
 	@Display(label=@LocalizedString("forms.testObject.title"), type=Type.TEXT)
 	public String title;

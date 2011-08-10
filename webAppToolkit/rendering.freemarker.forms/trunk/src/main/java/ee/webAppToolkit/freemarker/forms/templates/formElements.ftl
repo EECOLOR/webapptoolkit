@@ -1,8 +1,9 @@
 [#include "/c.ftl" /]
 [#import "/validation.ftl" as validation /]
 
-[#macro component value name=""]
-	[#list value._properties?values?sort_by(["annotations", "Display", "order"]) as property]
+[#macro component properties value name=""]
+	
+	[#list properties?values?sort_by(["annotations", "Display", "order"]) as property]
 		[#local propertyName = property.name /]
 
 		[#local subName = propertyName /]
@@ -13,23 +14,41 @@
 		[#local annotations = property.annotations /]
 		[#local display = annotations.Display /]
 		[#local type = display.type?lower_case /]
+
+		[#local currentValue = "" /]
 		
+		[#if value?is_hash]
+			[#local currentValue = value[propertyName]! /]
+		[/#if]
+
 		[#attempt]
 			[#switch type]
 				[#case "component"]
+					<div class="${type}">
+						[@.namespace[type] 
+							properties=property.properties
+							value=currentValue
+							name=subName 
+						/]
+					</div>
+					[#break /]
 				[#case "component_list"]
-					[#if value[propertyName]??]
+					[#if property.isList]
 						<div class="${type}">
 							[@.namespace[type] 
-								value=value[propertyName] 
+								properties=property.componentProperties
+								value=currentValue
 								name=subName 
 							/]
 						</div>
-					[/#if] 
+					[#else]
+						Error rendering @formElements[${type}]:<br />
+						Could not render the component_list as the property is not a list type (List or array)
+					[/#if]
 					[#break /]
 				[#case "hidden"]
 					<div>
-						[@hidden value=value[propertyName] name=subName /]
+						[@hidden value=currentValue name=subName /]
 					</div>
 					[#break /]
 				[#default]
@@ -37,7 +56,7 @@
 						[@.namespace[type] 
 							label=display.label 
 							name=subName 
-							value=value[propertyName]! 
+							value=currentValue
 							optional=annotations.Optional??
 							property=property
 						/]
@@ -50,17 +69,23 @@
 	[/#list]
 [/#macro]
 
-[#macro component_list value name=""]
-	[#list value as component]
-		[#local subName = component_index /]
-		[#if name?length > 0]
-			[#local subName = name + "." + subName]
-		[/#if]
-	
+[#macro component_list properties value name=""]
+	[#if !value?is_string && value?size > 0]
+		[#list value as component]
+			[#local subName = component_index /]
+			[#if name?length > 0]
+				[#local subName = name + "." + subName]
+			[/#if]
+		
+			<div class="component">
+				[@.namespace.component properties=properties value=component name=subName /]
+			</div>
+		[/#list]
+	[#else]
 		<div class="component">
-			[@.namespace.component value=component name=subName /]
+			[@.namespace.component properties=properties value="" name=name + ".0" /]
 		</div>
-	[/#list]
+	[/#if]
 [/#macro]
 
 [#macro label label name optional error]
@@ -108,7 +133,7 @@
 		[/#if]
 		[#list property.enumeration as element]
 			[#assign selected = '' /]
-			[#if (value.value)?? && element.value == value.value]
+			[#if value?is_hash && (value.value)?? && element.value == value.value]
 				[#assign selected = ' selected="selected"' /]
 			[/#if]
 			<option value="${element.value}"${selected}>${element.label}</option>

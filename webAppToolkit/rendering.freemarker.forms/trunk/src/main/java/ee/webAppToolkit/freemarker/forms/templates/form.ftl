@@ -2,7 +2,7 @@
 
 [#import "/validation.ftl" as validation /]
 
-[#macro create action submitLabel value showValidationErrorList=false]
+[#macro create action submitLabel metadata value="" showValidationErrorList=false name=""]
 	
 	[#if showValidationErrorList]
 		[@validation.displayValidation /]
@@ -10,7 +10,7 @@
 	
 	<form action="${action}" method="POST">
 		
-		[@formElements.component value=value /]
+		[@formElements.component properties=metadata.properties value=value name=name /]
 		
 		<input type="submit" value="${submitLabel}" />
 	</form>

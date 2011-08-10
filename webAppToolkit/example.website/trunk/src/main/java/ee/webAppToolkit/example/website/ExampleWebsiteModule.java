@@ -1,6 +1,8 @@
 package ee.webAppToolkit.example.website;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -11,6 +13,7 @@ import ee.parameterConverter.Converter;
 import ee.webAppToolkit.amf.AmfModule;
 import ee.webAppToolkit.example.website.forms.TestEnumeration;
 import ee.webAppToolkit.example.website.forms.TestEnumerationService;
+import ee.webAppToolkit.example.website.forms.TestObject;
 import ee.webAppToolkit.example.website.validation.Length;
 import ee.webAppToolkit.example.website.validation.LengthValidator;
 import ee.webAppToolkit.freemarker.forms.EnumerationProvider;
@@ -30,6 +33,7 @@ public class ExampleWebsiteModule extends WebsiteModule {
 		bind(new TypeLiteral<AnnotationValidator<String, Length>>(){}).to(LengthValidator.class);
 		
 		bind(new TypeLiteral<Map<String, String>>(){}).annotatedWith(Names.named("store")).to(new TypeLiteral<HashMap<String, String>>(){}).asEagerSingleton();
+		bind(new TypeLiteral<List<TestObject>>(){}).annotatedWith(Names.named("store")).to(new TypeLiteral<ArrayList<TestObject>>(){}).asEagerSingleton();
 		
 		bind(new TypeLiteral<EnumerationProvider<TestEnumeration>>(){}).to(TestEnumerationService.class).asEagerSingleton();
 		bind(new TypeLiteral<Converter<String, TestEnumeration>>(){}).to(TestEnumerationService.class).asEagerSingleton();
