@@ -52,7 +52,6 @@ public class TestEnumerationService implements EnumerationProvider<TestEnumerati
 		{
 			throw new CustomEmptyValueException(_localizedStringProvider.get());
 		}
-		System.out.println(value);
 		return _list.get(Integer.parseInt(value));
 	}
 	

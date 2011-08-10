@@ -21,8 +21,6 @@ public class ParametersController extends RenderingController {
 	@Post
 	public Result index(@Parameter TestObject testObject)
 	{
-		System.out.println(testObject);
-		
 		return render(testObject);
 	}
 }

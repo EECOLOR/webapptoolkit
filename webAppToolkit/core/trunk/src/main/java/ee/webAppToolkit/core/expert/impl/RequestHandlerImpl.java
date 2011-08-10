@@ -81,9 +81,6 @@ public class RequestHandlerImpl implements RequestHandler {
 		String testPath = _pathProvider.get();
 		Handler handler = _handlers.get(testPath);
 
-		System.out.println(testPath);
-		System.out.println(_handlers.keySet());
-		
 		while (handler == null && testPath.length() > 0) {
 			testPath = testPath.substring(0, testPath.lastIndexOf('/'));
 			handler = _handlers.get(testPath);
