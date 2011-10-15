@@ -9,7 +9,6 @@ import freemarker.template.TemplateHashModel;
 
 public class ValidationResultsTemplateModel extends BeanModel implements TemplateHashModel
 {
-	private static final long serialVersionUID = 1L;
 	private ValidationResults _validationResults;
 
 	public ValidationResultsTemplateModel(ValidationResults validationResults, BeansWrapper beansWrapper)

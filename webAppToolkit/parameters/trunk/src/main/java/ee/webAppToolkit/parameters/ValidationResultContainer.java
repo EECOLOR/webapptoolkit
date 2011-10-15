@@ -8,8 +8,6 @@ import java.util.ListIterator;
 
 public class ValidationResultContainer extends ValidationResult implements List<ValidationResult>
 {
-	private static final long serialVersionUID = 1L;
-	
 	private List<ValidationResult> _validationResults;
 	
 	public ValidationResultContainer()

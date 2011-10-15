@@ -29,6 +29,7 @@ import com.google.inject.Singleton;
 @SuppressWarnings("serial")
 public class StaticServlet extends HttpServlet {
 	
+	@SafeVarargs
 	public static <T> T coalesce(T...ts) {
 	    for(T t: ts)
 	        if(t != null)

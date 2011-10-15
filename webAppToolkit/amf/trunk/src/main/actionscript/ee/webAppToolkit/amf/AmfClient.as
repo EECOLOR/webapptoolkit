@@ -11,7 +11,7 @@ package ee.webAppToolkit.amf
 		{
 		}
 		
-		public function request(url:String, data:Object):void
+		public function request(url:String, data:Object, headers:Array = null):void
 		{
 			var byteArray:ByteArray = new ByteArray();
 			byteArray.writeObject(data);
@@ -20,6 +20,11 @@ package ee.webAppToolkit.amf
 			urlRequest.method = URLRequestMethod.POST;
 			urlRequest.contentType = "application/x-amf";
 			urlRequest.data = byteArray;
+			
+			if (headers != null)
+			{
+				urlRequest.requestHeaders = headers;
+			}
 			
 			load(urlRequest);
 		}

@@ -82,6 +82,15 @@ public class WebAppToolkitServlet extends HttpServlet {
 				httpServletResponse.setCharacterEncoding(characterEncoding);
 				httpServletResponse.setContentType(contentType);
 				httpServletResponse.getOutputStream().write(result.getBytes());
+				
+				
+				httpServletResponse.getOutputStream().flush();
+				
+				while (!httpServletResponse.isCommitted())
+				{
+					System.out.println("waiting");
+				}
+				
 			}
 		} catch (RedirectException e) {
 			// handle redirects
