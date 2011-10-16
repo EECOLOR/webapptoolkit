@@ -85,3 +85,17 @@ handle("").with(MainController.class);
 = Test =
 
 Run the application to find {{{Hello world!}}} in your browser.
+
+= Website =
+
+For more out-of-the-box features you can use the [website] module as a dependency. After adding the required dependencies you need to modify you {{{ApplicationModule}}} like this:
+
+{{{
+public class ApplicationModule extends WebsiteModule {
+
+	@Override
+	protected Class<?> getRootController() {
+		return MainController.class;
+	}
+}
+}}}
