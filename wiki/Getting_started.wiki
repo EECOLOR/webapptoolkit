@@ -64,13 +64,15 @@ public class ApplicationModule extends WebAppToolkitModule {
 Create a class like this:
 
 {{{
-public class MainController {
+public class MainController extends BasicController {
 
 	public Result index() {
 		return output("Hello world!");
 	}
 }
 }}}
+
+_Note: web app toolkit does not require you to extend BasicController, we extended it as a convenience; it provides the output method_
 
 = Mapping a controller =
 
