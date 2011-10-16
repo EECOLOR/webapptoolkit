@@ -94,6 +94,11 @@ For more out-of-the-box features you can use the [website] module as a dependenc
 public class ApplicationModule extends WebsiteModule {
 
 	@Override
+	protected void configureApplication() {
+		
+	}
+
+	@Override
 	protected Class<?> getRootController() {
 		return MainController.class;
 	}
