@@ -33,7 +33,7 @@ public class LocalizedStrings
 		
 		if (!_providers.containsKey(EMPTY_VALUE))
 		{
-			provider = _createProvider(binder, EMPTY_VALUE);
+			provider = _createProvider(binder, EMPTY_VALUE, "");
 			provider.addLocalizedString(locale, "");
 		}
 		
@@ -50,16 +50,16 @@ public class LocalizedStrings
 				provider = _providers.get(key);
 			} else
 			{
-				provider = _createProvider(binder, key);
+				provider = _createProvider(binder, key, propertyName);
 			}
 			
 			provider.addLocalizedString(locale, value);
 		}
 	}
 
-	private static LocalizedStringProvider _createProvider(Binder binder, Key<String> key)
+	private static LocalizedStringProvider _createProvider(Binder binder, Key<String> key, String propertyName)
 	{
-		LocalizedStringProvider provider = new LocalizedStringProvider();
+		LocalizedStringProvider provider = new LocalizedStringProvider(propertyName);
 		binder.bind(key).toProvider(provider);
 		_providers.put(key, provider);
 		

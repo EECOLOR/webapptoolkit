@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.TypeLiteral;
@@ -24,6 +25,11 @@ public class EnumerationResolverImpl implements EnumerationResolver {
 	
 	@Override
 	public <T> List<T> resolve(Class<T> type) {
+		
+		if (type.isEnum())
+		{
+			return Lists.newArrayList(type.getEnumConstants());
+		}
 		
 		TypeLiteral<?> typeLiteral = TypeLiteral.get(Types.newParameterizedType(EnumerationProvider.class, type));
 		

@@ -52,6 +52,13 @@ public class ValidationResults extends ValidationResult implements Map<String, V
 		return super.getValidated() && _getSubResultsValidated();
 	}
 	
+	public boolean getValidated(String key)
+	{
+		ValidationResult validationResult = get(key); 
+		
+		return validationResult == null || validationResult.getValidated();
+	}
+	
 	@Override
 	public String toString()
 	{

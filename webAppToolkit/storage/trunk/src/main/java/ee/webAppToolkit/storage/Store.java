@@ -1,6 +1,5 @@
 package ee.webAppToolkit.storage;
 
-import java.util.List;
 
 /*
  * sortOrder 
@@ -13,19 +12,34 @@ import java.util.List;
 
 public interface Store {
 	
+	/**
+	 * May return null if the entity has no key
+	 */
+	public Object getKey(Object entity);
+	
+	/**
+	 * A value of 0 means the entity has no key
+	 */
+	public long getKeyAsLong(Object entity);
+	
 	public <T> T load(Class<T> entityClass, Object key);
+	public <T> T load(Class<T> entityClass, long key);
 	
 	public void save(Object entity);
 	public void remove(Object entity);	
+	public void removeByKey(Object key);	
+	public void removeByKey(Class<?> entityClass, long key);	
 	
-	public <T> List<T> list(Class<T> entityClass);
-	public <T> List<T> list(Class<T> entityClass, String sortOrder);
-	public <T> List<T> list(Class<T> entityClass, int offset, int maxResults);
-	public <T> List<T> list(Class<T> entityClass, int offset, int maxResults, String sortOrder);
+	public int count(Class<?> entityClass);
+	public <T> Iterable<T> list(Class<T> entityClass);
+	public <T> Iterable<T> list(Class<T> entityClass, String sortOrder);
+	public <T> Iterable<T> list(Class<T> entityClass, int offset, int maxResults);
+	public <T> Iterable<T> list(Class<T> entityClass, int offset, int maxResults, String sortOrder);
 	
-	public <T> List<T> find(T exampleEntity);
-	public <T> List<T> find(T exampleEntity, String sortOrder);
-	public <T> List<T> find(T exampleEntity, int offset, int maxResults);
-	public <T> List<T> find(T exampleEntity, int offset, int maxResults, String sortOrder);
+	public int count(Object exampleEntity);
+	public <T> Iterable<T> find(T exampleEntity);
+	public <T> Iterable<T> find(T exampleEntity, String sortOrder);
+	public <T> Iterable<T> find(T exampleEntity, int offset, int maxResults);
+	public <T> Iterable<T> find(T exampleEntity, int offset, int maxResults, String sortOrder);
 
 }

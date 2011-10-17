@@ -1,16 +1,18 @@
 package ee.webAppToolkit.storage.twigPersist;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.inject.Inject;
 
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.repackaged.com.google.common.collect.Lists;
 import com.vercer.engine.persist.FindCommand.RootFindCommand;
+import com.vercer.engine.persist.util.generic.GenericTypeReflector;
 import com.vercer.engine.persist.ObjectDatastore;
 
 import ee.metadataUtils.PropertyMetadata;
@@ -40,10 +42,24 @@ public class TwigPersistStore implements Store {
 		_propertyMetadataRegistry = propertyMetadataRegistry;
 	}
 
+	@Override
+	public Object getKey(Object entity) {
+		return _objectDatastore.associatedKey(entity);
+	}
+
+	@Override
+	public long getKeyAsLong(Object entity) {
+		return _objectDatastore.associatedKey(entity).getId();
+	}
 
 	@Override
 	public <T> T load(Class<T> entityClass, Object key) {
 		return _objectDatastore.load(entityClass, key);
+	}
+
+	@Override
+	public <T> T load(Class<T> entityClass, long key) {
+		return load(entityClass, _getKey(entityClass, key));
 	}
 
 	@Override
@@ -57,24 +73,39 @@ public class TwigPersistStore implements Store {
 	}
 
 	@Override
-	public <T> List<T> list(Class<T> entityClass) {
+	public void removeByKey(Object key) {
+		_objectDatastore.load((Key) key);
+	}
+	
+	@Override
+	public void removeByKey(Class<?> entityClass, long key) {
+		removeByKey(_getKey(entityClass, key));
+	}
+	
+	@Override
+	public int count(Class<?> entityClass) {
+		return _objectDatastore.find().type(entityClass).countResultsNow();
+	}
+
+	@Override
+	public <T> Iterable<T> list(Class<T> entityClass) {
 		return list(entityClass, 0, 0, null);
 	}
 
 	@Override
-	public <T> List<T> list(Class<T> entityClass, String sortOrder) {
+	public <T> Iterable<T> list(Class<T> entityClass, String sortOrder) {
 		return list(entityClass, 0, 0, sortOrder);
 	}
 
 	@Override
-	public <T> List<T> list(Class<T> entityClass, int offset, int maxResults) {
+	public <T> Iterable<T> list(Class<T> entityClass, int offset, int maxResults) {
 		
 		return list(entityClass, offset, maxResults, null);
 	}
 
 	@Override
-	public <T> List<T> list(Class<T> entityClass, int offset, int maxResults, String sortOrder) {
-		RootFindCommand<T> findCommand = _objectDatastore.find().type(entityClass);
+	public <T> Iterable<T> list(Class<T> entityClass, int offset, int maxResults, String sortOrder) {
+		final RootFindCommand<T> findCommand = _objectDatastore.find().type(entityClass);
 		
 		if (offset > 0)
 		{
@@ -88,30 +119,47 @@ public class TwigPersistStore implements Store {
 		
 		_addSort(sortOrder, findCommand);
 		
-		return Lists.newArrayList(findCommand.returnResultsNow());
+		return new Iterable<T>() {
+			@Override
+			public Iterator<T> iterator() {
+				return findCommand.returnResultsNow();
+			}
+		};
 	}
 
 	@Override
-	public <T> List<T> find(T exampleEntity) {
+	public int count(Object exampleEntity) {
+		@SuppressWarnings("unchecked")
+		RootFindCommand<Object> findCommand = (RootFindCommand<Object>) _objectDatastore.find().type(exampleEntity.getClass());
+		
+		_addPropertyFilters(exampleEntity, findCommand);
+		
+		return findCommand.countResultsNow();
+	}
+	
+	@Override
+	public <T> Iterable<T> find(T exampleEntity) {
 		return find(exampleEntity, 0, 0, null);
 	}
 
 	@Override
-	public <T> List<T> find(T exampleEntity, String sortOrder) {
+	public <T> Iterable<T> find(T exampleEntity, String sortOrder) {
 		return find(exampleEntity, 0, 0, sortOrder);
 	}
 
 	@Override
-	public <T> List<T> find(T exampleEntity, int offset, int maxResults) {
+	public <T> Iterable<T> find(T exampleEntity, int offset, int maxResults) {
 		return find(exampleEntity, offset, maxResults, null);
 	}
 
 	@Override
-	public <T> List<T> find(T exampleEntity, int offset, int maxResults, String sortOrder) {
+	public <T> Iterable<T> find(T exampleEntity, int offset, int maxResults, String sortOrder) {
 		@SuppressWarnings("unchecked")
 		Class<T> entityClass = (Class<T>) exampleEntity.getClass();
 		
-		RootFindCommand<T> findCommand = _objectDatastore.find().type(entityClass);
+		final RootFindCommand<T> findCommand = _objectDatastore.find().type(entityClass);
+		
+		_addPropertyFilters(exampleEntity, findCommand);
 		
 		if (offset > 0)
 		{
@@ -123,13 +171,15 @@ public class TwigPersistStore implements Store {
 			findCommand.maximumResults(maxResults);
 		}
 		
-		_addPropertyFilters(exampleEntity, findCommand);
-		
 		_addSort(sortOrder, findCommand);
 		
-		return Lists.newArrayList(findCommand.returnResultsNow());
+		return new Iterable<T>() {
+			@Override
+			public Iterator<T> iterator() {
+				return findCommand.returnResultsNow();
+			}
+		};
 	}
-
 
 	private <T> void _addSort(String sortOrder, RootFindCommand<T> findCommand) {
 		String[] sortOrderArray = sortOrder.split(",");
@@ -167,6 +217,11 @@ public class TwigPersistStore implements Store {
 				findCommand.addFilter(entry.getKey(), FilterOperator.EQUAL, value);
 			}
 		}
+	}
+	
+	private Key _getKey(Class<?> entityClass, long id) {
+		String type = GenericTypeReflector.erase(entityClass).getName();
+		return KeyFactory.createKey(type, id);
 	}
 
 }

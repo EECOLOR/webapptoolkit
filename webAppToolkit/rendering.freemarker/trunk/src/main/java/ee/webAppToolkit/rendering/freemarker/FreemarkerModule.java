@@ -20,6 +20,9 @@ import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;
 import freemarker.ext.util.ModelFactory;
 import freemarker.template.Configuration;
+import freemarker.template.ObjectWrapper;
+import freemarker.template.SimpleCollection;
+import freemarker.template.TemplateModel;
 
 public class FreemarkerModule extends AbstractModule {
 
@@ -37,6 +40,14 @@ public class FreemarkerModule extends AbstractModule {
 		
 		Multibinder<TemplateLoader> templateLoaders = Multibinder.newSetBinder(binder(), TemplateLoader.class);
 		templateLoaders.addBinding().toInstance(new ClassTemplateLoader(FreemarkerModule.class, "templates"));
+		
+		MapBinder<Class<?>, ModelFactory> modelFactories = MapBinder.newMapBinder(binder(), new TypeLiteral<Class<?>>(){}, new TypeLiteral<ModelFactory>(){});
+		modelFactories.addBinding(Iterable.class).toInstance(new ModelFactory() {
+			@Override
+			public TemplateModel create(Object object, ObjectWrapper wrapper) {
+				return new SimpleCollection(((Iterable<?>) object).iterator(), wrapper);
+			}
+		});
 	}
 	
 	protected void bindModelFactory(Class<?> type, Class<? extends ModelFactory> modelFactory)
@@ -54,7 +65,7 @@ public class FreemarkerModule extends AbstractModule {
 		Configuration configuration = new Configuration();
 		configuration.setObjectWrapper(objectWrapper);
 		configuration.setTagSyntax(tagSyntax);
-		configuration.setLocale(localeResolver.getLocale());
+		configuration.setLocale(localeResolver.getLocaleChain().get(0));
 		configuration.setTemplateLoader(templateLoader);
 		
 		return configuration;

@@ -10,9 +10,9 @@ import com.google.inject.Provider;
 import ee.parameterConverter.ConversionFailedException;
 import ee.parameterConverter.Converter;
 import ee.parameterConverter.EmptyValueException;
-import ee.webAppToolkit.freemarker.forms.EnumerationProvider;
 import ee.webAppToolkit.localization.LocalizedString;
 import ee.webAppToolkit.parameters.exceptions.CustomEmptyValueException;
+import ee.webAppToolkit.rendering.freemarker.utils.EnumerationProvider;
 
 public class TestEnumerationService implements EnumerationProvider<TestEnumeration>, Converter<String, TestEnumeration>{
 	private List<TestEnumeration> _list;

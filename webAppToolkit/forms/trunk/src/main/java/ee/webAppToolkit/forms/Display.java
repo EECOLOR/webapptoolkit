@@ -8,10 +8,45 @@ import java.lang.annotation.Target;
 import ee.webAppToolkit.localization.LocalizedString;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.METHOD})
 public @interface Display
 {
-	enum Type {HIDDEN, TEXT, LIST, TEXTAREA, DATE, COMPONENT, COMPONENT_LIST};
+	enum Type {
+		/**
+		 * Displays the property as hidden
+		 */
+		HIDDEN,
+		
+		/**
+		 * Displays the property as text
+		 */
+		TEXT, 
+		
+		/**
+		 * Displays the property as a list
+		 */
+		LIST,
+		
+		/**
+		 * Displays the property as a text area
+		 */
+		TEXTAREA, 
+		
+		/**
+		 * Displays the property as a date
+		 */
+		DATE, 
+		
+		/**
+		 * Displays the property as a component
+		 */
+		COMPONENT, 
+		
+		/**
+		 * Displays the property as a component list, note that by default an empty component is displayed if the list is empty. 
+		 * If you want to change the default behavior, annotate the property with @ComponentList 
+		 */
+		COMPONENT_LIST};
 	
 	LocalizedString label() default @LocalizedString("");
 	int order() default 0;

@@ -4,7 +4,9 @@ import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Key;
+import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.multibindings.Multibinder;
@@ -91,38 +93,53 @@ public abstract class WebAppToolkitModule extends ServletModule {
 	private Map<String, Class<?>> _bindings = new HashMap<String, Class<?>>();
 
 	@Override
-	protected void configureServlets() {
-		bind(new TypeLiteral<Map<String, Class<?>>>() {
-		}).annotatedWith(WebAppToolkit.class).toInstance(_bindings);
-
-		bindThreadLocalProvider(String.class, Path.class);
-		bindThreadLocalProvider(String.class, Context.class);
-
-		bind(RequestMethod.class).toProvider(RequestMethodProvider.class).in(ServletScopes.REQUEST);
-
-		bind(String.class).annotatedWith(DefaultCharacterEncoding.class).toInstance("UTF-8");
-		bind(String.class).annotatedWith(DefaultContentType.class).toInstance("text/html");
-		requestStaticInjection(DefaultResult.class);
-
-		install(new FactoryModuleBuilder().implement(ControllerDescription.class,
-				ControllerDescriptionImpl.class).build(ControllerDescriptionFactory.class));
-
-		install(new FactoryModuleBuilder().implement(Action.class, ActionImpl.class).build(
-				ActionFactory.class));
+	protected final void configureServlets() {
 
 		bindStaticServlet();
-
+		
 		serve("/*").with(WebAppToolkitServlet.class);
 
-		bind(ActionArgumentResolver.class).annotatedWith(Flash.class).to(
-				FlashActionArgumentResolver.class);
-
-		Multibinder.newSetBinder(binder(), ActionRegistrationListener.class);
-		Multibinder.newSetBinder(binder(), ControllerRegistrationListener.class);
+		install(getDefaultBindingsModule());
 		
 		configureControllers();
 	}
+	
+	/**
+	 * This method can be overridden in order to override default bindings
+	 */
+	protected Module getDefaultBindingsModule()
+	{
+		return new AbstractModule() {
+			
+			@Override
+			protected void configure() {
+				bind(new TypeLiteral<Map<String, Class<?>>>() {
+				}).annotatedWith(WebAppToolkit.class).toInstance(_bindings);
 
+				bindThreadLocalProvider(String.class, Path.class);
+				bindThreadLocalProvider(String.class, Context.class);
+
+				bind(RequestMethod.class).toProvider(RequestMethodProvider.class).in(ServletScopes.REQUEST);
+
+				bind(String.class).annotatedWith(DefaultCharacterEncoding.class).toInstance("UTF-8");
+				bind(String.class).annotatedWith(DefaultContentType.class).toInstance("text/html");
+				requestStaticInjection(DefaultResult.class);
+
+				install(new FactoryModuleBuilder().implement(ControllerDescription.class,
+						ControllerDescriptionImpl.class).build(ControllerDescriptionFactory.class));
+
+				install(new FactoryModuleBuilder().implement(Action.class, ActionImpl.class).build(
+						ActionFactory.class));
+
+				bind(ActionArgumentResolver.class).annotatedWith(Flash.class).to(
+						FlashActionArgumentResolver.class);
+
+				Multibinder.newSetBinder(binder(), ActionRegistrationListener.class);
+				Multibinder.newSetBinder(binder(), ControllerRegistrationListener.class);			
+			}
+		};
+	}
+	
 	protected void bindStaticServlet() {
 		serve("/favicon.ico").with(StaticServlet.class);
 		serve("/static/*").with(StaticServlet.class);
@@ -130,6 +147,7 @@ public abstract class WebAppToolkitModule extends ServletModule {
 
 	abstract protected void configureControllers();
 
+	//TODO check the ServletModule, maybe their approach is better
 	protected class Binder {
 		private String _path;
 

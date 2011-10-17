@@ -3,4 +3,11 @@
   <groupId>ee.webAppToolkit</groupId>
   <artifactId>storage</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+  	<dependency>
+  		<groupId>ee.webAppToolkit</groupId>
+  		<artifactId>core</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>

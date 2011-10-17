@@ -16,16 +16,15 @@ import ee.webAppToolkit.example.website.forms.TestEnumerationService;
 import ee.webAppToolkit.example.website.forms.TestObject;
 import ee.webAppToolkit.example.website.validation.Length;
 import ee.webAppToolkit.example.website.validation.LengthValidator;
-import ee.webAppToolkit.freemarker.forms.EnumerationProvider;
 import ee.webAppToolkit.json.JsonModule;
 import ee.webAppToolkit.parameters.AnnotationValidator;
+import ee.webAppToolkit.rendering.freemarker.utils.EnumerationProvider;
 import ee.webAppToolkit.website.WebsiteModule;
 
 public class ExampleWebsiteModule extends WebsiteModule {
 
 	@Override
-	protected void configureControllers() {
-		super.configureControllers();
+	protected void configureApplication() {
 		
 		install(new AmfModule());
 		install(new JsonModule());
@@ -38,11 +37,14 @@ public class ExampleWebsiteModule extends WebsiteModule {
 		bind(new TypeLiteral<EnumerationProvider<TestEnumeration>>(){}).to(TestEnumerationService.class).asEagerSingleton();
 		bind(new TypeLiteral<Converter<String, TestEnumeration>>(){}).to(TestEnumerationService.class).asEagerSingleton();
 		
-		handle("").with(MainController.class);
-		
 		bindPropertiesToLocale("navigation", Locale.ENGLISH);
 		bindPropertiesToLocale("example.website.validationMessages", Locale.ENGLISH);
 		bindPropertiesToLocale("forms", Locale.ENGLISH);
+	}
+
+	@Override
+	protected Class<?> getRootController() {
+		return MainController.class;
 	}
 
 }

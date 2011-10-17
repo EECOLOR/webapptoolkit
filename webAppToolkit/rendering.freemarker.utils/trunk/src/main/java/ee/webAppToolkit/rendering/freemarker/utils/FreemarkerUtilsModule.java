@@ -17,6 +17,7 @@ import ee.webAppToolkit.rendering.freemarker.utils.expert.CustomObjectTemplateMo
 import ee.webAppToolkit.rendering.freemarker.utils.expert.FreemarkerPropertyMetadata;
 import ee.webAppToolkit.rendering.freemarker.utils.expert.impl.AnnotationModelFactory;
 import ee.webAppToolkit.rendering.freemarker.utils.expert.impl.ClassModelFactory;
+import ee.webAppToolkit.rendering.freemarker.utils.expert.impl.EnumTemplateModelFactory;
 import ee.webAppToolkit.rendering.freemarker.utils.expert.impl.FreemarkerPropertyMetadataImpl;
 import ee.webAppToolkit.rendering.freemarker.utils.expert.impl.MetadataObjectWrapper;
 import ee.webAppToolkit.rendering.freemarker.utils.expert.impl.SiteMapModelFactory;
@@ -40,6 +41,7 @@ public class FreemarkerUtilsModule extends AbstractModule {
 		modelFactories.addBinding(Class.class).to(ClassModelFactory.class);
 		modelFactories.addBinding(SiteMap.class).to(SiteMapModelFactory.class);		
 		modelFactories.addBinding(ValidationResults.class).to(ValidationResultsTemplateModelFactory.class);
+		modelFactories.addBinding(Enum.class).to(EnumTemplateModelFactory.class);
 		
 		MetadataUtilsModule.bindAdapter(binder(), FreemarkerPropertyMetadata.class, FreemarkerPropertyMetadataImpl.class);
 		

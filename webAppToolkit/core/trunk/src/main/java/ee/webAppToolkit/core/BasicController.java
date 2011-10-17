@@ -14,6 +14,16 @@ public class BasicController {
 	@Inject protected FlashMemory flash;
 	
 	/**
+	 * Can be used to redirect to the current controller
+	 * 
+	 * Calls redirect("")
+	 */
+	protected void redirect()
+	{
+		redirect("");
+	}
+	
+	/**
 	 * Calls redirect(action, null)
 	 */
 	protected void redirect(String action)

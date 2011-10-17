@@ -1,6 +1,7 @@
 package ee.webAppToolkit.localization.expert.impl;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -18,10 +19,11 @@ import ee.webAppToolkit.localization.LocaleResolver;
  */
 public class LocalizedStringProvider implements Provider<String>
 {
+	private String _key;
 	private Map<Locale, String> _localizedStrings;
 	private LocaleResolver _localeResolver;
 
-	public LocalizedStringProvider()
+	public LocalizedStringProvider(String key)
 	{
 		_localizedStrings = new HashMap<Locale, String>();
 	}
@@ -43,6 +45,22 @@ public class LocalizedStringProvider implements Provider<String>
 	@Override
 	public String get()
 	{
-		return _localizedStrings.get(_localeResolver.getLocale());
+		Iterator<Locale> locales = _localeResolver.getLocaleChain().iterator();
+		
+		String localizedString;
+		
+		do
+		{
+			Locale locale = locales.next();
+			localizedString = _localizedStrings.get(locale);
+		} while (localizedString == null && locales.hasNext());
+		
+		if (localizedString == null)
+		{
+			return _key;
+		} else
+		{
+			return localizedString;
+		}
 	}
 }

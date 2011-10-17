@@ -25,11 +25,6 @@
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   	<dependency>
-  		<groupId>com.google.guava</groupId>
-  		<artifactId>guava-collections</artifactId>
-  		<version>r03</version>
-  	</dependency>
-  	<dependency>
   		<groupId>ee.webAppToolkit</groupId>
   		<artifactId>forms</artifactId>
   		<version>0.0.1-SNAPSHOT</version>

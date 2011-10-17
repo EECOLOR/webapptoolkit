@@ -1,18 +1,21 @@
 package ee.webAppToolkit.navigation.expert.impl;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import com.google.inject.Injector;
 
 import ee.webAppToolkit.core.RequestMethod;
 import ee.webAppToolkit.core.expert.Action;
 import ee.webAppToolkit.core.expert.ActionRegistrationListener;
+import ee.webAppToolkit.core.expert.ControllerRegistrationListener;
 import ee.webAppToolkit.localization.LocalizedString;
 import ee.webAppToolkit.navigation.SiteMap;
 import ee.webAppToolkit.navigation.annotations.HideFromNavigation;
 import ee.webAppToolkit.navigation.annotations.NavigationDisplayName;
 
-public class ActionRegistrationListenerImpl implements ActionRegistrationListener {
+@Singleton
+public class ActionRegistrationListenerImpl implements ActionRegistrationListener, ControllerRegistrationListener {
 
 	private Injector _injector;
 	private SiteMap _siteMap;
@@ -85,6 +88,29 @@ public class ActionRegistrationListenerImpl implements ActionRegistrationListene
 			if (action.isAnnotationPresent(NavigationDisplayName.class))
 			{
 				NavigationDisplayName displayNameAnnotation = action.getAnnotation(NavigationDisplayName.class);
+				localizedString = displayNameAnnotation.value();
+			} else
+			{
+				displayName = pathSegments[pathSegments.length - 1];
+			}
+
+			_addPagesForPath(pathSegments, displayName, localizedString);
+		}
+	}
+
+	@Override
+	public void controllerRegistered(String path, Class<?> controller) {
+		String[] pathSegments = _getPathSegments(path);
+		
+		if (!controller.isAnnotationPresent(HideFromNavigation.class) &&
+			!_containsPath(pathSegments))
+		{
+			String displayName = null;
+			LocalizedString localizedString = null;
+			
+			if (controller.isAnnotationPresent(NavigationDisplayName.class))
+			{
+				NavigationDisplayName displayNameAnnotation = controller.getAnnotation(NavigationDisplayName.class);
 				localizedString = displayNameAnnotation.value();
 			} else
 			{
