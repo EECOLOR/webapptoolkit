@@ -136,15 +136,19 @@
 
 [#macro list label name value optional=true property=false]
 	[#local error = validation.hasValidationErrors(name) /]
+	[#local valueIsHash = value?is_hash /]
+	[#if valueIsHash && value._enumeration??]
+		[#local value = value._enumeration /]
+	[/#if]
 	[@.namespace.label label=label name=name optional=optional error=error /]
 	<select ${error?string('class="error"', '')} name="${name}">
 		[#if property.annotations.List??]
 			<option value="">${property.annotations.List.defaultLabel}</option>
 		[/#if]
 		[#list property.enumeration as element]
-			[#assign selected = '' /]
-			[#if value?is_hash && (value.value)?? && element.value == value.value]
-				[#assign selected = ' selected="selected"' /]
+			[#local selected = '' /]
+			[#if valueIsHash && value.value?? && element.value == value.value]
+				[#local selected = ' selected="selected"' /]
 			[/#if]
 			<option value="${element.value}"${selected}>${element.label}</option>
 		[/#list]

@@ -12,9 +12,9 @@ import ee.parameterConverter.Converter;
 import ee.parameterConverter.EmptyValueException;
 import ee.webAppToolkit.localization.LocalizedString;
 import ee.webAppToolkit.parameters.exceptions.CustomEmptyValueException;
-import ee.webAppToolkit.rendering.freemarker.utils.EnumerationProvider;
+import ee.webAppToolkit.rendering.freemarker.utils.AbstractEnumerationProvider;
 
-public class TestEnumerationService implements EnumerationProvider<TestEnumeration>, Converter<String, TestEnumeration>{
+public class TestEnumerationService extends AbstractEnumerationProvider<TestEnumeration> implements Converter<String, TestEnumeration>{
 	private List<TestEnumeration> _list;
 	private Provider<String> _localizedStringProvider;
 	
@@ -41,11 +41,6 @@ public class TestEnumerationService implements EnumerationProvider<TestEnumerati
 	}
 	
 	@Override
-	public List<TestEnumeration> get() {
-		return _list;
-	}
-
-	@Override
 	public TestEnumeration convert(String value) throws EmptyValueException,
 			ConversionFailedException {
 		if (value.length() == 0)
@@ -53,6 +48,21 @@ public class TestEnumerationService implements EnumerationProvider<TestEnumerati
 			throw new CustomEmptyValueException(_localizedStringProvider.get());
 		}
 		return _list.get(Integer.parseInt(value));
+	}
+
+	@Override
+	protected Iterable<TestEnumeration> getElements() {
+		return _list;
+	}
+
+	@Override
+	protected String getLabel(TestEnumeration element) {
+		return element.label;
+	}
+
+	@Override
+	protected Object getValue(TestEnumeration element) {
+		return element.value;
 	}
 	
 	

@@ -1,35 +1,27 @@
 package ee.webAppToolkit.storage.db4o;
 
-import java.util.List;
-
 import javax.inject.Inject;
-
-import org.modelmapper.ModelMapper;
 
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import com.db4o.ext.ExtObjectContainer;
 import com.db4o.query.Query;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.inject.Injector;
 import com.google.inject.Provider;
 
+import ee.objectCloner.ObjectCloner;
 import ee.webAppToolkit.storage.Identifiable;
 import ee.webAppToolkit.storage.Store;
 
 public class Db4oStore implements Store {
 
-	private Injector _injector;
 	private Provider<ObjectContainer> _objectContainerProvider;
-	private ModelMapper _modelMapper;
+	private Provider<ObjectCloner> _objectCloner;
 	
 	@Inject
-	public Db4oStore(Injector injector, Provider<ObjectContainer> objectContainerProvider, ModelMapper modelMapper)
+	public Db4oStore(Provider<ObjectContainer> objectContainerProvider, Provider<ObjectCloner> objectCloner)
 	{
-		_injector = injector;
 		_objectContainerProvider = objectContainerProvider;
-		_modelMapper = modelMapper;
+		_objectCloner = objectCloner;
 	}
 	
 	protected ObjectContainer getObjectContainer()
@@ -78,10 +70,12 @@ public class Db4oStore implements Store {
 		} else {
 			entityToSave = _getByKey(key);
 		
-			_modelMapper.map(entity, entityToSave);
+			//TODO check if we can use the bind method of the ext() container
+			ObjectCloner objectCloner = _objectCloner.get();
+			objectCloner.copy(entity, entityToSave);
 		}
 		
-		getObjectContainer().store(entityToSave);
+		//getObjectContainer().store(entityToSave);
 	}
 
 	@Override
@@ -176,7 +170,6 @@ public class Db4oStore implements Store {
 		ExtObjectContainer ext = getObjectContainer().ext();
 		T object = ext.getByID((long) key);
 		ext.activate(object);
-		_injector.injectMembers(object);
 		return object;
 	}
 	
@@ -229,17 +222,6 @@ public class Db4oStore implements Store {
 			}
 		}
 
-		return _getInjected(result.subList(start, end));
-	}
-	
-	private <T> Iterable<T> _getInjected(List<T> result)
-	{
-		return Iterables.filter(result, new Predicate<T>() {
-			@Override
-			public boolean apply(T object) {
-				_injector.injectMembers(object);
-				return true;
-			}
-		});
+		return result.subList(start, end);
 	}
 }

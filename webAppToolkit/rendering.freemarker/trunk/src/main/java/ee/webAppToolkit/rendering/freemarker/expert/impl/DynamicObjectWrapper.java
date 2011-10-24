@@ -48,30 +48,37 @@ public class DynamicObjectWrapper extends DefaultObjectWrapper implements GuiceO
 			return super.wrap(object);
 		}
 		
-    	TemplateModel result = null;
-    	Class<?> type = object.getClass();
-    	ModelFactory modelFactory = null;
+		if (object instanceof TemplateModel) {
+            return (TemplateModel) object;
+        }
+		
+		//TODO implement caching, see super.wrap
+		
+    	ModelFactory modelFactory = _getModelFactory(object.getClass());
     	
+    	if (modelFactory == null)
+		{
+			//we have no model factory, let super handle it
+			return super.wrap(object);
+		} else
+		{
+			//use the factory to wrap the model
+			return modelFactory.create(object, this);
+		}
+    }
+	
+	private ModelFactory _getModelFactory(Class<?> type) {
     	//check if we have a model factory for this specific type
     	if (_typeCache.containsKey(type))
     	{
-    		modelFactory = _typeCache.get(type);
-    		
-    		if (modelFactory == null)
-    		{
-    			//we have no model factory, let super handle it
-    			result = super.wrap(object);
-    		} else
-    		{
-    			//use the factory to wrap the model
-    			result = modelFactory.create(object, this);
-    		}
-    		
+    		return _typeCache.get(type);
     	} else
     	{
     		Iterator<Class<?>> iterator = _registeredModelFactories.keySet().iterator();
     		
-    		//loop through all registered model types
+    		ModelFactory modelFactory = null;
+    		
+    		//loop through all registered model types to find a modelFactory
     		while (iterator.hasNext())
     		{
     			Class<?> targetType = iterator.next();
@@ -81,21 +88,14 @@ public class DynamicObjectWrapper extends DefaultObjectWrapper implements GuiceO
     			{
     				modelFactory = _registeredModelFactories.get(targetType);
     				
-    				//add the type to the cache and wrap the object
-    				_typeCache.put(type, modelFactory);
-    				result = modelFactory.create(object, this);
     				break;
     			}
     		}
     		
-    		if (result == null)
-    		{
-    			//we can not handle this type, to prevent trying next time we add it to the cache
-    			_typeCache.put(type, null);
-    			result = super.wrap(object);
-    		}
+    		//add the type to the cache and wrap the object
+    		_typeCache.put(type, modelFactory);
+    		return modelFactory;
     	}
-    	
-    	return result;
-    }
+		
+	}
 }

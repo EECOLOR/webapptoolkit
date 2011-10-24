@@ -8,6 +8,7 @@ import com.google.inject.assistedinject.Assisted;
 
 import ee.metadataUtils.PropertyMetadataRegistry;
 import ee.metadataUtils.impl.AdapterNotFoundException;
+import ee.webAppToolkit.rendering.freemarker.utils.Enumeration;
 import ee.webAppToolkit.rendering.freemarker.utils.expert.CustomObjectTemplateModel;
 import ee.webAppToolkit.rendering.freemarker.utils.expert.EnumerationResolver;
 import ee.webAppToolkit.rendering.freemarker.utils.expert.FreemarkerPropertyMetadata;
@@ -43,26 +44,7 @@ public class UtilsTemplateModel extends StringModel implements CustomObjectTempl
 			return super.get(key);
 		}
 		
-		if (key.endsWith("_metadata"))
-		{
-			//find the getter for the requested property
-			key = key.replace("_metadata", "");
-			
-			FreemarkerPropertyMetadata propertyMetadata;
-			try {
-				propertyMetadata = _propertyMetadataRegistry.getPropertyMetadata(object.getClass(), key, FreemarkerPropertyMetadata.class);
-			} catch (AdapterNotFoundException e) {
-				throw new TemplateModelException(e);
-			}
-			
-			if (propertyMetadata == null)
-			{
-				throw new TemplateModelException("Could not find property metadata for '" + key + "' in type '" + object.getClass() + "'");
-			} else
-			{
-				return wrap(propertyMetadata);
-			}
-		} else if (key.equals("_properties"))
+		if (key.equals("_properties"))
 		{
 			try {
 				
@@ -80,6 +62,13 @@ public class UtilsTemplateModel extends StringModel implements CustomObjectTempl
 			} catch (AdapterNotFoundException e) {
 				throw new TemplateModelException(e);
 			}
+		} else if (key.equals("_enumeration"))
+		{
+			if (object instanceof Enumeration)
+			{
+				return wrap(object);
+			}
+			return wrap(_enumerationResolver.getEnumeration(object));
 		} else if (key.endsWith("_enumeration"))
 		{
 			key = key.replace("_enumeration", "");
@@ -96,7 +85,26 @@ public class UtilsTemplateModel extends StringModel implements CustomObjectTempl
 				throw new TemplateModelException("Could not find property metadata for '" + key + "' in " + object.getClass().getName());
 			} else
 			{
-				return wrap(_enumerationResolver.resolve(propertyMetadata.getType()));
+				return wrap(propertyMetadata.getEnumeration());
+			}
+		} else if (key.endsWith("_metadata"))
+		{
+			//find the getter for the requested property
+			key = key.replace("_metadata", "");
+			
+			FreemarkerPropertyMetadata propertyMetadata;
+			try {
+				propertyMetadata = _propertyMetadataRegistry.getPropertyMetadata(object.getClass(), key, FreemarkerPropertyMetadata.class);
+			} catch (AdapterNotFoundException e) {
+				throw new TemplateModelException(e);
+			}
+			
+			if (propertyMetadata == null)
+			{
+				throw new TemplateModelException("Could not find property metadata for '" + key + "' in type '" + object.getClass() + "'");
+			} else
+			{
+				return wrap(propertyMetadata);
 			}
 		} else
 		{

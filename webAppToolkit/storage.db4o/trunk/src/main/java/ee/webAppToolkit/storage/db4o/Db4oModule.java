@@ -1,13 +1,12 @@
 package ee.webAppToolkit.storage.db4o;
 
-import org.modelmapper.ModelMapper;
-
 import com.google.inject.Module;
 import com.google.inject.servlet.ServletModule;
 import com.wideplay.warp.persist.PersistenceFilter;
 import com.wideplay.warp.persist.PersistenceService;
 import com.wideplay.warp.persist.UnitOfWork;
 
+import ee.objectCloner.guice.ObjectClonerModule;
 import ee.webAppToolkit.storage.Store;
 
 public class Db4oModule extends ServletModule {
@@ -15,8 +14,10 @@ public class Db4oModule extends ServletModule {
 	@Override
 	protected void configureServlets() {
 		bind(Store.class).to(Db4oStore.class).asEagerSingleton();
-		bind(ModelMapper.class).to(GuiceModelMapper.class).asEagerSingleton();
 		
+		bind(Db4oInstantiationMemberInjector.class).asEagerSingleton();
+		
+		install(new ObjectClonerModule());
 		install(getDb4oModule());
 		
 		filter("/*").through(PersistenceFilter.class);

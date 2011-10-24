@@ -3,6 +3,7 @@ package ee.webAppToolkit.rendering.freemarker.utils.expert.impl;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import ee.webAppToolkit.rendering.freemarker.expert.impl.DynamicObjectWrapper;
 import ee.webAppToolkit.rendering.freemarker.utils.expert.CustomObjectTemplateModelFactory;
@@ -10,6 +11,7 @@ import freemarker.ext.util.ModelFactory;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 
+@Singleton
 public class MetadataObjectWrapper extends DynamicObjectWrapper {
 
 	private CustomObjectTemplateModelFactory _customObjectTemplateModelFactory;

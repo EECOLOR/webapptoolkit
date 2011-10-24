@@ -111,7 +111,7 @@ public class FreemarkerPropertyMetadataImpl implements FreemarkerPropertyMetadat
 
 	@Override
 	public List<?> getEnumeration() {
-		return _enumerationResolver.resolve(getType());
+		return _enumerationResolver.getEnumeration(getType());
 	}
 	
 }

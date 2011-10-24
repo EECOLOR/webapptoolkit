@@ -43,7 +43,7 @@ public @interface Display
 		COMPONENT, 
 		
 		/**
-		 * Displays the property as a component list, note that by default an empty component is displayed if the list is empty. 
+		 * Displays the property as a component list, note that by default an empty component is displayed. 
 		 * If you want to change the default behavior, annotate the property with @ComponentList 
 		 */
 		COMPONENT_LIST};

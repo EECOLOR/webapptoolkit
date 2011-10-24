@@ -26,13 +26,8 @@
       <version>8.0-SNAPSHOT</version>
     </dependency>
   	<dependency>
-  		<groupId>org.modelmapper</groupId>
-  		<artifactId>modelmapper</artifactId>
-  		<version>0.3.5</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>ee.metadata-utils</groupId>
-  		<artifactId>metadata-util-core</artifactId>
+  		<groupId>ee.object-cloner</groupId>
+  		<artifactId>object-cloner-guice</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>

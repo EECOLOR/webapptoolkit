@@ -32,6 +32,8 @@ public class FreemarkerRenderer implements Renderer
 			Writer writer = new StringWriter();
 			ftl.process(model, writer);
 			
+			//TODO add debug log with render time
+			
 			return writer.toString();
 		} catch (Exception e)
 		{
