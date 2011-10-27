@@ -46,6 +46,13 @@ public abstract class WebAppToolkitModule extends ServletModule {
 	}
 
 	/**
+	 * Calls bindThreadLocalProvider(type, null)
+	 */
+	protected <T> void bindThreadLocalProvider(Class<T> type) {
+		bindThreadLocalProvider(type, null);
+	}
+	
+	/**
 	 * This allows you to bind a thread local provider to Guice provider, it's a shortcut for statements like this:
 	 * 
 	 * <pre>
@@ -80,14 +87,18 @@ public abstract class WebAppToolkitModule extends ServletModule {
 		@SuppressWarnings("unchecked")
 		TypeLiteral<ThreadLocalProvider<T>> threadLocalType = (TypeLiteral<ThreadLocalProvider<T>>) TypeLiteral
 				.get(Types.newParameterizedType(ThreadLocalProvider.class, type));
-		Key<ThreadLocalProvider<T>> key = Key.get(threadLocalType, annotationType);
+		Key<ThreadLocalProvider<T>> key = annotationType == null ? Key.get(threadLocalType) : Key.get(threadLocalType, annotationType);
 
 		@SuppressWarnings("unchecked")
 		TypeLiteral<ThreadLocalProviderImpl<T>> threadLocalImplementation = (TypeLiteral<ThreadLocalProviderImpl<T>>) TypeLiteral
 				.get(Types.newParameterizedType(ThreadLocalProviderImpl.class, type));
 
 		bind(key).to(threadLocalImplementation).asEagerSingleton();
-		bind(type).annotatedWith(annotationType).toProvider(key);
+		if (annotationType == null) {
+			bind(type).toProvider(key);
+		} else {
+			bind(type).annotatedWith(annotationType).toProvider(key);
+		}
 	}
 
 	private Map<String, Class<?>> _bindings = new HashMap<String, Class<?>>();

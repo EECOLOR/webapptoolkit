@@ -8,7 +8,10 @@ import com.google.inject.TypeLiteral;
 import com.wideplay.warp.persist.db4o.Db4Objects;
 
 import ee.parameterConverter.Converter;
+import ee.webAppToolkit.example.projectTimeTracking.administration.CustomerContext;
+import ee.webAppToolkit.example.projectTimeTracking.domain.Employee;
 import ee.webAppToolkit.example.projectTimeTracking.domain.Role;
+import ee.webAppToolkit.example.projectTimeTracking.providers.EmployeeEnumerationService;
 import ee.webAppToolkit.example.projectTimeTracking.providers.RoleEnumerationService;
 import ee.webAppToolkit.localization.LocaleResolver;
 import ee.webAppToolkit.rendering.freemarker.utils.EnumerationProvider;
@@ -40,6 +43,11 @@ public class ApplicationModule extends WebsiteModule {
 		
 		bind(new TypeLiteral<EnumerationProvider<Role>>(){}).to(RoleEnumerationService.class);
 		bind(new TypeLiteral<Converter<String, Role>>(){}).to(RoleEnumerationService.class);
+		bind(new TypeLiteral<EnumerationProvider<Employee>>(){}).to(EmployeeEnumerationService.class);
+		bind(new TypeLiteral<Converter<String, Employee>>(){}).to(EmployeeEnumerationService.class);
+		
+		bindThreadLocalProvider(CustomerContext.class);
+		
 	}
 	
 	@Override

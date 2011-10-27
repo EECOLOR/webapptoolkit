@@ -41,5 +41,13 @@ public interface Store {
 	public <T> Iterable<T> find(T exampleEntity, String sortOrder);
 	public <T> Iterable<T> find(T exampleEntity, int offset, int maxResults);
 	public <T> Iterable<T> find(T exampleEntity, int offset, int maxResults, String sortOrder);
+	
+	/**
+	 * The path should consist of property names separated by a dot 
+	 */
+	public <T> Iterable<T> find(String path, T exampleEntity);
+	public <T> Iterable<T> find(String path, T exampleEntity, String sortOrder);
+	public <T> Iterable<T> find(String path, T exampleEntity, int offset, int maxResults);
+	public <T> Iterable<T> find(String path, T exampleEntity, int offset, int maxResults, String sortOrder);
 
 }

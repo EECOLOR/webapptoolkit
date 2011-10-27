@@ -14,7 +14,13 @@ public class ThreadLocalProviderImpl <T> implements ThreadLocalProvider<T> {
 	
 	@Override
 	public T get() {
-		return _threadLocal.get();
+		T value = _threadLocal.get();
+		
+		if (value == null) {
+			throw new RuntimeException("No value has been set or the ThreadLocalProvider as not bound in the module using bindThreadLocalProvider");
+		}
+		
+		return value;
 	}
 
 	@Override
