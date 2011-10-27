@@ -1,11 +1,14 @@
 package ee.webAppToolkit.storage.db4o;
 
 import com.google.inject.Module;
+import com.google.inject.multibindings.Multibinder;
+import com.google.inject.name.Names;
 import com.google.inject.servlet.ServletModule;
 import com.wideplay.warp.persist.PersistenceFilter;
 import com.wideplay.warp.persist.PersistenceService;
 import com.wideplay.warp.persist.UnitOfWork;
 
+import ee.objectCloner.CloneAdvisor;
 import ee.objectCloner.guice.ObjectClonerModule;
 import ee.webAppToolkit.storage.Store;
 
@@ -21,6 +24,9 @@ public class Db4oModule extends ServletModule {
 		install(getDb4oModule());
 		
 		filter("/*").through(PersistenceFilter.class);
+		
+		Multibinder<CloneAdvisor> cloneAdvisors = Multibinder.newSetBinder(binder(), CloneAdvisor.class, Names.named("cloneAdvisors"));
+		cloneAdvisors.addBinding().to(IdentifiableCloner.class).asEagerSingleton();
 	}
 
 	

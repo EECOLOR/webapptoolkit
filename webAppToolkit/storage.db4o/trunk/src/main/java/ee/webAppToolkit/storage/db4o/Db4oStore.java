@@ -75,7 +75,7 @@ public class Db4oStore implements Store {
 			objectCloner.copy(entity, entityToSave);
 		}
 		
-		//getObjectContainer().store(entityToSave);
+		getObjectContainer().store(entityToSave);
 	}
 
 	@Override
