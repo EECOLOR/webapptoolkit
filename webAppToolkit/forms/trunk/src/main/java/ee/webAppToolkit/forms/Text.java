@@ -7,4 +7,5 @@ import java.lang.annotation.RetentionPolicy;
 public @interface Text
 {
 	int maxLength() default 0;
+	boolean readonly() default false;
 }

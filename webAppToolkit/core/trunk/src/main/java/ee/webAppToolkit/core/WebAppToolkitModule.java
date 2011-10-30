@@ -37,6 +37,7 @@ import ee.webAppToolkit.core.expert.impl.StaticServlet;
 import ee.webAppToolkit.core.expert.impl.ThreadLocalProviderImpl;
 import ee.webAppToolkit.core.expert.impl.WebAppToolkitServlet;
 
+//TODO: profile for performance and memory usage
 //TODO: class documentation for public interfaces
 //TODO: check bindings, make sure the ones that are meant as singletons are bound that way
 public abstract class WebAppToolkitModule extends ServletModule {

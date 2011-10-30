@@ -46,7 +46,13 @@ public @interface Display
 		 * Displays the property as a component list, note that by default an empty component is displayed. 
 		 * If you want to change the default behavior, annotate the property with @ComponentList 
 		 */
-		COMPONENT_LIST};
+		COMPONENT_LIST, 
+		
+		/**
+		 * Displays the property as checkbox
+		 */
+		CHECKBOX
+	};
 	
 	LocalizedString label() default @LocalizedString("");
 	int order() default 0;

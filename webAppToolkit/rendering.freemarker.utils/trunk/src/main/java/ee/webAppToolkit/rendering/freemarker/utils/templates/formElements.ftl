@@ -1,7 +1,9 @@
 [#include "/c.ftl" /]
 [#import "/validation.ftl" as validation /]
 
-[#macro component properties value name=""]
+[#macro component label properties value name="" optional=true]
+	[#local error = validation.hasValidationErrors(name) /]
+	[@.namespace.label label=label name=name optional=optional error=error /]
 	
 	[#list properties?values?sort_by(["annotations", "Display", "order"]) as property]
 		[#local propertyName = property.name /]
@@ -14,49 +16,51 @@
 		[#local annotations = property.annotations /]
 		[#local display = annotations.Display /]
 		[#local type = display.type?lower_case /]
-
-		[#local currentValue = "" /]
-		
-		[#if value?is_hash]
-			[#local currentValue = value[propertyName]! /]
-		[/#if]
-
-		[#attempt]
-			[#switch type]
-				[#case "component"]
-					<div class="${type}">
+		<div class="${type}">
+	
+			[#local currentValue = "" /]
+			
+			[#if value?is_hash]
+				[#local currentValue = value[propertyName]! /]
+			[/#if]
+	
+			[#attempt]
+				[#switch type]
+					[#case "component"]
 						[@.namespace[type] 
+							label=display.label
 							properties=property.displayProperties
 							value=currentValue
 							name=subName 
+							optional=annotations.Optional??
 						/]
-					</div>
-					[#break /]
-				[#case "component_list"]
-					[#if property.isList]
+						[#break /]
+					[#case "component_list"]
+						[#if property.isList]
+													
+							[#local addEmptyComponent = !(annotations.ComponentList??) || annotations.ComponentList.addEmptyComponent /]
+							[#local createRemoveLink = annotations.ComponentList?? && annotations.ComponentList.createRemoveLink /]
+							[#local removeLinkLabel = (annotations.ComponentList.removeLinkLabel)! /]
 						
-						[#local addEmptyComponent = !(annotations.ComponentList??) || annotations.ComponentList.addEmptyComponent /]
-					
-						<div class="${type}">
 							[@.namespace[type] 
+								label=display.label
 								properties=property.componentDisplayProperties
 								value=currentValue
 								name=subName 
 								addEmptyComponent=addEmptyComponent
+								createRemoveLink=createRemoveLink
+								removeLinkLabel=removeLinkLabel
+								optional=annotations.Optional??
 							/]
-						</div>
-					[#else]
-						Error rendering @formElements[${type}]:<br />
-						Could not render the component_list as the property is not a list type (List or array)
-					[/#if]
-					[#break /]
-				[#case "hidden"]
-					<div>
+						[#else]
+							Error rendering @formElements[${type}]:<br />
+							Could not render the component_list as the property is not a list type (List or array)
+						[/#if]
+						[#break /]
+					[#case "hidden"]
 						[@hidden value=currentValue name=subName /]
-					</div>
-					[#break /]
-				[#default]
-					<div>
+						[#break /]
+					[#default]
 						[@.namespace[type] 
 							label=display.label 
 							name=subName 
@@ -64,17 +68,20 @@
 							optional=annotations.Optional??
 							property=property
 						/]
-					</div>
-			[/#switch]
-		[#recover]
-			Error rendering @formElements[${type}]:<br />
-			${.error}
-		[/#recover]
+				[/#switch]
+			[#recover]
+				Error rendering @formElements[${type}]:<br />
+				${.error}
+			[/#recover]
+		</div>
 	[/#list]
 [/#macro]
 
-[#macro component_list properties value name="" addEmptyComponent=true]
+[#macro component_list label properties value name="" addEmptyComponent=true createRemoveLink=false removeLinkLabel="" optional=true ]
 	[#local index = -1 /]
+	
+	[#local error = validation.hasValidationErrors(name) /]
+	[@.namespace.label label=label name=name optional=optional error=error /]
 	
 	[#if !value?is_string && value?size > 0]
 		[#list value as component]
@@ -83,16 +90,19 @@
 			[#if name?length > 0]
 				[#local subName = name + "." + subName]
 			[/#if]
-		
+			
 			<div class="component">
-				[@.namespace.component properties=properties value=component name=subName /]
+				[#if createRemoveLink && !component?is_string]
+					 <a href="${context}/remove${component.class.simpleName}?id=${component.id}>${removeLinkLabel}<a>
+				[/#if]
+				[@.namespace.component label="" properties=properties value=component name=subName /]
 			</div>
 		[/#list]
 	[/#if]
 	
-	[#if addEmptyComponent]
+	[#if addEmptyComponent && !error]
 		<div class="component">
-			[@.namespace.component properties=properties value="" name=name + "." + (index + 1) /]
+			[@.namespace.component label="" properties=properties value="" name=name + "." + (index + 1) /]
 		</div>
 	[/#if]
 
@@ -115,6 +125,7 @@
 		value="${value}"
 		[#if property.annotations.Text??]
 			maxLength="${property.annotations.Text.maxLength}"
+			${property.annotations.Text.readonly?string('readonly="readonly"', '')}
 		[/#if] 
 	/>
 	[@validation.showValidationError name=name /]
@@ -176,4 +187,21 @@
 
 [#macro hidden name value]
 	<input type="hidden" name="${name}" value="[@c value /]" />
+[/#macro]
+
+[#macro checkbox label name value optional=true property=false]
+	[#local error = validation.hasValidationErrors(name) /]
+	[#if error]
+		[#local value = validation.getOriginalValue(name)]
+	[/#if]
+	[#if value?is_string]
+		[#local value = false /]
+	[/#if]
+	[@.namespace.label label=label name=name optional=optional error=error /]
+	<input type="checkbox" 
+		${error?string('class="error"', '')} 
+		id="${name}" name="${name}" 
+		${value?string('checked="checked"', '')}
+	/>
+	[@validation.showValidationError name=name /]
 [/#macro]

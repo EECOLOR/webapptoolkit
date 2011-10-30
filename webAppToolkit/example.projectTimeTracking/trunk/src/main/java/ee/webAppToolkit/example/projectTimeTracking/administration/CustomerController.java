@@ -19,11 +19,11 @@ import ee.webAppToolkit.storage.Store;
 public class CustomerController extends RenderingController {
 
 	@Inject
-	private ThreadLocalProvider<CustomerContext> _customerContextProvider;
+	private ThreadLocalProvider<EmployeeContext> _employeeContextProvider;
 	
 	@Override
 	public void beforeHandling(String memberName, Object controller) {
-		_customerContextProvider.set(CustomerContext.OPERATIONS_ONLY);
+		_employeeContextProvider.set(EmployeeContext.OPERATIONS_ONLY);
 		
 		super.beforeHandling(memberName, controller);
 	}
@@ -78,7 +78,7 @@ public class CustomerController extends RenderingController {
 	
 	@HideFromNavigation
 	public void removeConfirm(@Parameter("id") Long id) {
-		_store.removeByKey(id);
+		_store.removeByKey(Customer.class, id);
 		
 		flash.put(_removedMessage);
 		redirect();

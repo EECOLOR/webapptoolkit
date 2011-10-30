@@ -1,11 +1,11 @@
-[#macro create list properties editLabel="Edit" removeLabel="Remove" editPath="" removePath="/remove" labelMethod=""]
+[#macro create list properties editLabel="Edit" removeLabel="Remove" editPath="" removePath="/remove" labelMethod="" ignoredProperties=[] ]
 	[#local hasContent = false /]
 	[#local result]
 		<table>
 			<thead>
 				[#list properties as property]
 					[#local display = property.annotations.Display /]
-					[#if display.type?lower_case != "hidden"]
+					[#if display.type?lower_case != "hidden" && !ignoredProperties?seq_contains(property.name)]
 						<th>${property.annotations.Display.label}</th>
 					[/#if]
 				[/#list]
@@ -18,12 +18,13 @@
 					<tr>
 						[#list properties as property]
 							[#local display = property.annotations.Display /]
-							[#if display.type?lower_case != "hidden"]
+							[#local propertyName = property.name /]
+							[#if display.type?lower_case != "hidden" && !ignoredProperties?seq_contains(property.name)]
 								<td>
 									[#if labelMethod?length > 0 && .main[labelMethod]??]
-										${.main[labelMethod](element, property.name)}
+										${.main[labelMethod](element, propertyName)?string}
 									[#else]
-										${element[property.name]}
+										${element[propertyName]?string}
 									[/#if]
 								</td>
 							[/#if]

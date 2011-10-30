@@ -67,7 +67,7 @@ public class EmployeeController extends RenderingController {
 	
 	@HideFromNavigation
 	public void removeConfirm(@Parameter("id") Long id) {
-		_store.removeByKey(id);
+		_store.removeByKey(Employee.class, 	id);
 		
 		flash.put(_removedMessage);
 		redirect();

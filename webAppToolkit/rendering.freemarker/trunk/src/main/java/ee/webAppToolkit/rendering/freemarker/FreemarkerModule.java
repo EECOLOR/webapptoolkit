@@ -1,5 +1,6 @@
 package ee.webAppToolkit.rendering.freemarker;
 
+import java.util.Collection;
 import java.util.Set;
 
 import javax.inject.Named;
@@ -22,6 +23,7 @@ import freemarker.ext.util.ModelFactory;
 import freemarker.template.Configuration;
 import freemarker.template.ObjectWrapper;
 import freemarker.template.SimpleCollection;
+import freemarker.template.SimpleSequence;
 import freemarker.template.TemplateModel;
 
 public class FreemarkerModule extends AbstractModule {
@@ -45,7 +47,12 @@ public class FreemarkerModule extends AbstractModule {
 		modelFactories.addBinding(Iterable.class).toInstance(new ModelFactory() {
 			@Override
 			public TemplateModel create(Object object, ObjectWrapper wrapper) {
-				return new SimpleCollection(((Iterable<?>) object).iterator(), wrapper);
+				if (object instanceof Collection) {
+					return new SimpleSequence((Collection<?>) object, wrapper);
+				} else
+				{
+					return new SimpleCollection(((Iterable<?>) object).iterator(), wrapper);
+				}
 			}
 		});
 	}

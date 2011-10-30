@@ -1,5 +1,6 @@
 package ee.webAppToolkit.example.projectTimeTracking;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -8,10 +9,15 @@ import com.google.inject.TypeLiteral;
 import com.wideplay.warp.persist.db4o.Db4Objects;
 
 import ee.parameterConverter.Converter;
-import ee.webAppToolkit.example.projectTimeTracking.administration.CustomerContext;
+import ee.webAppToolkit.example.projectTimeTracking.administration.EmployeeContext;
+import ee.webAppToolkit.example.projectTimeTracking.domain.Customer;
 import ee.webAppToolkit.example.projectTimeTracking.domain.Employee;
+import ee.webAppToolkit.example.projectTimeTracking.domain.ProjectNumber;
 import ee.webAppToolkit.example.projectTimeTracking.domain.Role;
+import ee.webAppToolkit.example.projectTimeTracking.providers.CalendarProvider;
+import ee.webAppToolkit.example.projectTimeTracking.providers.CustomerEnumerationService;
 import ee.webAppToolkit.example.projectTimeTracking.providers.EmployeeEnumerationService;
+import ee.webAppToolkit.example.projectTimeTracking.providers.ProjectNumberConverter;
 import ee.webAppToolkit.example.projectTimeTracking.providers.RoleEnumerationService;
 import ee.webAppToolkit.localization.LocaleResolver;
 import ee.webAppToolkit.rendering.freemarker.utils.EnumerationProvider;
@@ -45,8 +51,14 @@ public class ApplicationModule extends WebsiteModule {
 		bind(new TypeLiteral<Converter<String, Role>>(){}).to(RoleEnumerationService.class);
 		bind(new TypeLiteral<EnumerationProvider<Employee>>(){}).to(EmployeeEnumerationService.class);
 		bind(new TypeLiteral<Converter<String, Employee>>(){}).to(EmployeeEnumerationService.class);
+		bind(new TypeLiteral<EnumerationProvider<Customer>>(){}).to(CustomerEnumerationService.class);
+		bind(new TypeLiteral<Converter<String, Customer>>(){}).to(CustomerEnumerationService.class);
+		bind(new TypeLiteral<Converter<String, ProjectNumber>>(){}).to(ProjectNumberConverter.class);
 		
-		bindThreadLocalProvider(CustomerContext.class);
+		bind(Calendar.class).toProvider(CalendarProvider.class);
+		
+		bindThreadLocalProvider(EmployeeContext.class);
+		
 		
 	}
 	

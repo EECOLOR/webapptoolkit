@@ -78,7 +78,7 @@ public class ExtendedPropertyMetadataImpl extends GuiceParameterPropertyMetadata
 	@Override
 	public Object getDefaultValue(Object context) {
 		if (_defaultValueProvider == null) {
-			return null;
+			return super.getDefaultValue(context);
 		} else {
 			return _defaultValueProvider.provide(context);
 		}

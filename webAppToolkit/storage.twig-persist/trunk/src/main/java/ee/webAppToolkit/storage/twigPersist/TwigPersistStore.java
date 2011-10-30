@@ -73,13 +73,9 @@ public class TwigPersistStore implements Store {
 	}
 
 	@Override
-	public void removeByKey(Object key) {
-		_objectDatastore.load((Key) key);
-	}
-	
-	@Override
 	public void removeByKey(Class<?> entityClass, long key) {
-		removeByKey(_getKey(entityClass, key));
+		Object entity = load(entityClass, key);
+		_objectDatastore.delete(entity);
 	}
 	
 	@Override

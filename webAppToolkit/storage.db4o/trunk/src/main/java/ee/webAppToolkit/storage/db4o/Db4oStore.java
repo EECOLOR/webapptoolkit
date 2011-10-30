@@ -85,11 +85,6 @@ public class Db4oStore implements Store {
 	}
 
 	@Override
-	public void removeByKey(Object key) {
-		getObjectContainer().delete(_getByKey(key));
-	}
-	
-	@Override
 	public void removeByKey(Class<?> entityClass, long key) {
 		getObjectContainer().delete(_getByKey(key));
 	}

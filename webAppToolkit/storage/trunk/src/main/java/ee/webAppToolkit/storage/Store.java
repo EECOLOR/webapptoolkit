@@ -27,7 +27,6 @@ public interface Store {
 	
 	public void save(Object entity);
 	public void remove(Object entity);	
-	public void removeByKey(Object key);	
 	public void removeByKey(Class<?> entityClass, long key);	
 	
 	public int count(Class<?> entityClass);
@@ -41,13 +40,5 @@ public interface Store {
 	public <T> Iterable<T> find(T exampleEntity, String sortOrder);
 	public <T> Iterable<T> find(T exampleEntity, int offset, int maxResults);
 	public <T> Iterable<T> find(T exampleEntity, int offset, int maxResults, String sortOrder);
-	
-	/**
-	 * The path should consist of property names separated by a dot 
-	 */
-	public <T> Iterable<T> find(String path, T exampleEntity);
-	public <T> Iterable<T> find(String path, T exampleEntity, String sortOrder);
-	public <T> Iterable<T> find(String path, T exampleEntity, int offset, int maxResults);
-	public <T> Iterable<T> find(String path, T exampleEntity, int offset, int maxResults, String sortOrder);
 
 }

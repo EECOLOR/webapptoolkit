@@ -8,9 +8,11 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.google.inject.util.Types;
 
+import ee.webAppToolkit.localization.LocalizedString;
 import ee.webAppToolkit.rendering.freemarker.utils.Enumeration;
 import ee.webAppToolkit.rendering.freemarker.utils.EnumerationProvider;
 import ee.webAppToolkit.rendering.freemarker.utils.expert.EnumerationResolver;
@@ -81,7 +83,24 @@ public class EnumerationResolverImpl implements EnumerationResolver {
 	
 	protected <T> Enumeration<T> _createEnumEnumeration(T enumConstant) {
 		Enum<?> cast = Enum.class.cast(enumConstant);
-		final String name = cast.name();
+		
+		final String value = cast.name();
+		final String name;
+		
+		LocalizedString localizedString;
+		try {
+			localizedString = cast.getDeclaringClass().getField(value).getAnnotation(LocalizedString.class);
+		} catch (NoSuchFieldException | SecurityException e) {
+			throw new RuntimeException(e);
+		}
+		
+		if (localizedString == null) {
+			name = value;
+		} else
+		{
+			name = _injector.getInstance(Key.get(String.class, localizedString));
+		}
+		
 		return new Enumeration<T>() {
 
 			@Override
@@ -91,7 +110,7 @@ public class EnumerationResolverImpl implements EnumerationResolver {
 
 			@Override
 			public Object getValue() {
-				return name;
+				return value;
 			}
 		};
 	}

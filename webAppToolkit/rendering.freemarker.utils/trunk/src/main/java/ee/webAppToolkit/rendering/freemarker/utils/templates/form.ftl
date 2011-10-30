@@ -10,7 +10,7 @@
 	
 	<form action="${action}" method="POST">
 		
-		[@formElements.component properties=metadata.displayProperties value=value name=name /]
+		[@formElements.component label="" properties=metadata.displayProperties value=value name=name /]
 		
 		<input type="submit" value="${submitLabel}" />
 	</form>

@@ -72,7 +72,7 @@ public class RoleController extends RenderingController {
 	
 	@HideFromNavigation
 	public void removeConfirm(@Parameter("id") Long id) {
-		_store.removeByKey(id);
+		_store.removeByKey(Role.class, id);
 		
 		flash.put(_removedMessage);
 		redirect();
