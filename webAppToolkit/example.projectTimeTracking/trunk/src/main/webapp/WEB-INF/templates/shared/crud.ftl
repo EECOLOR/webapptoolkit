@@ -1,4 +1,4 @@
-[#macro crud elementName elementListName newLabel editLabel tableLabelMethod="" ]
+[#macro crud elementName elementListName newLabel editLabel tableLabelMethod="" tableIgnoredProperties=[] ]
 	[#import "/form.ftl" as form /]
 	[#import "/table.ftl" as table /]
 	
@@ -29,6 +29,7 @@
 			properties=properties
 			editLabel="Bewerken"
 			removeLabel="Verwijderen"
-			labelMethod=tableLabelMethod /]
+			labelMethod=tableLabelMethod
+			ignoredProperties=tableIgnoredProperties /]
 	</p>
 [/#macro]
