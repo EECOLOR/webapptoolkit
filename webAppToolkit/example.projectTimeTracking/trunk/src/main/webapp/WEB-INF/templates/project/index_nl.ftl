@@ -19,8 +19,8 @@
 [/#function]
 
 [#if model.project.id??]
-[/#if]
 	<a href="${context}?followUpProjectNumber=${model.project.projectNumber}">Vervolg project</a>
+[/#if]
 
 [@crud 
 	elementName="project"

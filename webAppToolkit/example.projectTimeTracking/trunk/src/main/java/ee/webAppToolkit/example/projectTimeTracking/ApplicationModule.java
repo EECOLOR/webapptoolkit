@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import com.db4o.Db4o;
+import com.db4o.config.Configuration;
 import com.google.common.collect.Lists;
 import com.google.inject.TypeLiteral;
 import com.wideplay.warp.persist.db4o.Db4Objects;
@@ -12,6 +14,7 @@ import ee.parameterConverter.Converter;
 import ee.webAppToolkit.example.projectTimeTracking.administration.EmployeeContext;
 import ee.webAppToolkit.example.projectTimeTracking.domain.Customer;
 import ee.webAppToolkit.example.projectTimeTracking.domain.Employee;
+import ee.webAppToolkit.example.projectTimeTracking.domain.Project;
 import ee.webAppToolkit.example.projectTimeTracking.domain.ProjectNumber;
 import ee.webAppToolkit.example.projectTimeTracking.domain.Role;
 import ee.webAppToolkit.example.projectTimeTracking.providers.CalendarProvider;
@@ -42,6 +45,11 @@ public class ApplicationModule extends WebsiteModule {
 		bindPropertiesToLocale("messages", DUTCH);
 		bindPropertiesToLocale("validation", DUTCH);
 		bindPropertiesToLocale("navigation", DUTCH);
+
+		@SuppressWarnings("deprecation")
+		Configuration configuration = Db4o.newConfiguration();
+		configuration.objectClass(Project.class).cascadeOnUpdate(true);
+		bind(Configuration.class).toInstance(configuration);
 		
 		install(new Db4oModule());
 		
@@ -58,8 +66,6 @@ public class ApplicationModule extends WebsiteModule {
 		bind(Calendar.class).toProvider(CalendarProvider.class);
 		
 		bindThreadLocalProvider(EmployeeContext.class);
-		
-		
 	}
 	
 	@Override

@@ -6,6 +6,6 @@
 	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="lib/warp-persist-2.0-20090214.jar" sourcepath="lib/warp-persist-2.0-20090214-src.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/warp-persist-2.0-SNAPSHOT.jar" sourcepath="lib/warp-persist-2.0-SNAPSHOT-src.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

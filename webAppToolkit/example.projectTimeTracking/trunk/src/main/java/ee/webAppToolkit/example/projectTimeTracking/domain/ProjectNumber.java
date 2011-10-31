@@ -14,7 +14,7 @@ public class ProjectNumber {
 		
 		if (previousProjectNumber.year == currentYear)
 		{
-			counter = previousProjectNumber.counter++;
+			counter = previousProjectNumber.counter + 1;
 		} else
 		{
 			counter = 0;
@@ -77,5 +77,4 @@ public class ProjectNumber {
 		
 		return _value;
 	}
-
 }

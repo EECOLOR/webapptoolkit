@@ -24,6 +24,16 @@ public class BasicController {
 	}
 	
 	/**
+	 * Can be used to redirect to the current controller
+	 * 
+	 * Calls redirect("", queryString)
+	 */
+	protected void redirect(QueryString queryString)
+	{
+		redirect("", queryString);
+	}
+	
+	/**
 	 * Calls redirect(action, null)
 	 */
 	protected void redirect(String action)

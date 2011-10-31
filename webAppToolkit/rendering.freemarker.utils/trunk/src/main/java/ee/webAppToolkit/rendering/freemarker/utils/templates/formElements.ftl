@@ -84,18 +84,22 @@
 	[@.namespace.label label=label name=name optional=optional error=error /]
 	
 	[#if !value?is_string && value?size > 0]
-		[#list value as component]
-			[#local index = component_index /]
+		[#list value as listComponent]
+			[#local index = listComponent_index /]
 			[#local subName = index /]
 			[#if name?length > 0]
 				[#local subName = name + "." + subName]
 			[/#if]
 			
 			<div class="component">
-				[#if createRemoveLink && !component?is_string]
-					 <a href="${context}/remove${component.class.simpleName}?id=${component.id}>${removeLinkLabel}<a>
+				[#if listComponent??]
+					[@.namespace.component label="" properties=properties value=listComponent name=subName /]
+					[#if createRemoveLink]
+						 <button type="submit" name="remove${listComponent.class?split(".")?last}" value="${listComponent.id}">${removeLinkLabel}</button>
+					[/#if]
+				[#else]
+					<b>Error: A component in this list is null, this should not happen</b>
 				[/#if]
-				[@.namespace.component label="" properties=properties value=component name=subName /]
 			</div>
 		[/#list]
 	[/#if]
@@ -194,6 +198,7 @@
 	[#if error]
 		[#local value = validation.getOriginalValue(name)]
 	[/#if]
+
 	[#if value?is_string]
 		[#local value = false /]
 	[/#if]
@@ -202,6 +207,7 @@
 		${error?string('class="error"', '')} 
 		id="${name}" name="${name}" 
 		${value?string('checked="checked"', '')}
+		value="true"
 	/>
 	[@validation.showValidationError name=name /]
 [/#macro]
