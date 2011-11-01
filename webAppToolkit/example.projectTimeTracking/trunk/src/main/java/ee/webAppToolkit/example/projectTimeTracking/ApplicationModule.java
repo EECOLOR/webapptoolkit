@@ -6,6 +6,8 @@ import java.util.Locale;
 
 import com.db4o.Db4o;
 import com.db4o.config.Configuration;
+import com.db4o.config.ObjectClass;
+import com.db4o.config.ObjectField;
 import com.google.common.collect.Lists;
 import com.google.inject.TypeLiteral;
 import com.wideplay.warp.persist.db4o.Db4Objects;
@@ -48,7 +50,13 @@ public class ApplicationModule extends WebsiteModule {
 
 		@SuppressWarnings("deprecation")
 		Configuration configuration = Db4o.newConfiguration();
-		configuration.objectClass(Project.class).cascadeOnUpdate(true);
+		ObjectClass projectClass = configuration.objectClass(Project.class);
+		ObjectField componentsField = projectClass.objectField("components");
+		componentsField.cascadeOnUpdate(true);
+		componentsField.cascadeOnDelete(true);
+		ObjectField purchasesAndSalesField = projectClass.objectField("purchasesAndSales");
+		purchasesAndSalesField.cascadeOnUpdate(true);
+		purchasesAndSalesField.cascadeOnDelete(true);
 		bind(Configuration.class).toInstance(configuration);
 		
 		install(new Db4oModule());

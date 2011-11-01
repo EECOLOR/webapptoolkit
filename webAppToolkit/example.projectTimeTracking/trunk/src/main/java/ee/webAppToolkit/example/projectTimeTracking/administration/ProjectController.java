@@ -13,7 +13,9 @@ import com.google.inject.Provider;
 import ee.webAppToolkit.core.QueryString;
 import ee.webAppToolkit.core.Result;
 import ee.webAppToolkit.core.annotations.Flash;
+import ee.webAppToolkit.core.annotations.Get;
 import ee.webAppToolkit.core.annotations.Optional;
+import ee.webAppToolkit.core.annotations.Post;
 import ee.webAppToolkit.core.expert.ThreadLocalProvider;
 import ee.webAppToolkit.example.projectTimeTracking.domain.Project;
 import ee.webAppToolkit.example.projectTimeTracking.domain.ProjectComponent;
@@ -57,37 +59,20 @@ public class ProjectController extends RenderingController {
 	@Inject
 	private Provider<Project> _projectProvider;
 
+	@Get
 	public Result index(
-			@Optional @Parameter("project") Project project,
 			@Optional @Parameter("id") Long id,
-			ValidationResults validationResults,
 			@Flash String message,
-			@Optional @Parameter("followUpProjectNumber") String followUpProjectNumber,
-			@Optional @Parameter("removeProjectComponent") Long projectComponentId,
-			@Optional @Parameter("removeProjectPurchaseAndSale") Long projectPurchaseAndSaleId) {
-		if (validationResults.getValidated("project")) {
-			if (project == null) {
-				if (id == null) {
-					// create a project number
-					project = _projectProvider.get();
-					project.projectNumber = _getProjectNumber(followUpProjectNumber);
-				} else {
-					project = _store.load(Project.class, id);
-				}
-			} else {
-				if (projectComponentId != null) {
-					_removeProjectComponent(project, projectComponentId);
-				}
-
-				if (projectPurchaseAndSaleId != null) {
-					_removeProjectPurchaseAndSale(project,
-							projectPurchaseAndSaleId);
-				}
-
-				_store.save(project);
-				flash.put(_savedMessage);
-				redirect(new QueryString("id", project.getId()));
-			}
+			@Optional @Parameter("followUpProjectNumber") String followUpProjectNumber) {
+		
+		Project project;
+		
+		if (id == null) {
+			// create a project number
+			project = _projectProvider.get();
+			project.projectNumber = _getProjectNumber(followUpProjectNumber);
+		} else {
+			project = _store.load(Project.class, id);
 		}
 
 		Model model = new Model(_store.list(Project.class), project, message);
@@ -95,6 +80,33 @@ public class ProjectController extends RenderingController {
 		return render(model);
 	}
 
+	@Post
+	public Result index(
+			@Optional @Parameter("project") Project project,
+			ValidationResults validationResults,
+			@Optional @Parameter("removeProjectComponent") Long projectComponentId,
+			@Optional @Parameter("removeProjectPurchaseAndSale") Long projectPurchaseAndSaleId) {
+
+		if (validationResults.getValidated("project")) {
+			if (projectComponentId != null) {
+				_removeProjectComponent(project, projectComponentId);
+			}
+			
+			if (projectPurchaseAndSaleId != null) {
+				_removeProjectPurchaseAndSale(project,
+						projectPurchaseAndSaleId);
+			}
+			
+			_store.save(project);
+			flash.put(_savedMessage);
+			redirect(new QueryString("id", project.getId()));
+		}
+		
+		Model model = new Model(_store.list(Project.class), project);
+		
+		return render(model);
+	}
+	
 	private void _removeProjectComponent(Project project,
 			Long projectComponentId) {
 		for (ProjectComponent projectComponent : project.components) {
@@ -182,6 +194,10 @@ public class ProjectController extends RenderingController {
 
 		public Model(Project project) {
 			this(null, project, null);
+		}
+		
+		public Model(Iterable<Project> projects, Project project) {
+			this(projects, project, null);
 		}
 
 		public Model(Iterable<Project> projects, Project project, String message) {
