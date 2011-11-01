@@ -13,6 +13,7 @@ public class NumberFormatExceptionConverter implements ExceptionConverter<Number
 {
 	private Provider<String> _conversion;
 	
+	//TODO make sure all localized strings are request through a provider, otherwise they could mis runtime changes of the locale
 	@Inject
 	public NumberFormatExceptionConverter(
 			@LocalizedString("validation.number.conversion") Provider<String> conversion)

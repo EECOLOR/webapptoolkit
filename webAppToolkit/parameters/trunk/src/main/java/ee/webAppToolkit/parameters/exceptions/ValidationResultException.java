@@ -9,12 +9,17 @@ public class ValidationResultException extends Exception {
 	private Object _originalValue;
 	private ValidationResult _validationResult;
 
+	public ValidationResultException(ValidationResult validationResult)
+	{
+		this(validationResult.getOriginalValue(), validationResult);
+	}
+
 	public ValidationResultException(Object originalValue, ValidationResult validationResult)
 	{
 		_originalValue = originalValue;
 		_validationResult = validationResult;
 	}
-
+	
 	public Object getOriginalValue() {
 		return _originalValue;
 	}

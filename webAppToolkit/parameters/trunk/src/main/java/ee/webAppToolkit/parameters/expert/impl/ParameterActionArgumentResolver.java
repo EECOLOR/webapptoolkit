@@ -14,7 +14,6 @@ import ee.parameterConverter.ParameterConverter;
 import ee.webAppToolkit.core.exceptions.ConfigurationException;
 import ee.webAppToolkit.core.expert.Action;
 import ee.webAppToolkit.core.expert.ActionArgumentResolver;
-import ee.webAppToolkit.parameters.ValidationResults;
 import ee.webAppToolkit.parameters.annotations.Parameter;
 
 public class ParameterActionArgumentResolver implements ActionArgumentResolver {
@@ -25,8 +24,7 @@ public class ParameterActionArgumentResolver implements ActionArgumentResolver {
 	@Inject
 	public ParameterActionArgumentResolver(
 			@RequestParameters Provider<Map<String, String[]>> requestParameterProvider,
-			ParameterConverter parameterConverter,
-			Provider<ValidationResults> validationResultsProvider) {
+			ParameterConverter parameterConverter) {
 		_requestParameterProvider = requestParameterProvider;
 		_parameterConverter = parameterConverter;
 	}

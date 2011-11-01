@@ -94,7 +94,7 @@
 			<div class="component">
 				[#if listComponent??]
 					[@.namespace.component label="" properties=properties value=listComponent name=subName /]
-					[#if createRemoveLink]
+					[#if createRemoveLink && listComponent.id??]
 						 <button type="submit" name="remove${listComponent.class?split(".")?last}" value="${listComponent.id}">${removeLinkLabel}</button>
 					[/#if]
 				[#else]
@@ -208,6 +208,24 @@
 		id="${name}" name="${name}" 
 		${value?string('checked="checked"', '')}
 		value="true"
+	/>
+	[@validation.showValidationError name=name /]
+[/#macro]
+
+[#macro time label name value optional=true property=false]
+	[#local error = validation.hasValidationErrors(name) /]
+	[#if error]
+		[#local value = validation.getOriginalValue(name) /]
+	[#else]
+		[#if value?is_date]
+			[#local value = value?string("HH:mm") ]
+		[/#if]
+	[/#if]
+	[@.namespace.label label=label name=name optional=optional error=error /]
+	<input type="time" 
+		${error?string('class="error"', '')} 
+		id="${name}" name="${name}" 
+		value="${value}"
 	/>
 	[@validation.showValidationError name=name /]
 [/#macro]

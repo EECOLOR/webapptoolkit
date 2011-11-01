@@ -10,6 +10,7 @@ import com.google.inject.Injector;
 import com.google.inject.assistedinject.Assisted;
 
 import ee.metadataUtils.PropertyMetadata;
+import ee.parameterConverter.Converter;
 import ee.parameterConverter.Validator;
 import ee.parameterConverter.guice.GuiceParameterPropertyMetadata;
 import ee.webAppToolkit.parameters.AnnotationValidator;
@@ -24,6 +25,7 @@ public class ExtendedPropertyMetadataImpl extends GuiceParameterPropertyMetadata
 	private DefaultValueProvider<?> _defaultValueProvider;
 	private Validator _validator;
 	private AnnotationValidatorResolver _annotationValidatorResolver;
+	private Converter<String[], ?> _converter;
 
 	@Inject
 	public ExtendedPropertyMetadataImpl(Injector injector,
@@ -45,6 +47,8 @@ public class ExtendedPropertyMetadataImpl extends GuiceParameterPropertyMetadata
 		for (Annotation annotation : annotations) {
 			if (annotation instanceof Default) {
 				_defaultValueProvider = _injector.getInstance(((Default) annotation).value());
+			} else if (annotation instanceof ee.webAppToolkit.parameters.annotations.Converter) {
+				_converter = _injector.getInstance(((ee.webAppToolkit.parameters.annotations.Converter) annotation).value());
 			} else {
 				Class<? extends Annotation> annotationType = annotation.annotationType();
 				if (annotationType.isAnnotationPresent(ValidationAnnotation.class)) {
@@ -86,6 +90,21 @@ public class ExtendedPropertyMetadataImpl extends GuiceParameterPropertyMetadata
 
 	@Override
 	public Validator getValidator() {
-		return _validator;
+		if (_validator == null) {
+			return super.getValidator();
+		} else
+		{
+			return _validator;
+		}
+	}
+	
+	@Override
+	public Converter<String[], ?> getConverter() {
+		if (_converter == null) {
+			return super.getConverter();
+		} else
+		{
+			return _converter;
+		}
 	}
 }

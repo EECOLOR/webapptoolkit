@@ -1,5 +1,4 @@
 [#import "/formElements.ftl" as formElements /]
-
 [#import "/validation.ftl" as validation /]
 
 [#macro create action submitLabel metadata value="" showValidationErrorList=false name=""]

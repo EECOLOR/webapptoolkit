@@ -51,7 +51,12 @@ public @interface Display
 		/**
 		 * Displays the property as checkbox
 		 */
-		CHECKBOX
+		CHECKBOX,
+		
+		/**
+		 * Displays the property as time
+		 */
+		TIME
 	};
 	
 	LocalizedString label() default @LocalizedString("");
