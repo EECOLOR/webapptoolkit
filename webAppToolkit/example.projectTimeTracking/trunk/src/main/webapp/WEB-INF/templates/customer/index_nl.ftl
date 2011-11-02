@@ -9,7 +9,7 @@
 [#function customerPropertyLabel customer property]
 	[#if property == "accountManager"]
 		[#local employee = customer.accountManager!{"id":"null", "name":"null"} /]
-		[#return '<a href="/employees?id=${employee.id}">${employee.name}</a>' /]
+		[#return '<a href="/administration/employees?id=${employee.id}">${employee.name}</a>' /]
 	[/#if]
 	[#return customer[property] /]
 [/#function]

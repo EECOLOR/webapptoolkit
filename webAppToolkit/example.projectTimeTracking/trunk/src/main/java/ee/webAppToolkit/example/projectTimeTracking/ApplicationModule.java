@@ -14,15 +14,20 @@ import com.wideplay.warp.persist.db4o.Db4Objects;
 
 import ee.parameterConverter.Converter;
 import ee.webAppToolkit.example.projectTimeTracking.administration.EmployeeContext;
+import ee.webAppToolkit.example.projectTimeTracking.converters.ProjectComponentConverter;
+import ee.webAppToolkit.example.projectTimeTracking.converters.ProjectConverter;
+import ee.webAppToolkit.example.projectTimeTracking.converters.ProjectNumberConverter;
 import ee.webAppToolkit.example.projectTimeTracking.domain.Customer;
 import ee.webAppToolkit.example.projectTimeTracking.domain.Employee;
 import ee.webAppToolkit.example.projectTimeTracking.domain.Project;
+import ee.webAppToolkit.example.projectTimeTracking.domain.ProjectComponent;
 import ee.webAppToolkit.example.projectTimeTracking.domain.ProjectNumber;
 import ee.webAppToolkit.example.projectTimeTracking.domain.Role;
 import ee.webAppToolkit.example.projectTimeTracking.providers.CalendarProvider;
 import ee.webAppToolkit.example.projectTimeTracking.providers.CustomerEnumerationService;
 import ee.webAppToolkit.example.projectTimeTracking.providers.EmployeeEnumerationService;
-import ee.webAppToolkit.example.projectTimeTracking.providers.ProjectNumberConverter;
+import ee.webAppToolkit.example.projectTimeTracking.providers.ProjectComponentEnumerationService;
+import ee.webAppToolkit.example.projectTimeTracking.providers.ProjectEnumerationService;
 import ee.webAppToolkit.example.projectTimeTracking.providers.RoleEnumerationService;
 import ee.webAppToolkit.localization.LocaleResolver;
 import ee.webAppToolkit.rendering.freemarker.utils.EnumerationProvider;
@@ -65,11 +70,20 @@ public class ApplicationModule extends WebsiteModule {
 		
 		bind(new TypeLiteral<EnumerationProvider<Role>>(){}).to(RoleEnumerationService.class);
 		bind(new TypeLiteral<Converter<String, Role>>(){}).to(RoleEnumerationService.class);
+		
 		bind(new TypeLiteral<EnumerationProvider<Employee>>(){}).to(EmployeeEnumerationService.class);
 		bind(new TypeLiteral<Converter<String, Employee>>(){}).to(EmployeeEnumerationService.class);
+		
 		bind(new TypeLiteral<EnumerationProvider<Customer>>(){}).to(CustomerEnumerationService.class);
 		bind(new TypeLiteral<Converter<String, Customer>>(){}).to(CustomerEnumerationService.class);
+		
 		bind(new TypeLiteral<Converter<String, ProjectNumber>>(){}).to(ProjectNumberConverter.class);
+		
+		bind(new TypeLiteral<EnumerationProvider<Project>>(){}).to(ProjectEnumerationService.class);
+		bind(new TypeLiteral<Converter<String, Project>>(){}).to(ProjectConverter.class);
+		
+		bind(new TypeLiteral<EnumerationProvider<ProjectComponent>>(){}).to(ProjectComponentEnumerationService.class);
+		bind(new TypeLiteral<Converter<String, ProjectComponent>>(){}).to(ProjectComponentConverter.class);
 		
 		bind(Calendar.class).toProvider(CalendarProvider.class);
 		

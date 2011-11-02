@@ -9,7 +9,7 @@
 [#function employeePropertyLabel employee property]
 	[#if property == "role"]
 		[#local role = employee.role!{"id":"null", "name":"null"} /]
-		[#return '<a href="/roles?id=${role.id}">${role.name}</a>' /]
+		[#return '<a href="/administration/roles?id=${role.id}">${role.name}</a>' /]
 	[/#if]
 	[#return employee[property] /]
 [/#function]

@@ -1,79 +1,84 @@
 [#include "/c.ftl" /]
 [#import "/validation.ftl" as validation /]
 
+[#macro property property parentName parentValue='' ]
+	
+	[#local propertyName = property.name /]
+
+	[#local subName = propertyName /]
+	[#if parentName?length > 0]
+		[#local subName = parentName + "." + subName]
+	[/#if]
+	
+	[#local annotations = property.annotations /]
+	[#local display = annotations.Display /]
+	[#local type = display.type?lower_case /]
+	<div class="${type}">
+
+		[#local currentValue = "" /]
+		
+		[#if parentValue?is_hash]
+			[#local currentValue = parentValue[propertyName]! /]
+		[/#if]
+
+		[#attempt]
+			[#switch type]
+				[#case "component"]
+					[@.namespace[type] 
+						label=display.label
+						properties=property.displayProperties
+						value=currentValue
+						name=subName 
+						optional=annotations.Optional??
+					/]
+					[#break /]
+				[#case "component_list"]
+					[#if property.isList]
+												
+						[#local addEmptyComponent = !(annotations.ComponentList??) || annotations.ComponentList.addEmptyComponent /]
+						[#local createRemoveLink = annotations.ComponentList?? && annotations.ComponentList.createRemoveLink /]
+						[#local removeLinkLabel = (annotations.ComponentList.removeLinkLabel)! /]
+					
+						[@.namespace[type] 
+							label=display.label
+							properties=property.componentDisplayProperties
+							value=currentValue
+							name=subName 
+							addEmptyComponent=addEmptyComponent
+							createRemoveLink=createRemoveLink
+							removeLinkLabel=removeLinkLabel
+							optional=annotations.Optional??
+						/]
+					[#else]
+						Error rendering @formElements[${type}]:<br />
+						Could not render the component_list as the property is not a list type (List or array)
+					[/#if]
+					[#break /]
+				[#case "hidden"]
+					[@hidden value=currentValue name=subName /]
+					[#break /]
+				[#default]
+					[@.namespace[type] 
+						label=display.label 
+						name=subName 
+						value=currentValue
+						optional=annotations.Optional??
+						property=property
+					/]
+			[/#switch]
+		[#recover]
+			Error rendering @formElements[${type}]:<br />
+			${.error}
+		[/#recover]
+	</div>
+[/#macro]
+
 [#macro component label properties value name="" optional=true]
 	[#local error = validation.hasValidationErrors(name) /]
 	[@.namespace.label label=label name=name optional=optional error=error /]
 	
 	[#list properties?values?sort_by(["annotations", "Display", "order"]) as property]
-		[#local propertyName = property.name /]
-
-		[#local subName = propertyName /]
-		[#if name?length > 0]
-			[#local subName = name + "." + subName]
-		[/#if]
-		
-		[#local annotations = property.annotations /]
-		[#local display = annotations.Display /]
-		[#local type = display.type?lower_case /]
-		<div class="${type}">
-	
-			[#local currentValue = "" /]
-			
-			[#if value?is_hash]
-				[#local currentValue = value[propertyName]! /]
-			[/#if]
-	
-			[#attempt]
-				[#switch type]
-					[#case "component"]
-						[@.namespace[type] 
-							label=display.label
-							properties=property.displayProperties
-							value=currentValue
-							name=subName 
-							optional=annotations.Optional??
-						/]
-						[#break /]
-					[#case "component_list"]
-						[#if property.isList]
-													
-							[#local addEmptyComponent = !(annotations.ComponentList??) || annotations.ComponentList.addEmptyComponent /]
-							[#local createRemoveLink = annotations.ComponentList?? && annotations.ComponentList.createRemoveLink /]
-							[#local removeLinkLabel = (annotations.ComponentList.removeLinkLabel)! /]
-						
-							[@.namespace[type] 
-								label=display.label
-								properties=property.componentDisplayProperties
-								value=currentValue
-								name=subName 
-								addEmptyComponent=addEmptyComponent
-								createRemoveLink=createRemoveLink
-								removeLinkLabel=removeLinkLabel
-								optional=annotations.Optional??
-							/]
-						[#else]
-							Error rendering @formElements[${type}]:<br />
-							Could not render the component_list as the property is not a list type (List or array)
-						[/#if]
-						[#break /]
-					[#case "hidden"]
-						[@hidden value=currentValue name=subName /]
-						[#break /]
-					[#default]
-						[@.namespace[type] 
-							label=display.label 
-							name=subName 
-							value=currentValue
-							optional=annotations.Optional??
-							property=property
-						/]
-				[/#switch]
-			[#recover]
-				Error rendering @formElements[${type}]:<br />
-				${.error}
-			[/#recover]
-		</div>
+		[@.namespace.property property=property parentName=name parentValue=value /] 
 	[/#list]
 [/#macro]
 
@@ -149,10 +154,10 @@
 	[@validation.showValidationError name=name /]
 [/#macro]
 
-[#macro list label name value optional=true property=false]
+[#macro list label name value optional=true property=false enumeration='' ]
 	[#local error = validation.hasValidationErrors(name) /]
-	[#local valueIsHash = value?is_hash /]
-	[#if valueIsHash && value._enumeration??]
+	[#local valueHasContent = value?has_content /]
+	[#if valueHasContent]
 		[#local value = value._enumeration /]
 	[/#if]
 	[@.namespace.label label=label name=name optional=optional error=error /]
@@ -160,12 +165,19 @@
 		[#if property.annotations.List??]
 			<option value="">${property.annotations.List.defaultLabel}</option>
 		[/#if]
-		[#list property.enumeration as element]
+		
+		[#if enumeration?is_enumerable]
+			[#local enumerationList = enumeration /]
+		[#else]
+			[#local enumerationList = property.enumeration /]
+		[/#if]
+		[#list enumerationList as element]
+			[#local elementAsEnumeration = element._enumeration /]
 			[#local selected = '' /]
-			[#if valueIsHash && value.value?? && element.value == value.value]
+			[#if valueHasContent && value.value?? && elementAsEnumeration.value == value.value]
 				[#local selected = ' selected="selected"' /]
 			[/#if]
-			<option value="${element.value}"${selected}>${element.label}</option>
+			<option value="${elementAsEnumeration.value}"${selected}>${elementAsEnumeration.label}</option>
 		[/#list]
 	</select>
 	[@validation.showValidationError name=name /]

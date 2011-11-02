@@ -1,4 +1,4 @@
-package ee.webAppToolkit.example.projectTimeTracking.providers;
+package ee.webAppToolkit.example.projectTimeTracking.converters;
 
 import ee.parameterConverter.ConversionFailedException;
 import ee.parameterConverter.Converter;
