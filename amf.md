@@ -1,0 +1,35 @@
+# Amf #
+
+The Amf module allows you to communicate with clients using [AMF](http://en.wikipedia.org/wiki/Action_Message_Format).
+
+It adds an `ActionArgumentResolver` for parameters annotated with `@Amf`. In order to return results in AMF it provides an `AmfResult` class. Simple usage example:
+
+```
+public Result echo(@Amf Object obj)
+{
+	return new AmfResult(obj);
+}
+```
+
+For Flash this module provides a small library with one class called `AmfClient`, this class extends `UrlStream` and is simply a wrapper to hide 6 lines of code. Simple usage example:
+
+```
+private function _clickHandler(e:MouseEvent):void
+{
+	var a:AmfClient = new AmfClient();
+	a.addEventListener(Event.COMPLETE, _completeHandler);
+	a.request("http://localhost:8080/amf/echo", {one: "value one", two: "value two"});
+}
+		
+private function _completeHandler(e:Event):void
+{
+	trace(AmfClient(e.currentTarget).readObject().one);
+}
+```
+
+If you send typed objects, don't forget to use the native `registerClassAlias` function in your ActionScript project.
+
+## Dependencies ##
+
+  * [core](core.md)
+  * [amf-serializer](http://mavenhub.com/mvn/central/com.exadel.flamingo.flex/amf-serializer/1.5.0)

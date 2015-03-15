@@ -1,0 +1,80 @@
+# Render #
+
+The main features this module provides is the `Renderer` interface and `RenderingController`.
+
+This is the base module that can be used to add a renderer to the toolkit. No renderer is provided by this module, giving you the freedom to implement your own renderer.
+
+# RenderingController #
+
+The rendering controller extends `BasicController` in order to add serveral render methods. These methods allow you to render a model with a template.
+
+A few commonly used examples:
+
+```
+public Result action1()
+{
+   // Returns the result of the rendered template called 'action1'
+   return render();
+}
+```
+
+```
+public Result action2()
+{
+   // Returns the result of 'model' rendered with the template called 'action2'
+   Map<String, String> model = new HashMap<String, String>();
+   return render(model);
+}
+```
+
+
+```
+public Result action3()
+{
+   // Returns the result of 'model' rendered with the template called 'action2'
+   Map<String, String> model = new HashMap<String, String>();
+   return render(model, "action2");
+}
+```
+
+## render ##
+
+The `render` method performs a few actions before it creates a `Result`:
+
+  1. Wraps the given model using the injected `ModelWrapper`
+  1. Resolves the template using the injected `TemplateResolver`
+  1. Renders the content using the injected `Renderer`
+
+The `ModelWrapper` is implemented using the following Guice binding:
+
+```
+install(new FactoryModuleBuilder().implement(Object.class,
+	SimpleModel.class).build(ModelWrapper.class));
+```
+
+This means that every model is wrapped into a `SimpleModel` instance which has the following properties:
+
+  * _model_: The model that is wrapped
+  * _path_: The current path that is executed (`@Path String`)
+  * _context_: The context in which the current action is executed (`@Context String`)
+
+The `TemplateResolver` is implemented so that it will return the `controllerName/template`. So if the controller is of type `MainController` and the template is called `action1` the result will be `main/action1`.
+
+# Implementing a renderer #
+
+To implement a renderer you need to create an implementation of the `Renderer` interface. The renderer contains one method:
+
+```
+public String render(Object model, String template) throws RenderFailedException;
+```
+
+If you do not override the `ModelWrapper` and `TemplateResolver` it will receive an instance of `SimpleModel` and "controllerName/template" as parameters.
+
+
+## Dependencies ##
+
+  * [core](core.md)
+
+## Implementations ##
+
+  * [rendering.freemarker](rendering_freemarker.md)

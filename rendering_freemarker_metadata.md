@@ -1,0 +1,25 @@
+# Freemarker metadata #
+
+This module adds metadata capabilities to custom objects. For an object you can request the properties by accessing `_properties`:
+
+```
+[#include "/shared/dump.ftl" /]
+
+[#if model??]
+	[@dump data=model._properties /]
+[/#if]
+```
+
+If you want the metadata of a specific property you can do the following:
+
+```
+[#include "/shared/dump.ftl" /]
+
+[#if model??]
+	[@dump data=model.title_metadata /]
+[/#if]
+```
+
+## Dependencies ##
+
+  * [rendering.freemarker](rendering_freemarker.md)

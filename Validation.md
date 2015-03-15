@@ -1,0 +1,124 @@
+# Validation #
+
+If you are converting from strings to arbitrary types accidents happen. This is the reason the parameters module handles validation.
+
+To reach the results of the validation you can request and instance of `ValidationResults` which is bound to the request scope. It has a `getValidated()` method that determines if it contains any results of validation.
+
+Validation works like this:
+
+  * If the converter fails to convert a value, it throws an exception
+  * The parameters module tries to find an `ExceptionConverter` that can convert the exception into a `ValidationResult`
+  * The `ValidationResult` is placed into the requests `ValidationResults` object in the correct location
+  * If conversion was successful (and it was converting for a property of an object) it will check for any annotations that themselves are marked with `@ValidationAnnotation`
+  * If any annotation is found it will try to find an `AnnotationValidator` for the annotation in combination with the type of the property
+  * It then calls the `validate` method of the `AnnotationValidator`
+  * If the returned `ValidationResult` is not validated it is placed into the requests `ValidationResults` object in the correct location
+
+# ValidationResults #
+
+`ValidationResults` are available to Guice and thus can be injected automatically if you need them. The `Model` provided by the [Website](Website.md) module provides it by default.
+
+# ExceptionConverter #
+
+The [Website](Website.md) module provides an `ExceptionConverter` for `NumberFormatException` by default:
+
+```
+public class NumberFormatExceptionConverter implements ExceptionConverter<NumberFormatException>
+{
+	private Provider<String> _conversion;
+	
+	@Inject
+	public NumberFormatExceptionConverter(
+			@LocalizedString("validation.number.conversion") Provider<String> conversion)
+	{
+		_conversion = conversion;
+	}
+	
+	@Override
+	public ValidationResult convert(NumberFormatException e, Object originalValue)
+	{
+		return new ValidationResult(originalValue, MessageFormat.format(_conversion.get(), originalValue));
+	}
+}
+```
+
+The following code is used to register it:
+
+```
+bind(new TypeLiteral<ExceptionConverter<NumberFormatException>>(){}).to(NumberFormatExceptionConverter.class);
+```
+
+# AnnotationValidator #
+
+Let's say we want to create a validator for the length of a string. The first thing we do is create an annotation:
+
+```
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+@ValidationAnnotation
+public @interface Length
+{
+	int max() default 0;
+	int min() default 0;
+}
+```
+
+The validator implementation:
+
+```
+public class LengthValidator implements AnnotationValidator<String, Length>
+{
+	private String _min;
+	private String _max;
+	
+	@Inject
+	public LengthValidator(
+			@LocalizedString("validation.length.min") String min,
+			@LocalizedString("validation.length.max") String max)
+	{
+		_min = min;
+		_max = max;
+	}
+	
+	@Override
+	public ValidationResult validate(String value, Length validationAnnotation)
+	{
+		int length = value.length();
+		
+		ValidationResult validationResult = new ValidationResult();
+		
+		int minLength = validationAnnotation.min();
+		if (minLength > 0 && length < minLength)
+		{
+			validationResult.setErrorMessage(MessageFormat.format(_min, minLength));
+		}
+		
+		int maxLength = validationAnnotation.max();
+		if (maxLength > 0 && length > maxLength)
+		{
+			validationResult.setErrorMessage(MessageFormat.format(_max, maxLength));
+		}
+		
+		if (!validationResult.getValidated())
+		{
+			validationResult.setOriginalValue(value);
+		}
+		
+		return validationResult;
+	}
+	
+}
+```
+
+The following code is used to register it:
+
+```
+bind(new TypeLiteral<AnnotationValidator<String, Length>>(){}).to(LengthValidator.class);
+```
+
+Now you can use the `@Length` annotation on a property:
+
+```
+@Length(min=12)
+public String content;
+```

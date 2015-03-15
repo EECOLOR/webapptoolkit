@@ -1,0 +1,52 @@
+Actions are public methods of [Controllers](Controllers.md).
+
+# Annotations #
+
+To prevent a public method from becoming an action you need to annotate it with the `@Forbidden` annotation.
+
+The http specification provides different request methods, WebAppToolkit allows you to distinguish between 4 of them:
+
+  * Get
+  * Post
+  * Put
+  * Delete
+
+If you want an action to available only with the `Get` request method you can annotate it with `@Get`. By default an action is available for all request methods.
+
+# Return types #
+
+An action can have two different return types: `void` and `Result`. If the action has `Result` as a return type and returns `null` it has the same effect as return type `void`: no result.
+
+`Result` allows you to specify:
+
+  * character encoding (default is UTF-8)
+  * content type (default is text/html)
+  * content
+  * headers
+  * if this result may be wrapped
+
+# Arguments #
+
+Action arguments are resolved using the following strategy.
+
+If the argument has an annotation that is annotated with `@ActionArgument` it is resolved with an `ActionArgumentResolver`. These should be bound with Guice like this:
+
+```
+bind(ActionArgumentResolver.class).annotatedWith(Flash.class).to(FlashActionArgumentResolver.class)
+```
+
+If no `@ActionArgument` was found on the annotation the argument will be resolved using Guice.
+
+If no value could be resolved an exception is thrown. This can be prevented by annotating arguments with the `@Optional` annotation.
+
+The following arguments types are available by default (note that these are only the most commonly used):
+
+  * `@Path String`
+  * `@Context String`
+  * `@DefaultCharacterEncoding String`
+  * `@DefaultContentType String`
+  * `RequestMethod`
+
+Action argument resolvers are available by default for the following annotations:
+
+  * `@Flash`

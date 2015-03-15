@@ -1,0 +1,69 @@
+# Localization #
+
+The localization module provides a few simple tools that can be used for localization. The first tool is the `@LocalizedString` annotation which is used in conjunction with the `LocalizedStrings` class and the `LocaleResolver` interface.
+
+The `LocalizedStrings` class provides methods to bind the contents of`java.util.Properties` to a specific `Locale`. These in turn are turned into implementations of `@LocalizedString String`.
+
+A common use to install localized strings is this:
+
+```
+LocalizedStrings.bindPropertiesToLocale(binder(), getClass().getClassLoader(),
+				"module.validationMessages", Locale.ENGLISH);
+```
+
+The above statement assumes that a file called `module.validationMessages_en.properties` is present, contents of that file could look like this:
+
+```
+validation.empty=Did not receive input
+```
+
+A `String` annotated with `@LocalizedString("validation.empty")` would be injected with `"Did not receive input"`.
+
+At runtime, when an `@LocalizedString String` is requested the `LocalizedStringProvider` will use the implementation of `LocaleResolver` to determine the locale that should be used to determine the correct `String`.
+
+The default implementation of `LocaleResolver` always returns `Locale.ENGLISH`. You can override the default binding like this:
+
+```
+install(Modules.override(new LocalizationModule()).with(new AbstractModule() {
+
+	@Override
+	protected void configure() 
+	{
+	
+		bind(LocaleResolver.class).toInstance(new LocaleResolver()
+		{
+			@Override
+			public Locale getLocale()
+			{
+				if (something)
+				{
+					return Locale.FRENCH;
+				} else
+				{
+					return Locale.ENGLISH;
+				}
+			}
+		});		
+
+	};
+```
+
+If you need a localized string at runtime it's best to use a provider:
+
+```
+private Provider<String> _property;
+
+public Constructor(@LocalizedString("property") Provider<String> property)
+{
+	_property = property;
+}
+
+public String method()
+{
+	return _property.get();
+}
+```
+
+## Dependencies ##
+
+  * [core](core.md)
